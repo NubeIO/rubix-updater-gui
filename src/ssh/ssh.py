@@ -1,3 +1,6 @@
+from fabric import Connection, task
+
+
 class SSHConnection:
     def __init__(self,
                  host='192.168.15.10',
@@ -10,14 +13,14 @@ class SSHConnection:
         self.user = user
         self.password = password
 
-    def list_all(self,
-                 limit: int = 100
-                 ):
+    def connect(self):
         """
         list all gateways
         :param organizationID:
         :param limit:
         :return:
         """
-
-        return self.host
+        print(self.host)
+        connection = Connection(host=self.host, port=self.port, user=self.user,
+                                connect_kwargs={'password': self.password})
+        return connection

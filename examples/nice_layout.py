@@ -15,8 +15,7 @@ class FileZipApp:
         dpg.add_data("stored_data", custom_data)
 
     def print_data(self, sender, data):
-        print(dpg.get_data("stored_data"))
-        print(dpg.get_data("stored_data").get("Checkbox"))
+        print(dpg.get_value("Checkbox"))
 
     def show(self):
         """Start the gui."""
@@ -38,12 +37,10 @@ class FileZipApp:
                          "the same directory from where you've run this script.", bullet=True)
             dpg.add_spacing()
             dpg.add_separator()
-            dpg.add_input_text("Decimal", decimal=True, default_value="123")
             dpg.add_checkbox("Checkbox")
             dpg.add_spacing(count=5)
-            dpg.add_button("Store Data", callback=self.store_data)
-            dpg.add_button("Print Data", callback=self.print_data)
-
+            # dpg.add_button("Store Data", callback=self.store_data)
+            dpg.add_button("Run", callback=self.print_data)
 
             dpg.start_dearpygui(primary_window="Main Window")
 

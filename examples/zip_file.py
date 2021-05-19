@@ -32,7 +32,7 @@ class FileZipApp:
         if selected_folder in directory:
             self.output_directory = directory
         else:
-            self.output_directory = '\\'.join(data)
+            self.output_directory = '/'.join(data)
         print(self.output_directory)
         dpg.set_value('Selected output directory:', f'Selected output directory: {self.output_directory}')
 
@@ -56,11 +56,11 @@ class FileZipApp:
 
     def __zip_files(self, sender, data):
         dpg.set_value('Zip Progress', 0)
-        with ZipFile(f'{self.output_directory}\\{uuid.uuid4().hex}.zip', 'w') as zip_file:
+        with ZipFile(f'{self.output_directory}/{uuid.uuid4().hex}.zip', 'w') as zip_file:
             current_progress = 0
             total_progress = len(self.files_list)
             for f in self.files_list:
-                full_path = f['path'] + "\\" + f['name']
+                full_path = f['path'] + "/" + f['name']
                 zip_file.write(full_path, f['name'])
 
                 # Update progress bar
@@ -70,7 +70,6 @@ class FileZipApp:
     def show(self):
         """Start the gui."""
         with sdpg.window("Main Window"):
-            dpg.set_theme("Light")
             dpg.set_main_window_size(550, 650)
             dpg.set_main_window_resizable(False)
             dpg.add_spacing()
@@ -89,13 +88,12 @@ class FileZipApp:
             dpg.add_separator()
 
             dpg.add_spacing(count=10)
-            dpg.add_button("Select output directory", width=250, callback=self.__select_output_directory)
             dpg.add_same_line()
             dpg.add_button("Add file", width=250, callback=self.__select_file)
             dpg.add_spacing(count=10)
             dpg.add_separator()
 
-            dpg.add_text("Selected output directory:")
+            # dpg.add_text("Selected output directory:")
             dpg.add_table('Files', ['Path', 'Name'], height=200, callback=self.__remove_file)
             dpg.add_separator()
             dpg.add_progress_bar('Zip Progress', width=-1)
