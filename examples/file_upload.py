@@ -32,7 +32,7 @@ class FileZipApp:
         if selected_folder in directory:
             self.output_directory = directory
         else:
-            self.output_directory = '/'.join(data)
+            self.output_directory = '\\'.join(data)
         print(self.output_directory)
         dpg.set_value('Selected output directory:', f'Selected output directory: {self.output_directory}')
 
