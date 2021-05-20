@@ -1,5 +1,6 @@
 import dearpygui.core as dpg
 import dearpygui.simple as sdpg
+from dearpygui.core import show_logger, log, clear_log, set_log_level, get_value, mvTRACE, log_debug
 
 
 class FileZipApp:
@@ -15,11 +16,16 @@ class FileZipApp:
         dpg.add_data("stored_data", custom_data)
 
     def print_data(self, sender, data):
-        print(dpg.get_value("Checkbox"))
+        show_logger()
+
+        log("trace message")
+        log_debug("debug message")
+        log(dpg.get_value("Checkbox"))
 
     def show(self):
         """Start the gui."""
         with sdpg.window("Main Window"):
+            show_logger()
             dpg.set_theme("Light")
             dpg.set_main_window_size(550, 500)
             dpg.set_main_window_resizable(False)

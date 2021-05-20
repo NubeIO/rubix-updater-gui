@@ -1,5 +1,7 @@
 import dearpygui.core as dpg
 import dearpygui.simple as sdpg
+from dearpygui.core import show_logger, log, log_debug
+
 from src.ssh.ssh import SSHConnection
 from src.ssh.test_settings import TestSettings
 from fabric import task
@@ -15,31 +17,35 @@ cx = SSHConnection(
     password=settings.password
 )
 
+
 def _run(ctx, command):
-    if Utils.ping(settings.host) == False:
+    if not Utils.ping(settings.host):
         print()
         raise Exception(f"ERROR: failed to ping {settings.host}")
 
-
     try:
-        ctx.run(command)
+        out = ctx.run(command)
+        return out.__dict__.get('stdout')
     except:
         print(f"ERROR: {command}")
 
 
 @task
 def list_services(ctx):
-    _run(ctx, 'ls -l')
-    # _run(ctx, 'ls /lib/systemd/system/ | grep -e nube')
+    exe = _run(ctx, 'ls -l')
+    log_debug(exe)
+
 
 
 @task
 def deploy(conn):
     with conn as c:
-        list_services(c)
+        show_logger()
+        log("trace message")
+        log_debug("debug message")
+        log(dpg.get_value("Checkbox"))
+        print(2222, list_services(c))
         # mk_dirs(c)
-
-
 
 
 class FileZipApp:
@@ -56,7 +62,6 @@ class FileZipApp:
 
     def print_data(self, sender, data):
         deploy(cx.connect())
-        print(dpg.get_value("Checkbox"))
 
     def show(self):
         """Start the gui."""
