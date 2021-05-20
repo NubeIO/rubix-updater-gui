@@ -1,11 +1,14 @@
 from dearpygui.core import add_input_text, add_text, add_spacing, add_separator, set_main_window_title, \
-    set_main_window_resizable, set_main_window_size, set_theme, get_value
+    set_main_window_resizable, set_main_window_size, set_theme, get_value, set_global_font_scale, \
+    set_style_window_padding
 
 
 class CommonTheme:
     def __init__(self):
-        set_theme("Light")
-        set_main_window_size(800, 800)
+        set_theme("Dark")
+        set_global_font_scale(1.25)
+        set_style_window_padding(30, 30)
+        set_main_window_size(540, 720)
         set_main_window_resizable(False)
         add_spacing()
         set_main_window_title("Rubix Service Factory Reset")

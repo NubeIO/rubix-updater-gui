@@ -1,3 +1,3 @@
 #!/bin/bash
-pyinstaller --onefile --windowed  src/ui/main.py
+pyinstaller --onefile --windowed  src/main.py
 dist/./main
