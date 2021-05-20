@@ -29,7 +29,7 @@ with window("Main Window"):
     add_text("This example demonstrates the input text widget.", bullet=True)
     add_text("Press the 'Retrieve' button to display the input values in the logger", wrap=500, bullet=True)
 
-    add_input_text("Regular##inputtext")
+    add_input_text("Regular##inputtext", default_value="read only")
     add_input_text("With hint##inputtext", hint="A hint")
     add_input_text("No spaces##inputtext", no_spaces=True)
     add_input_text("Uppercase##inputtext", uppercase=True)

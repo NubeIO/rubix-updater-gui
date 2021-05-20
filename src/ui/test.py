@@ -1,4 +1,4 @@
-from src.ssh.ssh import SSHConnection
+from src.common_ssh.ssh import SSHConnection
 from src.ssh.test_settings import TestSettings
 from fabric import task
 

@@ -9,6 +9,3 @@ class TestSettings:
         self.port = port
         self.user = user
         self.password = password
-
-
-

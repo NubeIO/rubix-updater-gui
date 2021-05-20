@@ -1,93 +1,42 @@
 import dearpygui.core as dpg
 import dearpygui.simple as sdpg
-from dearpygui.core import show_logger, log, log_debug
+from src.common_ssh.tasks_rubix import deploy_rubix_update
 
-from src.ssh.ssh import SSHConnection
-from src.ssh.test_settings import TestSettings
-from fabric import task
-
-from src.utils.functions import Utils
-
-settings = TestSettings()
-
-cx = SSHConnection(
-    host=settings.host,
-    port=settings.port,
-    user=settings.user,
-    password=settings.password
-)
-
-
-def _run(ctx, command):
-    if not Utils.ping(settings.host):
-        print()
-        raise Exception(f"ERROR: failed to ping {settings.host}")
-
-    try:
-        out = ctx.run(command)
-        return out.__dict__.get('stdout')
-    except:
-        print(f"ERROR: {command}")
-
-
-@task
-def list_services(ctx):
-    exe = _run(ctx, 'ls -l')
-    log_debug(exe)
-
-
-
-@task
-def deploy(conn):
-    with conn as c:
-        show_logger()
-        log("trace message")
-        log_debug("debug message")
-        log(dpg.get_value("Checkbox"))
-        print(2222, list_services(c))
-        # mk_dirs(c)
+from src.common_ui.make_connection import MakeConnection
+from src.common_ui.ssh import CommonHost, CommonTheme
 
 
 class FileZipApp:
     def __init__(self):
         self.files_list = None
 
-    def store_data(self, sender, data):
-        custom_data = {
-            "Radio Button": dpg.get_value("Radio Button"),
-            "Checkbox": dpg.get_value("Checkbox"),
-            "Text Input": dpg.get_value("Text Input"),
-        }
-        dpg.add_data("stored_data", custom_data)
-
-    def print_data(self, sender, data):
-        deploy(cx.connect())
+    def run_setup(self, sender, data):
+        enable = dpg.get_value("enable")
+        delete_all_dirs = dpg.get_value("delete_all_dirs")
+        install_rubix_plat = dpg.get_value("install_rubix_plat")
+        if enable:
+            cx = MakeConnection().get_connection().connect()
+            deploy_rubix_update(cx,
+                                delete_all_dirs=delete_all_dirs,
+                                install_rubix_plat=install_rubix_plat
+                                )
 
     def show(self):
         """Start the gui."""
         with sdpg.window("Main Window"):
-            dpg.set_theme("Light")
-            dpg.set_main_window_size(550, 500)
-            dpg.set_main_window_resizable(False)
-            dpg.add_spacing()
-            dpg.set_main_window_title("Rubix Service Factory Reset")
+            CommonTheme()
+            CommonHost()
 
-            dpg.add_spacing()
+            dpg.add_checkbox("enable", label="Enable")
+            # dpg.add_checkbox("delete_all_dirs", label="Wipe All Data")
+
             dpg.add_text("File Zip App")
-            dpg.add_spacing()
-            dpg.add_text("Select files to zip by adding them to the table", bullet=True, tip="MY TIP")
-            dpg.add_text("Set the output directory", bullet=True)
-            dpg.add_text("Click on the table to remove a file", bullet=True)
-            dpg.add_text("Click on the zip files button to zip all the files", bullet=True)
-            dpg.add_text("If you do not choose a directory, it will by default be"
-                         "the same directory from where you've run this script.", bullet=True)
-            dpg.add_spacing()
-            dpg.add_separator()
-            dpg.add_checkbox("Checkbox")
-            dpg.add_spacing(count=5)
-            # dpg.add_button("Store Data", callback=self.store_data)
-            dpg.add_button("Run", callback=self.print_data)
+            dpg.add_radio_button("delete_all_dirs", items=["Wipe All Data", "Wipe All Data & Reinstall Rubix "
+                                                                            "Bios/Service"])
+            dpg.add_checkbox("install_rubix_plat", label="install rubix service")
 
+
+            dpg.add_button("Run", callback=self.run_setup)
             dpg.start_dearpygui(primary_window="Main Window")
 
 

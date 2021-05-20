@@ -2,7 +2,7 @@ import json
 import time
 from fabric import Connection, task
 
-host = '192.168.15.1'
+host = '192.168.15.189'
 port = 22
 user = 'pi'
 password = 'N00BRCRC'

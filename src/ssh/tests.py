@@ -9,32 +9,6 @@ password = 'N00BRCRC'
 connection = Connection(host=host, port=port, user=user, connect_kwargs={'password': password})
 
 
-def _download_bios(command, service):
-    return f"sudo systemctl {command} {service}.service "
-
-
-def _service(command, service):
-    return f"sudo systemctl {command} {service}.service "
-
-
-def _make_dir_config(service):
-    return f"sudo mkdir -p /data/{service}/config"
-
-
-def _download_config_file(service):
-    return f"curl -OL https://raw.githubusercontent.com/NubeIO/rubix-pi-image/main/config-files/{service}/config.json"
-
-
-def _move_config_file(service):
-    return f"sudo mv config.json /data/{service}/config/config.json"
-
-
-def _delete_home_dir():
-    return f"sudo rm -r *"
-
-
-def _delete_data_dir():
-    return f"sudo rm -r /home/data"
 
 
 def _run(ctx, command):
@@ -94,12 +68,6 @@ def clone_repo(ctx):
     # ctx.run(install)
 
 
-@task
-def mk_dirs(ctx):
-    ctx.run('sudo mkdir -p /data/point-server/config')
-    ctx.run(
-        'curl -OL https://raw.githubusercontent.com/NubeIO/rubix-pi-image/main/config-files/point-server/config.json')
-    ctx.run('sudo mv config.json /data/point-server/config/config.json')
 
 
 @task
