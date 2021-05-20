@@ -1,3 +1,4 @@
+import json
 import time
 
 from dearpygui.core import show_logger
@@ -11,7 +12,6 @@ from src.linux_commands.commands import LinuxCommands
 @task
 def deploy_rubix_update(ctx, **kwargs):
     delete_all_dirs = kwargs.get('delete_all_dirs')
-    install_rubix_plat = kwargs.get('install_rubix_plat')
     with ctx as c:
         show_logger()
         if delete_all_dirs == 0:
@@ -25,9 +25,6 @@ def deploy_rubix_update(ctx, **kwargs):
             install_bios(c)
             time.sleep(5)
             install_wires_plat(c)
-        # if install_rubix_plat == 0 and delete_all_dirs == 1:
-        #     install_wires_plat(c)
-
 
 @task
 def command_ls(ctx):
@@ -72,12 +69,9 @@ def install_bios(ctx):
     Common.log(f"LOG: @func install_bios {exe}")
     time.sleep(5)
     exe = SSHConnection.run_command(ctx, LinuxCommands.get_bios_token())
-    print(1111111)
-    print(exe)
-    print(111111)
     token = LinuxCommands.clean_token(exe)
     Common.log(f"LOG: @func clean_token {token}")
-    version = "v1.6.8"
+    version = "latest"
     Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX SERVICE >>>>>>>>>>> ")
     exe = SSHConnection.run_command(ctx, LinuxCommands.install_rubix_service(token, version))
     Common.log(f"LOG: @func install_rubix_service {exe}")
@@ -86,27 +80,42 @@ def install_bios(ctx):
 @task
 def install_wires_plat(ctx):
     Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM UI >>>>>>>>>>> ")
-    time.sleep(5)
     exe = SSHConnection.run_command(ctx, LinuxCommands.get_rubix_service_token())
     token = LinuxCommands.clean_token(exe)
     Common.log(f"LOG: @func clean_token {token}")
     service = "RUBIX_PLAT"
-    version = "v1.7.0"
+    git_token = "478aadf6e6e392a98e34b2925dec7d56438cc6d6"
+    version = "v1.7.1"
+    # version = "latest"
+    Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM ADD GITHUB TOKEN >>>>>>>>>>> ")
+    exe = SSHConnection.run_command(ctx, LinuxCommands.add_rubix_service_github_token(token, git_token))
+    Common.log(f"LOG: @func add_rubix_service_github_token {exe}")
+
     Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM DOWNLOAD >>>>>>>>>>> ")
     exe = SSHConnection.run_command(ctx, LinuxCommands.download_rubix_service_app(token, service, version))
     Common.log(f"LOG: @func download_rubix_service_app {exe}")
+    time.sleep(5)
+    Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM CHECK DOWNLOAD STATUS >>>>>>>>>>> ")
+    max_checks = 20
+    time.sleep(2)
+    i = 1
+    while i < max_checks:
+        aa = SSHConnection.run_command(ctx, LinuxCommands.get_state_download_rubix_service_app(token))
+        time.sleep(3)
+        Common.log(f"LOG: >>>>>>>>>>> CHECK DOWNLOAD STATUS  >>>>>>>>>>> ")
+        tt = json.loads(aa)
+        if isinstance(tt, list):
+            Common.log(f"LOG: >>>>>>>>>>> DOWNLOADED WIRES-PLAT-COMPLETED >>>>>>>>>>> ")
+            ttt = tt[0].get('download')
+            if ttt:
+                SSHConnection.run_command(ctx, LinuxCommands.delete_state_download_rubix_service_app(token))
+                Common.log(f"LOG: >>>>>>>>>>> DOWNLOADED WIRES-PLAT-COMPLETED DELETED DOWNLOAD>>>>>>>>>>> ")
+                break
+        i += 1
+
     Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM INSTALL >>>>>>>>>>> ")
     exe = SSHConnection.run_command(ctx, LinuxCommands.install_rubix_service_app(token, service, version))
     Common.log(f"LOG: @func install_rubix_service_app {exe}")
-    time.sleep(2)
-    Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM RESTART >>>>>>>>>>> ")
-    exe = SSHConnection.run_command(ctx, LinuxCommands.service_command("restart", "nubeio-wires-plat"))
-    Common.log(f"LOG: @func service_command {exe}")
-    Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM STATUS >>>>>>>>>>> ")
-    time.sleep(10)
+    time.sleep(8)
     exe = SSHConnection.run_command(ctx, LinuxCommands.service_command("status", "nubeio-wires-plat"))
     Common.log(f"LOG: @func service_command {exe}")
-    time.sleep(2)
-    if True:
-        SSHConnection.run_command(ctx, LinuxCommands.reboot_host())
-

@@ -44,15 +44,31 @@ class LinuxCommands:
         return r"""curl -X POST http://localhost:1616/api/users/login -H "Content-Type: application/json" -d '{"username":
         "admin", "password": "N00BWires"}'"""
 
+
+    @classmethod
+    def add_rubix_service_github_token(cls, token, git_token):
+        r = f"""curl -X PUT http://localhost:1616/api/app/token -H "Content-Type: application/json" -H "Authorization: {token}" -d '{{"token": "{git_token}"}}'"""
+        return r
+
     @classmethod
     def download_rubix_service_app(cls, token, service, version):
-        download = f"""curl -X POST http://localhost:1616/api/app/download -H "Content-Type: application/json" -H "Authorization: {token}" -d '{{"service": "{service}", "version": "{version}"}}'"""
-        return download
+        r = f"""curl -X POST http://localhost:1616/api/app/download -H "Content-Type: application/json" -H "Authorization: {token}" -d '[{{"service": "{service}", "version": "{version}"}}]'"""
+        return r
+
+    @classmethod
+    def get_state_download_rubix_service_app(cls, token):
+        r = f"""""curl -X GET http://localhost:1616/api/app/download_state -H "Content-Type: application/json" -H "Authorization: {token}" """""
+        return r
+
+    @classmethod
+    def delete_state_download_rubix_service_app(cls, token):
+        r = f"""""curl -X DELETE http://localhost:1616/api/app/download_state -H "Content-Type: application/json" -H "Authorization: {token}" """""
+        return r
 
     @classmethod
     def install_rubix_service_app(cls, token, service, version):
-        download = f"""curl -X POST http://localhost:1616/api/app/install -H "Content-Type: application/json" -H "Authorization: {token}" -d '{{"service": "{service}", "version": "{version}"}}'"""
-        return download
+        r = f"""curl -X POST http://localhost:1616/api/app/install -H "Content-Type: application/json" -H "Authorization: {token}" -d '[{{"service": "{service}", "version": "{version}"}}]'"""
+        return r
 
     @classmethod
     def service_command(cls, command, service):

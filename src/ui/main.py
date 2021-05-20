@@ -13,12 +13,11 @@ class FileZipApp:
     def run_setup(self, sender, data):
         enable = dpg.get_value("enable")
         delete_all_dirs = dpg.get_value("delete_all_dirs")
-        install_rubix_plat = dpg.get_value("install_rubix_plat")
+
         if enable:
             cx = MakeConnection().get_connection().connect()
             deploy_rubix_update(cx,
-                                delete_all_dirs=delete_all_dirs,
-                                install_rubix_plat=install_rubix_plat
+                                delete_all_dirs=delete_all_dirs
                                 )
 
     def show(self):
@@ -33,7 +32,6 @@ class FileZipApp:
             dpg.add_text("File Zip App")
             dpg.add_radio_button("delete_all_dirs", items=["Wipe All Data", "Wipe All Data & Reinstall Rubix "
                                                                             "Bios/Service"])
-            dpg.add_checkbox("install_rubix_plat", label="install rubix service")
 
 
             dpg.add_button("Run", callback=self.run_setup)

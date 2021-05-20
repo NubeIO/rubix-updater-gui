@@ -34,7 +34,7 @@ class SSHConnection:
     @staticmethod
     def run_command(ctx, command):
         if not Common.ping():
-            Common.log(f"ERROR: failed to ping @func _run {CommonHost.get_host()}")
+            # Common.log(f"ERROR: failed to ping @func _run {CommonHost.get_host()}")
             return
         try:
             out = ctx.run(command)

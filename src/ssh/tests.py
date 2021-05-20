@@ -2,70 +2,21 @@ import json
 import time
 from fabric import Connection, task
 
-host = '192.168.15.10'
+from src.common_ssh.ssh import SSHConnection
+from src.linux_commands.commands import LinuxCommands
+
+host = '192.168.15.189'
 port = 22
 user = 'pi'
 password = 'N00BRCRC'
 connection = Connection(host=host, port=port, user=user, connect_kwargs={'password': password})
 
 
-
-
 def _run(ctx, command):
     try:
-        ctx.run(command)
+        return ctx.run(command)
     except:
         print(f"ERROR: {command}")
-
-
-@task
-def clone_repo(ctx):
-    print("Cloning repository . . .")
-    ctx.run("sudo rm -r *")
-    ctx.run("sudo rm -r /data")
-    ctx.run("wget https://github.com/NubeIO/rubix-bios/releases/download/v1.4.0/rubix-bios-1.4.0-7fa0370a.armv7.zip")
-    print("unzip")
-    ctx.run("unzip rubix-bios-1.4.0-7fa0370a.armv7.zip")
-    print("install bios")
-    ctx.run("sudo ./rubix-bios -p 1615 -g /data/rubix-bios -d data -c config -a apps --prod --install --auth")
-    time.sleep(5)
-    print("install rubix get password")
-    token = ctx.run(
-        r"""curl -X POST http://localhost:1615/api/users/login -H "Content-Type: application/json" -d '{"username":
-        "admin", "password": "N00BWires"}'""")
-    # print(type(token))
-    token = token.__dict__.get('stdout')
-    t = json.loads(token)
-    t = t.get('access_token')
-    version = "v1.6.8"
-    print('token:', t)
-    url = f"""curl -X PUT http://localhost:1615/api/service/upgrade -H "Content-Type: application/json" -H "Authorization: {t}" -d '{{"version": "{version}"}}'"""
-    print('url:', url)
-    ctx.run(url)
-    time.sleep(5)
-    print("install rubix UI")
-    token = ctx.run(
-        r"""curl -X POST http://localhost:1616/api/users/login -H "Content-Type: application/json" -d '{"username":
-        "admin", "password": "N00BWires"}'""")
-    # print(type(token))
-    token = token.__dict__.get('stdout')
-    t = json.loads(token)
-    t = t.get('access_token')
-    version = "v1.7.0"
-    service = 'RUBIX_PLAT'
-    download = f"""curl -X POST http://localhost:1616/api/app/download -H "Content-Type: application/json" -H "Authorization: {t}" -d '{{"service": "{service}", "version": "{version}"}}'"""
-    print('download UI:', url)
-    ctx.run(download)
-    time.sleep(2)
-    install = f"""curl -X POST http://localhost:1616/api/app/install -H "Content-Type: application/json" -H "Authorization: {t}" -d '{{"service": "{service}", "version": "{version}"}}'"""
-    print('install UI:', url)
-    ctx.run(install)
-    time.sleep(5)
-    ctx.run(_service('restart', 'nubeio-wires-plat'))
-    time.sleep(5)
-    ctx.run(_service('status', 'nubeio-wires-plat'))
-    # time.sleep(2)
-    # ctx.run(install)
 
 
 
@@ -80,7 +31,36 @@ def list_services(ctx):
 def deploy(conn):
     with conn as c:
         list_services(c)
-        # mk_dirs(c)
+        exe = _run(c, LinuxCommands.get_rubix_service_token())
+        print(type(exe))
+        token = exe.__dict__.get('stdout')
+        t = json.loads(token)
+        t = t.get('access_token')
+        service = "RUBIX_PLAT"
+        version = "v1.7.1"
+        # print(1111, LinuxCommands.download_rubix_service_app(t, service, version))
+        # print(22222, LinuxCommands.get_state_download_rubix_service_app(t))
+        _run(c, LinuxCommands.download_rubix_service_app(t, service, version))
+        max_checks = 100
+        down_load_state = 10
+        time.sleep(2)
+        i = 1
+        while i < max_checks:
+            aa = _run(c, LinuxCommands.get_state_download_rubix_service_app(t))
+            time.sleep(2)
+            bb = aa.__dict__.get('stdout')
+            tt = json.loads(bb)
+            if isinstance(tt, list):
+                ttt = tt[0].get('download')
+                print(5555, ttt)
+                if ttt:
+                    _run(c, LinuxCommands.delete_state_download_rubix_service_app(t))
+                    break
+            i += 1
+
+        # state = exe.__dict__.get('message')
+        # print(222222, state)
+        print("DONE")
 
 
 deploy(connection)
