@@ -1,62 +1,61 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+PyQt5 - QMainWindow with menubar
+Author: niftycode
+Date created: March 15th, 2020
+"""
+
 import sys
-from PyQt5 import QtWidgets,QtGui
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtMultimedia import *
+from PyQt5.QtWidgets import (QMainWindow, QApplication,
+    QWidget, QAction, qApp)
 
-# https://github.com/ahmetcevdetbulbul/pyQt5-exercises
 
-class Window(QtWidgets.QWidget):
+class MainWindow(QMainWindow):
+
     def __init__(self):
-
         super().__init__()
+
+        # Create a new widget object (window)
+        widget = QWidget()
+        self.setCentralWidget(widget)
+        self.title = 'Qt5-MainWindow with menubar'
+        self.left = 300
+        self.top = 300
+        self.width = 450
+        self.height = 300
+
+        self.create_actions()
         self.init_ui()
+
+    def create_actions(self):
+
+        # Add a quit action
+        self.quit_action = QAction('&Quit', self)
+        self.quit_action.setShortcut('Ctrl+Q')
+        self.quit_action.setStatusTip('Exit this application.')
+        self.quit_action.triggered.connect(qApp.quit)
+
+    def create_menubar(self):
+        # Create menubar
+        menubar = self.menuBar()
+        menubar.setNativeMenuBar(False)
+        self.file_menu.addAction(self.quit_action)
 
     def init_ui(self):
 
-        self.text_area = QtWidgets.QLabel("haven't been clicked")
-        self.button = QtWidgets.QPushButton("Click")
-        self.count = 0
-        self.setWindowTitle("Just Click")
-        self.setGeometry(100,200,400,200)
-        self.label = QLabel(self)
-        self.pixmap = QPixmap('firstphoto.jpg')
-        self.label.setPixmap(self.pixmap)
-        self.label.resize(self.pixmap.width(),self.pixmap.height())
-        self.text_area.setStyleSheet("color: red;")
-        v_box = QtWidgets.QVBoxLayout()
+        # Create menus
+        self.file_menu = self.menuBar().addMenu('&File')
+        self.create_menubar()
 
-        v_box.addWidget(self.text_area)
-        v_box.addWidget(self.button)
-        v_box.addStretch()
-
-        h_box = QtWidgets.QHBoxLayout()
-
-        h_box.addStretch()
-        h_box.addLayout(v_box)
-        h_box.addStretch()
-
-        self.setLayout(h_box)
-
-        self.button.clicked.connect(self.click)
-
+        # Set basic window layout
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
         self.show()
-
-    def click(self):
-        self.count += 1
-        print(222222)
-        self.text_area.setText(str(self.count) + " time clicked")
-
-
 
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-
-    window1 = Window()
-
-
-
+    app = QApplication(sys.argv)
+    window = MainWindow()
     sys.exit(app.exec_())
-

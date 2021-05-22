@@ -71,7 +71,8 @@ def install_bios(ctx):
     exe = SSHConnection.run_command(ctx, LinuxCommands.get_bios_token())
     token = LinuxCommands.clean_token(exe)
     Common.log(f"LOG: @func clean_token {token}")
-    version = "latest"
+    # version = "latest"
+    version = "v1.7.0"
     Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX SERVICE >>>>>>>>>>> ")
     exe = SSHConnection.run_command(ctx, LinuxCommands.install_rubix_service(token, version))
     Common.log(f"LOG: @func install_rubix_service {exe}")
@@ -84,7 +85,7 @@ def install_wires_plat(ctx):
     token = LinuxCommands.clean_token(exe)
     Common.log(f"LOG: @func clean_token {token}")
     service = "RUBIX_PLAT"
-    git_token = "478aadf6e6e392a98e34b2925dec7d56438cc6d6"
+    git_token = "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"
     version = "v1.7.1"
     # version = "latest"
     Common.log(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM ADD GITHUB TOKEN >>>>>>>>>>> ")
@@ -104,6 +105,7 @@ def install_wires_plat(ctx):
         time.sleep(3)
         Common.log(f"LOG: >>>>>>>>>>> CHECK DOWNLOAD STATUS  >>>>>>>>>>> ")
         tt = json.loads(aa)
+        tt = tt.get('services')
         if isinstance(tt, list):
             Common.log(f"LOG: >>>>>>>>>>> DOWNLOADED WIRES-PLAT-COMPLETED >>>>>>>>>>> ")
             ttt = tt[0].get('download')
