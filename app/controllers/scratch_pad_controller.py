@@ -67,3 +67,12 @@ class ScratchPadController:
             msg = f"device on ip: {ip} is dead"
             self.parent.statusBar.showMessage(msg)
             logging.debug(msg)
+
+    def _update_options(self):
+        op = self.parent.setting_remote_update_type.currentText()
+        op_service = "install rubix service"
+        op_service_bios = "install bios & rubix service"
+        if op == op_service:
+            print(op)
+        elif op == op_service_bios:
+            print(op)
