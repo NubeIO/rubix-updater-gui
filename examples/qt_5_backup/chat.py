@@ -3,7 +3,6 @@ import re
 import socket
 import threading
 import sys
-import time
 
 import qdarkstyle
 from PyQt5.QtCore import QTimer, Qt
@@ -17,7 +16,7 @@ class QTextEditLogger(logging.Handler):
     def __init__(self, parent):
         super().__init__()
         self.widget = QPlainTextEdit(parent)
-        self.widget.setReadOnly(False)
+        self.widget.setReadOnly(True)
 
     def emit(self, record):
         msg = self.format(record)
@@ -38,19 +37,20 @@ class chat_window(QWidget):
 
     def __init__(self, parent=None):
         super(chat_window, self).__init__(parent)
-        self.setWindowTitle('Rubix Compute Flashing Tool')
+        self.setWindowTitle('Crypt v1')
 
         self.setGeometry(400, 400, 800, 600)
         # self.setWindowFlag(Qt.FramelessWindowHint) ## hide the frame
         self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
         self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
+        self.listFile = QListWidget()
         self.sendBtn = QPushButton('Send')
         self.sendBtn.setDisabled(True)
         self.discBtn = QPushButton('Disconnect')
         self.discBtn.setDisabled(True)
         self.textbox = QLineEdit('')
-        # self.label = QPlainTextEdit('')
-        # self.label.setReadOnly(True)
+        self.label = QPlainTextEdit('')
+        self.label.setReadOnly(True)
         self.ip_bar = QLineEdit('IP')
         self.q_btn = QPushButton('Exit')
         self.connBtn = QPushButton('Connect')
@@ -61,28 +61,32 @@ class chat_window(QWidget):
         self.coding = 1
         self.coded = ''
 
-        layout = QGridLayout()
-        log_box = QTextEditLogger(self)
+        self.client = Client()
 
-        log_box.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-        logging.getLogger().addHandler(log_box)
+        layout = QGridLayout()
+        # layout = QVBoxLayout()
+        logTextBox = QTextEditLogger(self)
+        # You can format what is printed to text box
+        logTextBox.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+        logging.getLogger().addHandler(logTextBox)
         logging.getLogger().setLevel(logging.DEBUG)
+
+        self.timer = QTimer()
+        # self.timer.timeout.connect(self.refresh_state)
 
         layout.addWidget(self.sendBtn, 4, 7, 1, 1)
         layout.addWidget(self.discBtn, 1, 6, 1, 1)
         layout.addWidget(self.textbox, 4, 0, 1, 4)
-        # layout.addWidget(self.label, 3, 0, 1, 0)  # console
+        layout.addWidget(self.label, 3, 0, 1, 0)  # console
 
         layout.addWidget(self.q_btn, 1, 7, 1, 1)
         layout.addWidget(self.connBtn, 1, 5, 1, 1)
         # layout.addWidget(self.host, 1, 0, 1, 1)
         layout.addWidget(self.name_bar, 1, 1, 1, 1)
-        self.name_bar.setText("pi")
         layout.addWidget(self.ip_bar, 1, 2, 1, 1)
         self.ip_bar.setText("0.0.0.0")
         layout.addWidget(self.port, 1, 3, 1, 1)
-        self.port.setText("22")
-        layout.addWidget(log_box.widget, 3, 0, 1, 0)
+        layout.addWidget(logTextBox.widget)
 
         self.host.clicked.connect(self.startServer)
         self.connBtn.clicked.connect(self.connect)
@@ -98,14 +102,13 @@ class chat_window(QWidget):
         self.setLayout(layout)
 
     def test(self):
-        print(111111)
-        # QTextEditLogger(self).clear()
         logging.debug('damn, a bug')
-        # logging.info('something to remember')
-        # logging.warning('that\'s not right')
-        # logging.error('foobar')
+        logging.info('something to remember')
+        logging.warning('that\'s not right')
+        logging.error('foobar')
 
     def disconnect(self):
+        self.client.disconnect()
         self.sendBtn.setDisabled(True)
         self.connBtn.setDisabled(False)
         self.discBtn.setDisabled(True)
@@ -129,12 +132,14 @@ class chat_window(QWidget):
         try:
             ip = self.ip_bar.text()
             if self.is_ip(ip) is None:
-                text = "Invalid IP.\n"
-                logging.error(text)
+                text = self.label.toPlainText()
+                text += "Invalid IP.\n"
+                self.label.setPlainText(text)
+                self.label.setPlainText(logging.error('foobar'))
 
             else:
-                # self.start_timer()
-                # self.client.connect(ip)
+                self.start_timer()
+                self.client.connect(ip)
                 # disbale the buttons when connected
                 self.sendBtn.setDisabled(False)
                 self.connBtn.setDisabled(True)
@@ -157,8 +162,49 @@ class chat_window(QWidget):
         if self.client.log != self.label.toPlainText():
             self.label.setPlainText(self.client.log)
 
-    # def start_timer(self):
-    #     self.timer.start(140)
+    def start_timer(self):
+        self.timer.start(140)
+
+
+class Client:
+    def __init__(self):
+        self.terminal = False
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.log = ""
+
+    def connect(self, address):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect((address, 10000))
+        self.log += "Connected." + "\n"
+        print("Connected.")
+
+        oThread = threading.Thread(target=self.get_msg)
+        oThread.daemon = True
+        oThread.start()
+
+        if self.terminal:
+            while True:
+                self.sock.send(bytes(input(""), 'utf-8'))
+                print("\033")
+
+    def disconnect(self):
+        self.sock.close()
+
+    def get_msg(self):
+        try:
+            while True:
+                data = self.sock.recv(1024)
+                if not data:
+                    break
+                print(22222)
+                print(str(data, 'utf-8'))
+                print(22222)
+                self.log += str(data, 'utf-8') + "\n"
+        except ConnectionAbortedError:
+            self.log += "Disconnected." + "\n"
+
+    def send_msg_manual(self, message):
+        self.sock.send(bytes(message, 'utf-8'))
 
 
 if __name__ == '__main__':
@@ -170,9 +216,8 @@ if __name__ == '__main__':
         app.exec()
     else:
         try:
-            print(222222)
-            # client = Client()
-            # client.terminal = True
-            # client.connect(sys.argv[len(sys.argv) - 1])
+            client = Client()
+            client.terminal = True
+            client.connect(sys.argv[len(sys.argv) - 1])
         except ConnectionRefusedError:
             print("Failed to connect.")
