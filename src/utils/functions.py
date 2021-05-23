@@ -2,18 +2,25 @@ import platform
 import subprocess
 
 
+#
+#
 class Utils:
 
     @classmethod
     def ping(cls, host) -> bool:
-        """
-        Returns True if host (str) responds to a ping request.
-        Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
-        """
-        # Option for the number of packets as a function of
-        param = '-n' if platform.system().lower() == 'windows' else '-c'
+        try:
+            output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower(
+            ) == "windows" else 'c', host), shell=True, universal_newlines=True)
+            if 'unreachable' in output:
+                return False
+            else:
+                return True
+        except Exception:
+            return False
 
-        # Building the command. Ex: "ping -c 1 google.com"
-        command = ['ping', param, '1', host]
 
-        return subprocess.call(command) == 0
+# import subprocess
+# import platform
+
+
+print(Utils.ping("192.168.15.100"))
