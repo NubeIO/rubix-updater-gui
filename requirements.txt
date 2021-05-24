@@ -1,5 +1,0 @@
-dearpygui
-fabric
-githubdl
-qdarkstyle
-PyQt5
