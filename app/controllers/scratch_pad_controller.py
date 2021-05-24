@@ -43,7 +43,7 @@ class ScratchPadController:
 
         import githubdl
 
-        GIT_TOKEN = "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"
+        GIT_TOKEN = "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"
         RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
 
         POINT_SERVER_CONFIG = "config-files/point-server"
