@@ -44,7 +44,6 @@ class LinuxCommands:
         return r"""curl -X POST http://localhost:1616/api/users/login -H "Content-Type: application/json" -d '{"username":
         "admin", "password": "N00BWires"}'"""
 
-
     @classmethod
     def add_rubix_service_github_token(cls, token, git_token):
         r = f"""curl -X PUT http://localhost:1616/api/app/token -H "Content-Type: application/json" -H "Authorization: {token}" -d '{{"token": "{git_token}"}}'"""
@@ -90,6 +89,11 @@ class LinuxCommands:
     def move_config_file(cls, service):
         return f"sudo mv config.json /data/{service}/config/config.json"
 
+    #
+    @classmethod
+    def delete_rubix_dirs(cls):
+        return r"find . -name '*rubix-bios*' -exec rm -f {} \;"
+
     @classmethod
     def delete_home_dir(cls):
         return f"sudo rm -r *"
@@ -101,3 +105,14 @@ class LinuxCommands:
     @classmethod
     def reboot_host(cls):
         return f"sudo reboot"
+
+    @classmethod
+    def install_dfu(cls):
+        return f"sudo apt install -y dfu-util"
+
+    @classmethod
+    def run_stm_file(cls):
+        return f"python stm-flasher.py r-c-loraraw_subnet-1_v0.2.bin"
+
+
+
