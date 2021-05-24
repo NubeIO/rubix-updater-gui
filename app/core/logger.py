@@ -17,4 +17,4 @@ class LoggerSetup:
         log = ConsoleLogger(self.parent)
         log.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         logging.getLogger().addHandler(log)
-        logging.getLogger().setLevel(logging.INFO)
+        logging.getLogger().setLevel(logging.DEBUG)

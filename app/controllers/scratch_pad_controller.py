@@ -1,7 +1,9 @@
 import logging
 import os
-import githubdl
+from time import sleep
 
+import githubdl
+from datetime import datetime
 from app.core.logger import LoggerSetup
 from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update
@@ -25,20 +27,25 @@ class RubixUpdateLogger:
 
 class ScratchPadController:
     def __init__(self, parent, app):
+
         self.parent = parent
+        RubixUpdateLogger(self.parent)
         self.app = app
         # tab host connection
-        self.parent.action_remote_update_connect.pressed.connect(self._connect)
+        # self.parent.action_remote_update_connect.pressed.connect(self._connect)
         self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
         self.parent.action_remote_clear_console.pressed.connect(self._clear_console)
         # flash lora
         self.parent.action_lora_reflash.pressed.connect(self._lora_reflash)
         # update rubix
         self.parent.action_remote_update.pressed.connect(self._update_rubix)
-        RubixUpdateLogger(self.parent)
+
         # make connection
 
-    def _connect(self):
+
+
+
+    def _connection(self):
         host = self.parent.setting_remote_update_host.text()
         port = self.parent.setting_remote_update_port.text()
         user = self.parent.setting_remote_update_user.text()
@@ -53,7 +60,8 @@ class ScratchPadController:
         return cx
 
     def _lora_reflash(self):
-        cx = self._connect()
+        cx = self._connection()
+
         github_token = self.parent.github_token.text()
         githubdl.dl_dir(RUBIX_IMAGE_REPO, STM_FLASH_SCRIPT,
                         github_token=github_token)
@@ -67,8 +75,13 @@ class ScratchPadController:
         file_transfer_stm_build(cx, file_stm_bin, HOME_DIR)
 
     def _update_rubix(self):
-        cx = self._connect()
+        cx = self._connection()
+
         ip = self.parent.setting_remote_update_host.text()
+        rubix_username = self.parent.rubix_username.text()
+        rubix_password = self.parent.rubix_password.text()
+        rubix_bios_port = self.parent.rubix_bios_port.text()
+        rubix_service_port = self.parent.rubix_service_port.text()
         github_token = self.parent.github_token.text()
         ping = Utils.ping(ip)
         if ping:
@@ -76,7 +89,14 @@ class ScratchPadController:
             self.parent.statusBar.showMessage(msg)
             logging.info(msg)
             logging.info("------ Connect and start updates ------")
-            deploy_rubix_update(cx, host=ip, github_token=github_token)
+            deploy_rubix_update(cx,
+                                host=ip,
+                                github_token=github_token,
+                                rubix_username=rubix_username,
+                                rubix_password=rubix_password,
+                                rubix_bios_port=rubix_bios_port,
+                                rubix_service_port=rubix_service_port
+                                )
         else:
             msg = f"device on ip: {ip} is dead"
             self.parent.statusBar.showMessage(msg)
@@ -88,12 +108,32 @@ class ScratchPadController:
     def _ping_host(self):
         ip = self.parent.setting_remote_update_host.text()
         res = Utils.ping(ip)
+        dt = datetime.now()
+        time = dt.strftime("%d-%b-%Y (%H:%M:%S)")
         if res:
-            msg = f"device on ip: {ip} is connected"
+            msg = f"device on ip: {ip} is connected {time}"
+            self.parent.statusBar.showMessage(msg)
+            logging.warning("1212123132")
+            logging.warning(msg)
+            self._ping_host2()
+        else:
+            msg = f"device on ip: {ip} is dead {time}"
             self.parent.statusBar.showMessage(msg)
             logging.debug(msg)
+
+    def _ping_host2(self):
+        ip = self.parent.setting_remote_update_host.text()
+        res = Utils.ping(ip)
+        dt = datetime.now()
+        time = dt.strftime("%d-%b-%Y (%H:%M:%S)")
+        if res:
+            msg = f"device on ip: {ip} is connected {time}"
+            self.parent.statusBar.showMessage(msg)
+            logging.warning("_ping_host2")
+            # sleep(5)
+            logging.warning(msg)
         else:
-            msg = f"device on ip: {ip} is dead"
+            msg = f"device on ip: {ip} is dead {time}"
             self.parent.statusBar.showMessage(msg)
             logging.debug(msg)
 

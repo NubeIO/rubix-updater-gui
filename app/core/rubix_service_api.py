@@ -73,16 +73,18 @@ class RubixApi:
 
     @staticmethod
     def install_wires_plat(host, token):
-        payload = [{"service": "RUBIX_PLAT", "version": "v1.7.0"}]
+        payload = [{"service": "RUBIX_PLAT", "version": "v1.7.2"}]
         access_token = token
         url = f"http://{host}:1616/api/app/download"
         download_state_url = f"http://{host}:1616/api/app/download_state"
+        install_url = f"http://{host}:1616/api/app/install"
         result = requests.post(url,
                                headers={'Content-Type': 'application/json', 'Authorization': '{}'.format(access_token)},
                                json=payload)
         if result.status_code != 200:
             print("Failed to download", result.json())
             print("Clearing download state...")
+
             requests.delete(download_state_url,
                             headers={'Content-Type': 'application/json',
                                      'Authorization': '{}'.format(access_token)},
@@ -109,3 +111,11 @@ class RubixApi:
                                      'Authorization': '{}'.format(access_token)},
                             json=payload)
             print("Download state is cleared...")
+            result = requests.post(install_url,
+                                   headers={'Content-Type': 'application/json',
+                                            'Authorization': '{}'.format(access_token)},
+                                   json=payload)
+            if result.status_code != 200:
+                print("Failed to install", result.json())
+            else:
+                print("Install completed...")

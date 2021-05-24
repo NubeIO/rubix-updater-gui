@@ -12,14 +12,24 @@ def deploy_rubix_update(ctx, **kwargs):
     delete_all_dirs = kwargs.get('delete_all_dirs')
     host = kwargs.get('host')
     github_token = kwargs.get('github_token')
-    print(22222, github_token)
+    rubix_username = kwargs.get('rubix_username')
+    rubix_password = kwargs.get('rubix_password')
+    rubix_bios_port = kwargs.get('rubix_bios_port')
+    rubix_service_port = kwargs.get('rubix_service_port')
     with ctx as c:
+        delete_data_dir(c)
         mk_dir_data(c)
         delete_rubix_dirs(c)
         command_ls(c)
-        install_bios(c, github_token)
-        install_rubix_service()
-        time.sleep(5)
+        install_bios(c)
+        install_rubix_service(c, host,
+                              github_token,
+                              rubix_username=rubix_username,
+                              rubix_password=rubix_password,
+                              rubix_bios_port=rubix_bios_port,
+                              rubix_service_port=rubix_service_port
+                              )
+        # time.sleep(5)
         # install_wires_plat(c, github_token)
 
 
@@ -57,10 +67,10 @@ def delete_data_dir(ctx):
     logging.debug(f"LOG: @func delete_data_dir {exe}")
 
 
-@task
-def delete_data_dir(ctx):
-    exe = SSHConnection.run_command(ctx, LinuxCommands.delete_data_dir())
-    logging.debug(f"LOG: @func delete_data_dir {exe}")
+# @task
+# def delete_data_dir(ctx):
+#     exe = SSHConnection.run_command(ctx, LinuxCommands.delete_data_dir())
+#     logging.debug(f"LOG: @func delete_data_dir {exe}")
 
 
 @task
@@ -80,30 +90,26 @@ def install_bios(ctx):
     logging.info(f"LOG: INSTALL BIOS -> run install")
     exe = SSHConnection.run_command(ctx, LinuxCommands.install_bios())
     logging.info(f"LOG: @func install_bios {exe}")
-    # time.sleep(5)
-    # exe = SSHConnection.run_command(ctx, LinuxCommands.get_bios_token())
-    # token = LinuxCommands.clean_token(exe)
-    # logging.info(f"LOG: @func clean_token {token}")
-    # # version = "latest"
-    # version = "v1.7.1"
-    # logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX SERVICE >>>>>>>>>>> ")
-    # exe = SSHConnection.run_command(ctx, LinuxCommands.install_rubix_service(token, version))
-    # logging.info(f"LOG: @func install_rubix_service {exe}")
-    #
-    # logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM ADD GITHUB TOKEN >>>>>>>>>>> ")
-    # time.sleep(8)
-    # exe = SSHConnection.run_command(ctx, LinuxCommands.add_rubix_service_github_token(token, github_token))
-    # logging.info(f"LOG: @func add_rubix_service_github_token {exe}")
 
 
 @task
-def install_rubix_service(host, github_token):
+def install_rubix_service(ctx, host, github_token, **kwargs):
+    rubix_username = kwargs.get('rubix_username')
+    rubix_password = kwargs.get('rubix_password')
+    rubix_bios_port = kwargs.get('rubix_bios_port')
+    rubix_service_port = kwargs.get('rubix_service_port')
+
+    exe = SSHConnection.run_command(ctx, LinuxCommands.command_ls("/home/pi"))
+    logging.info(f"LOG: @func command_ls {exe}")
+    print(22222, rubix_username, rubix_password, rubix_bios_port , rubix_service_port)
     bios_token = RubixApi.bios_get_token(host)
+    print(22222, bios_token)
     RubixApi.bios_add_git_token(host, bios_token, github_token)
     RubixApi.install_rubix_service(host, bios_token)
     rubix_token = RubixApi.get_rubix_service_token(host)
     RubixApi.rubix_add_git_token(host, rubix_token, github_token)
     RubixApi.install_wires_plat(host, rubix_token)
+
 
 @task
 def install_wires_plat(ctx):
