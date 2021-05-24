@@ -26,4 +26,12 @@ class SSHConnection:
         except:
             print(f"ERROR: {command}")
 
+    @staticmethod
+    def run_sftp(ctx, file, directory):
+        try:
+            out = ctx.put(file, directory)
+            return out.__dict__.get('stdout')
+        except:
+            print(f"ERROR: file transfer {directory}")
+
 

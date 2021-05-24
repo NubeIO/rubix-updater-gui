@@ -3,3 +3,6 @@ darkdetect
 attrs
 cattrs
 dataset
+githubdl
+fabric
+pyinstaller

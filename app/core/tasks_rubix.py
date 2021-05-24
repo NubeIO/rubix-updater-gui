@@ -23,6 +23,14 @@ def deploy_rubix_update(ctx, **kwargs):
             install_wires_plat(c)
 
 @task
+def file_transfer_stm(ctx, file, directory):
+    exe = SSHConnection.run_sftp(ctx, file, directory)
+    logging.info(f"LOG: @func file_transfer_stm {exe}")
+
+
+
+
+@task
 def command_ls(ctx):
     exe = SSHConnection.run_command(ctx, LinuxCommands.command_ls("/home/pi"))
     logging.info(f"LOG: @func command_ls {exe}")

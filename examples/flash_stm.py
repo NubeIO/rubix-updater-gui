@@ -1,4 +1,4 @@
-import githubdl
+# import githubdl
 from fabric import Connection
 
 POINT_SERVER_PATH = "./config-files/point-server/point-server/config.json"
@@ -10,7 +10,7 @@ githubdl.dl_dir("https://github.com/NubeIO/rubix-pi-image", "config-files/point-
 # import os
 # # POINT_SERVER_PATH = "./config-files/point-server/point-server"
 # arr = os.listdir(POINT_SERVER_PATH)
-
+file = POINT_SERVER_PATH
 HOME_DIR = '/home/pi'
 file ="/home/aidan/code/py-nube/rubix-updater-gui/r-c-loraraw_subnet-1_v0.2.bin"
 
