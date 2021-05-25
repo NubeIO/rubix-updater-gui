@@ -14,6 +14,10 @@ class LinuxCommands:
         return f"/data"
 
     @classmethod
+    def command_blank(cls, cmd):
+        return cmd
+
+    @classmethod
     def command_ls(cls, path):
         return f"ls -l {path}"
 
@@ -113,7 +117,3 @@ class LinuxCommands:
     @classmethod
     def run_stm_file(cls):
         return f"python stm-flasher.py r-c-loraraw_subnet-1_v0.2.bin"
-
-
-
-

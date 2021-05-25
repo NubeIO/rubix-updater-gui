@@ -73,7 +73,7 @@ class RubixApi:
 
     @staticmethod
     def install_wires_plat(host, token):
-        payload = [{"service": "RUBIX_PLAT", "version": "v1.7.2"}]
+        payload = [{"service": "RUBIX_PLAT", "version": "v1.7.3"}]
         access_token = token
         url = f"http://{host}:1616/api/app/download"
         download_state_url = f"http://{host}:1616/api/app/download_state"

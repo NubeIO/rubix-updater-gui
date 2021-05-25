@@ -4,9 +4,13 @@ from time import sleep
 
 import githubdl
 from datetime import datetime
+
+from invoke import Responder
+
+from app.core.commands import LinuxCommands
 from app.core.logger import LoggerSetup
 from app.core.make_connection import SSHConnection
-from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update
+from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls
 from app.utils.utils import Utils
 
 RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
@@ -34,16 +38,15 @@ class ScratchPadController:
         # tab host connection
         # self.parent.action_remote_update_connect.pressed.connect(self._connect)
         self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
-        self.parent.action_remote_clear_console.pressed.connect(self._clear_console)
+        # self.parent.action_remote_clear_console.pressed.connect(self._clear_console)
         # flash lora
         self.parent.action_lora_reflash.pressed.connect(self._lora_reflash)
         # update rubix
         self.parent.action_remote_update.pressed.connect(self._update_rubix)
+        # update bbb ip
+        self.parent.run_update_bbb_ip.pressed.connect(self.run_update_bbb_ip)
 
         # make connection
-
-
-
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
@@ -55,9 +58,37 @@ class ScratchPadController:
             host=host,
             port=port,
             user=user,
+            connect_timeout=5,
             password=password
         ).connect()
         return cx
+
+    def _connection_bbb(self):
+        host = self.parent.bbb_host.text()
+        port = self.parent.bbb_port.text()
+        user = self.parent.bbb_user.text()
+        password = self.parent.bbb_password.text()
+        logging.info(f"try and connect with host:{host} port:{port} user:{user}")
+        cx = SSHConnection(
+            host=host,
+            port=port,
+            user=user,
+            connect_timeout=5,
+            password=password
+        ).connect()
+        return cx
+
+    def _connection_status(self):
+        cx = self._connection()
+        ip = self.parent.setting_remote_update_host.text()
+        time = self._time_stamp()
+        print(cx, 5555555555)
+        if not cx:
+            msg = f"device on ip: {ip} is DEAD {time}"
+            self.parent.statusBar.showMessage(msg)
+            return False
+        else:
+            return cx
 
     def _lora_reflash(self):
         cx = self._connection()
@@ -76,7 +107,6 @@ class ScratchPadController:
 
     def _update_rubix(self):
         cx = self._connection()
-
         ip = self.parent.setting_remote_update_host.text()
         rubix_username = self.parent.rubix_username.text()
         rubix_password = self.parent.rubix_password.text()
@@ -102,40 +132,54 @@ class ScratchPadController:
             self.parent.statusBar.showMessage(msg)
             logging.debug(msg)
 
+    def run_update_bbb_ip(self):
+        cx = self._connection_bbb()
+        bbb_new_ip = self.parent.bbb_new_ip.text()
+        bbb_new_mask = self.parent.bbb_new_mask.text()
+        bbb_new_router = self.parent.bbb_new_router.text()
+
+        sudo_pass = Responder(
+            pattern=r'\[sudo\] password for debian:',
+            response='N00B2828\n',
+        )
+
+        # exe = cx.run()
+        exe = SSHConnection.run_command(cx, LinuxCommands.command_blank("connmanctl services"))
+        iface = ''.join(exe.split())[8:]
+        print(iface)
+        new_ip = f"sudo connmanctl config {iface} --ipv4 manual {bbb_new_ip} {bbb_new_mask} {bbb_new_router} --nameservers 8.8.8.8"
+        print(new_ip)
+        # new_ip = "sudo pwd"
+        print(new_ip)
+        cx.run(new_ip, pty=True, watchers=[sudo_pass])
+        new_ip = "sudo pwd"
+        print(new_ip)
+        cx.run(new_ip, pty=True, watchers=[sudo_pass])
+
     def _clear_console(self):
         print("ADD LATER")
 
+    def _time_stamp(self):
+        dt = datetime.now()
+        time = dt.strftime("%d-%b-%Y (%H:%M:%S)")
+        return time
+
     def _ping_host(self):
         ip = self.parent.setting_remote_update_host.text()
-        res = Utils.ping(ip)
-        dt = datetime.now()
-        time = dt.strftime("%d-%b-%Y (%H:%M:%S)")
-        if res:
-            msg = f"device on ip: {ip} is connected {time}"
-            self.parent.statusBar.showMessage(msg)
-            logging.warning("1212123132")
-            logging.warning(msg)
-            self._ping_host2()
+        cx = self._connection_status()
+        time = self._time_stamp()
+        print(cx, 666666666)
+        if not cx:
+            msg = f"device on ip: {ip} is DEAD {time}"
+            logging.info(msg)
         else:
-            msg = f"device on ip: {ip} is dead {time}"
-            self.parent.statusBar.showMessage(msg)
-            logging.debug(msg)
-
-    def _ping_host2(self):
-        ip = self.parent.setting_remote_update_host.text()
-        res = Utils.ping(ip)
-        dt = datetime.now()
-        time = dt.strftime("%d-%b-%Y (%H:%M:%S)")
-        if res:
-            msg = f"device on ip: {ip} is connected {time}"
-            self.parent.statusBar.showMessage(msg)
-            logging.warning("_ping_host2")
-            # sleep(5)
-            logging.warning(msg)
-        else:
-            msg = f"device on ip: {ip} is dead {time}"
-            self.parent.statusBar.showMessage(msg)
-            logging.debug(msg)
+            exe = command_ls(cx)
+            if "ERROR" in exe:
+                msg = f"device on ip: {ip} is DEAD {time}"
+                self.parent.statusBar.showMessage(msg)
+            else:
+                msg = f"device on ip: {ip} is connected {time}"
+                self.parent.statusBar.showMessage(msg)
 
     def _update_options(self):
         op = self.parent.setting_remote_update_type.currentText()

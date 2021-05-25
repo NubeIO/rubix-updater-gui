@@ -16,50 +16,55 @@
 import json
 import time
 
-from fabric import Connection
-
+from fabric import Connection, Config
+from invoke import Responder
+import getpass
 from app.core.commands import LinuxCommands
 from app.core.make_connection import SSHConnection
 
-host = '192.168.15.189'
+host = '192.168.15.249'
 port = 22
-user = 'pi'
-password = 'N00BRCRC'
-ctx = Connection(host=host, port=port, user=user, connect_kwargs={'password': password})
-# c.put(file, HOME_DIR)
-# # c.run('stty -F /dev/ttyAMA0 38400 -cstopb -parenb && cat /dev/ttyAMA0')
-# c.run('ls')
+user = 'debian'
+password = 'N00B2828'
 
-github_token = ""
+#
+# stty -F /dev/ttyAMA0 38400 -cstopb -parenb && cat /dev/ttyAMA0"
+try:
+    # sudo_pass = getpass.getpass("N00B2828")
+    # print(sudo_pass)
 
-exe = SSHConnection.run_command(ctx, LinuxCommands.get_rubix_service_token())
-print(4444, exe)
-token = LinuxCommands.clean_token(exe)
-print(4444, token)
-service = "RUBIX_PLAT"
-# git_token = "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"
-version = "v1.7.1"
-# version = "latest"
-exe = SSHConnection.run_command(ctx, LinuxCommands.add_rubix_service_github_token(token, github_token))
-print(55555, exe)
+    # from fabric import Connection, Config
+    #
+    # config = Config(overrides={'sudo': {'user': 'debian'}})
+    # c = Connection(host=host, port=port, config=config,  connect_kwargs={'password': password})
+    #
+    # c.sudo('whoami')
+    # config = Config(overrides={'sudo': {'password': sudo_pass}})
+    #
+    ctx = Connection(host=host, port=port, user=user, connect_timeout=3, connect_kwargs={'password': password})
+    # c = Connection(host, config=config)
+    # c.sudo('whoami', hide='stderr')
+    # exe = SSHConnection.run_command(N00Bctx, LinuxCommands.command_blank("sudo pwd", pty=True))
+    # iface = ''.join(exe.split())[8:]
+    # ctx.run('sudo pwd', pty=True)
+    sudopass = Responder(
+        pattern=r'\[sudo\] N00B2828:',
+        response='N00B2828\n',
+    )
+    # print(sudopass.response)
+    ctx.run("sudo pwd", pty=True, watchers=[sudopass])
 
-import requests
 
+    # const setIP = `sudo connmanctl config ${iface} --ipv4 manual ${ipAddress} ${subnetMask} ${gateway} --nameservers 8.8.8.8
+    # new_ip = f"sudo connmanctl config ${iface} --ipv4 manual {ipAddress} {subnetMask} {gateway} --nameservers 8.8.8.8"
+    # print(iface)
 
+except:
+    print("An exception occurred")
 
-time.sleep(5)
-max_checks = 20
-time.sleep(2)
-i = 1
-while i < max_checks:
-    aa = SSHConnection.run_command(ctx, LinuxCommands.get_state_download_rubix_service_app(token))
-    time.sleep(3)
-    print(44444, type(aa))
-    tt = json.loads(aa)
-    tt = tt.get('services')
-    if isinstance(tt, list):
-        ttt = tt[0].get('download')
-        if ttt:
-            SSHConnection.run_command(ctx, LinuxCommands.delete_state_download_rubix_service_app(token))
-            break
-    i += 1
+# def do1():
+#     SSHConnection.run_command(ctx, LinuxCommands.command_blank( "timeout 5 stty -F /dev/ttyAMA0 38400 -cstopb -parenb && cat /dev/ttyAMA0"))
+#     time.sleep(10)
+#     return
+#
+#

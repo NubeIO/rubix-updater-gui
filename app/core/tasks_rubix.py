@@ -51,8 +51,10 @@ def file_transfer_stm_build(ctx, file, directory):
 
 @task
 def command_ls(ctx):
-    exe = SSHConnection.run_command(ctx, LinuxCommands.command_ls("/home/pi"))
+    print("command_ls")
+    exe = SSHConnection.run_command(ctx, LinuxCommands.command_ls("/home"))
     logging.info(f"LOG: @func command_ls {exe}")
+    return exe
 
 
 @task
