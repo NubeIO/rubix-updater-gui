@@ -67,6 +67,14 @@ def command_ls(ctx):
     logging.info(f"LOG: @func command_ls {exe}")
     return exe
 
+@task
+def reboot_host(ctx):
+    print("command_ls")
+    exe = SSHConnection.run_command(ctx, LinuxCommands.reboot_host())
+    logging.info(f"LOG: @func reboot_host {exe}")
+    return exe
+
+
 
 @task
 def delete_rubix_dirs(ctx):

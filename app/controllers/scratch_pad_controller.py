@@ -11,7 +11,7 @@ from app.core.commands import LinuxCommands
 from app.core.logger import LoggerSetup
 from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
-    deploy_rubix_service_update
+    deploy_rubix_service_update, reboot_host
 from app.utils.utils import Utils
 
 RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
@@ -58,6 +58,8 @@ class ScratchPadController:
         # update bbb ip
         self.parent.run_update_bbb_ip.setEnabled(False)
         self.parent.run_update_bbb_ip.pressed.connect(self.run_update_bbb_ip)
+        # rubix_reboot
+        self.parent.rubix_reboot.pressed.connect(self._reboot_rubix)
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
@@ -164,6 +166,30 @@ class ScratchPadController:
                                 rubix_bios_port=rubix_bios_port,
                                 rubix_service_port=rubix_service_port
                                 )
+            msg = f"install completed"
+            logging.debug(msg)
+            return msg
+        else:
+            msg = f"device on ip: {ip} is dead"
+            self.parent.statusBar.showMessage(msg)
+            logging.debug(msg)
+            return msg
+
+    def _reboot_rubix(self):
+        cx = self._connection()
+        ip = self.parent.setting_remote_update_host.text()
+        # rubix_username = self.parent.rubix_username.text()
+        # rubix_password = self.parent.rubix_password.text()
+        # rubix_bios_port = self.parent.rubix_bios_port.text()
+        # rubix_service_port = self.parent.rubix_service_port.text()
+        ping = Utils.ping(ip)
+
+        if ping:
+            msg = f"device on ip: {ip} is connected"
+            self.parent.statusBar.showMessage(msg)
+            logging.info(msg)
+            logging.info("------ Connect and start updates ------")
+            reboot_host(cx)
             msg = f"install completed"
             logging.debug(msg)
             return msg
