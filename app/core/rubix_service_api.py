@@ -18,6 +18,7 @@ class RubixApi:
                     return result.json().get('access_token')
             except:
                 print(f"ERROR: get bios token")
+                return False
 
     @staticmethod
     def bios_add_git_token(host, access_token, github_token):
@@ -58,6 +59,7 @@ class RubixApi:
                 #
             except:
                 print(f"ERROR: 1616/api/system/ping")
+                return False
 
     @staticmethod
     def rubix_add_git_token(host, access_token, github_token):
@@ -73,7 +75,7 @@ class RubixApi:
 
     @staticmethod
     def install_wires_plat(host, token):
-        payload = [{"service": "RUBIX_PLAT", "version": "v1.7.3"}]
+        payload = [{"service": "RUBIX_PLAT", "version": "latest"}]
         access_token = token
         url = f"http://{host}:1616/api/app/download"
         download_state_url = f"http://{host}:1616/api/app/download_state"
@@ -119,3 +121,4 @@ class RubixApi:
                 print("Failed to install", result.json())
             else:
                 print("Install completed...")
+                return True

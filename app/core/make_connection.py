@@ -1,3 +1,5 @@
+import logging
+
 from fabric import Connection
 
 
@@ -23,9 +25,10 @@ class SSHConnection:
                                 connect_kwargs={'password': self.password})
         try:
             connection.run('pwd')
+            logging.info(f"CONNECTED with host:{self.host} port:{self.port} user:{self.user}")
             return connection
         except:
-            print(333333, "An exception occurred")
+            logging.info(f"DEAD host:{self.host} port:{self.port} user:{self.user}")
             return False
 
     @staticmethod
@@ -41,11 +44,12 @@ class SSHConnection:
 
     @staticmethod
     def run_sftp(ctx, file, directory):
+        out = ctx.put(file, directory)
         try:
-            out = ctx.put(file, directory)
+            # out = ctx.put(file, directory)
             return out.__dict__.get('stdout')
         except:
-            return f"ERROR: file transfer {directory}"
+            return f"ERROR: file transfer {out}"
 
     @staticmethod
     def run_command_sudo(ctx, command, **kwargs):

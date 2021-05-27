@@ -82,6 +82,18 @@ class LinuxCommands:
         return f"sudo mkdir /data"
 
     @classmethod
+    def make_rubix_service_dir(cls):
+        return f"sudo mkdir /data/rubix-service"
+
+    @classmethod
+    def make_rubix_service_dir_config(cls):
+        return f"sudo mkdir /data/rubix-service/config"
+
+    @classmethod
+    def chown_data_dir(cls):
+        return f"sudo chown -R pi:pi /data"
+
+    @classmethod
     def make_dir_service_config(cls, service):
         return f"sudo mkdir -p /data/{service}/config"
 
