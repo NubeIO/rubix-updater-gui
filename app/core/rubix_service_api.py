@@ -97,6 +97,19 @@ class RubixApi:
             return False
 
     @staticmethod
+    def rubix_add_droplets(host, access_token, body):
+        url = f"http://{host}:1616/lora/api/lora/devices"
+        print("add droplet", body)
+        result = requests.post(url,
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': '{}'.format(access_token)}, json=body)
+        if result.status_code == 200:
+            return result.json()
+        else:
+            print(result.json())
+            return False
+
+    @staticmethod
     def install_rubix_app(host, token, app, version):
         payload = [{"service": app, "version": version}]
         access_token = token

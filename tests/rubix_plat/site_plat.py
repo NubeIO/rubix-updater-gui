@@ -13,11 +13,6 @@ FILE_NAME = "site.csv"
 file = f"{CWD}/{FILE_NAME}"
 print(file)
 
-# Device ID	Device Name	Customer ID	Client Name	Branch (Site) ID	Site Name	Street Address	City	Postcode	State	Country	Timezone
-# 94dadd6e	Build 001	cba	Commonweath Bank Australia	84289	Retail	SHOP 2, GREAT EASTERN HIGHWAY	MIDLAND	6056	WA	Australia
-#
-
-# cols
 
 build_id = 0
 sim_number = 1
@@ -111,25 +106,27 @@ droplets_ids = (droplet_1, droplet_2, droplet_3, droplet_4)
 droplets_zones = (zone_1, zone_2, zone_3, zone_4)
 
 count = 0
+
+host = IP
+payload = {"username": "admin", "password": "N00BWires"}
+access_token = RubixApi.get_rubix_service_token(host)
+print(access_token)
+
 for d in droplets_ids:
     print(droplets_zones[count])
     count += 1
     devices_obj = {
         "name": f'dr{count}',
         "id": f'{d}',
-        "device_type": "THL",
-        "device_model": "THL"
+        "device_type": "DROPLET",
+        "device_model": "DROPLET_THL"
     }
-    print(devices_obj)
+    droplets = True
+    if droplets:
+        if access_token != False:
+            app = RubixApi.rubix_add_droplets(host, access_token, devices_obj)
+            print(" rubix_add_droplets", app)
+        else:
+            sys.exit("FAILED to get token")
 
-droplets = False
-if droplets:
-    host = IP
-    payload = {"username": "admin", "password": "N00BWires"}
-    access_token = RubixApi.get_rubix_service_token(host)
-    print(access_token)
-    if access_token != False:
-        app = RubixApi.rubix_update_plat(host, access_token, body)
-        print(" rubix_update_plat", app)
-    else:
-        sys.exit("FAILED to get token")
+
