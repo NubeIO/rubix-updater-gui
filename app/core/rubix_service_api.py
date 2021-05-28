@@ -53,7 +53,6 @@ class RubixApi:
             sleep(1)
             try:
                 result = requests.post(url, json=payload)
-                print(result.status_code)
                 if result.status_code == 200:
                     return result.json().get('access_token')
                 #
@@ -72,6 +71,80 @@ class RubixApi:
             return True
         else:
             return False
+
+    @staticmethod
+    def rubix_add_config_file(host, access_token, body):
+        url = f"http://{host}:1616/api/app/config/config"
+        print("add config file", body)
+        result = requests.put(url,
+                              headers={'Content-Type': 'application/json',
+                                       'Authorization': '{}'.format(access_token)}, json=body)
+        if result.status_code == 200:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def rubix_update_plat(host, access_token, body):
+        url = f"http://{host}:1616/api/wires/plat"
+        print("add plat", body)
+        result = requests.put(url,
+                              headers={'Content-Type': 'application/json',
+                                       'Authorization': '{}'.format(access_token)}, json=body)
+        if result.status_code == 200:
+            return result.json()
+        else:
+            return False
+
+    @staticmethod
+    def install_rubix_app(host, token, app, version):
+        payload = [{"service": app, "version": version}]
+        access_token = token
+        url = f"http://{host}:1616/api/app/download"
+        download_state_url = f"http://{host}:1616/api/app/download_state"
+        install_url = f"http://{host}:1616/api/app/install"
+        result = requests.post(url,
+                               headers={'Content-Type': 'application/json', 'Authorization': '{}'.format(access_token)},
+                               json=payload)
+        if result.status_code != 200:
+            print("Failed to download", result.json())
+            print("Clearing download state...")
+
+            requests.delete(download_state_url,
+                            headers={'Content-Type': 'application/json',
+                                     'Authorization': '{}'.format(access_token)},
+                            json=payload)
+            print("Download state is cleared...")
+        else:
+            print("Download process has been started, and waiting for it's completion...")
+            while True:
+                sleep(1)
+                download_state = requests.get(download_state_url,
+                                              headers={'Content-Type': 'application/json',
+                                                       'Authorization': '{}'.format(access_token)},
+                                              json=payload)
+                print('download_state', download_state.json())
+                if download_state.json().get('state') == 'DOWNLOADED':
+                    break
+            print("Download completed...")
+            print("Please insert your installation code here...")
+            # Without clearing this state it won't able to start next download
+            # Currently rubix-service has an issue so it works without clearing but later it won't work
+            print("Clearing download state...")
+            requests.delete(download_state_url,
+                            headers={'Content-Type': 'application/json',
+                                     'Authorization': '{}'.format(access_token)},
+                            json=payload)
+            print("Download state is cleared...")
+            result = requests.post(install_url,
+                                   headers={'Content-Type': 'application/json',
+                                            'Authorization': '{}'.format(access_token)},
+                                   json=payload)
+            if result.status_code != 200:
+                print("Failed to install", result.json())
+            else:
+                print("Install completed...")
+                return True
 
     @staticmethod
     def install_wires_plat(host, token):

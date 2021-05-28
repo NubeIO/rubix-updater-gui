@@ -167,21 +167,17 @@ class ScratchPadController:
                                 rubix_service_port=rubix_service_port
                                 )
             msg = f"install completed"
-            logging.debug(msg)
+            logging.info(msg)
             return msg
         else:
             msg = f"device on ip: {ip} is dead"
             self.parent.statusBar.showMessage(msg)
-            logging.debug(msg)
+            logging.info(msg)
             return msg
 
     def _reboot_rubix(self):
         cx = self._connection()
         ip = self.parent.setting_remote_update_host.text()
-        # rubix_username = self.parent.rubix_username.text()
-        # rubix_password = self.parent.rubix_password.text()
-        # rubix_bios_port = self.parent.rubix_bios_port.text()
-        # rubix_service_port = self.parent.rubix_service_port.text()
         ping = Utils.ping(ip)
 
         if ping:
@@ -191,12 +187,12 @@ class ScratchPadController:
             logging.info("------ Connect and start updates ------")
             reboot_host(cx)
             msg = f"install completed"
-            logging.debug(msg)
+            logging.info(msg)
             return msg
         else:
             msg = f"device on ip: {ip} is dead"
             self.parent.statusBar.showMessage(msg)
-            logging.debug(msg)
+            logging.info(msg)
             return msg
 
     def _update_rubix_service(self):
@@ -212,10 +208,8 @@ class ScratchPadController:
         githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
                         github_token=github_token)
         file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/app.json"
-        print(file, 33333333333)
-        exe = cx.put(file, RUBIX_SERVICE_DIR)
-        # exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
-        print(exe, 44444444)
+        exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
+        logging.info(exe)
         if ping:
             msg = f"device on ip: {ip} is connected"
             self.parent.statusBar.showMessage(msg)
@@ -230,12 +224,12 @@ class ScratchPadController:
                                         rubix_service_port=rubix_service_port
                                         )
             msg = f"install completed"
-            logging.debug(msg)
+            logging.info(msg)
             return msg
         else:
             msg = f"device on ip: {ip} is dead"
             self.parent.statusBar.showMessage(msg)
-            logging.debug(msg)
+            logging.info(msg)
             return msg
 
     def check_bbb_connection(self):
@@ -259,14 +253,9 @@ class ScratchPadController:
         # exe = cx.run()
         exe = SSHConnection.run_command(cx, LinuxCommands.command_blank("connmanctl services"))
         iface = ''.join(exe.split())[8:]
-        print(iface)
         new_ip = f"sudo connmanctl config {iface} --ipv4 manual {bbb_new_ip} {bbb_new_mask} {bbb_new_router} --nameservers 8.8.8.8"
-        print(new_ip)
-        # new_ip = "sudo pwd"
-        print(new_ip)
         cx.run(new_ip, pty=True, watchers=[sudo_pass])
         new_ip = "sudo pwd"
-        print(new_ip)
         cx.run(new_ip, pty=True, watchers=[sudo_pass])
 
     def _clear_console(self):
@@ -281,7 +270,6 @@ class ScratchPadController:
         ip = self.parent.setting_remote_update_host.text()
         cx = self._connection_status()
         time = self._time_stamp()
-        print(cx, 666666666)
         if not cx:
             msg = f"device on ip: {ip} is DEAD {time}"
             logging.info(msg)

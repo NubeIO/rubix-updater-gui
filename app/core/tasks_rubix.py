@@ -16,6 +16,8 @@ def deploy_rubix_update(ctx, **kwargs):
         command_ls(c)
         install_bios(c)
         return "install completed"
+
+
 @task
 def deploy_rubix_service_update(ctx, **kwargs):
     delete_all_dirs = kwargs.get('delete_all_dirs')
@@ -34,14 +36,6 @@ def deploy_rubix_service_update(ctx, **kwargs):
                               rubix_service_port=rubix_service_port
                               )
         return "install completed"
-
-# @task
-# def file_transfer_rubix_service_config(ctx, file, directory):
-#     exe = SSHConnection.run_sftp(ctx, file, directory)
-#     logging.info(f"LOG: @func transfer stm file {exe}")
-#     exe = SSHConnection.run_command(ctx, LinuxCommands.install_dfu())
-#     logging.info(f"LOG: @func install_dfu {exe}")
-
 
 
 @task
@@ -62,18 +56,16 @@ def file_transfer_stm_build(ctx, file, directory):
 
 @task
 def command_ls(ctx):
-    print("command_ls")
     exe = SSHConnection.run_command(ctx, LinuxCommands.command_ls("/home"))
     logging.info(f"LOG: @func command_ls {exe}")
     return exe
 
+
 @task
 def reboot_host(ctx):
-    print("command_ls")
     exe = SSHConnection.run_command(ctx, LinuxCommands.reboot_host())
     logging.info(f"LOG: @func reboot_host {exe}")
     return exe
-
 
 
 @task
@@ -88,12 +80,6 @@ def delete_data_dir(ctx):
     logging.info(f"LOG: @func delete_data_dir {exe}")
 
 
-# @task
-# def delete_data_dir(ctx):
-#     exe = SSHConnection.run_command(ctx, LinuxCommands.delete_data_dir())
-#     logging.info(f"LOG: @func delete_data_dir {exe}")
-
-
 @task
 def mk_dir_data(ctx):
     exe = SSHConnection.run_command(ctx, LinuxCommands.make_data_dir())
@@ -106,7 +92,14 @@ def mk_dir_data(ctx):
     logging.info(f"LOG: @func make_rubix_service_dir_config {exe}")
     exe = SSHConnection.run_command(ctx, LinuxCommands.chown_data_dir())
     logging.info(f"LOG: @func chown_data_dir {exe}")
-
+    # mkdir point-server
+    exe = SSHConnection.run_command(ctx, LinuxCommands.make_dir_service_config("point-server"))
+    logging.info(f"LOG: @func mkdir point-server {exe}")
+    # make lora-raw
+    exe = SSHConnection.run_command(ctx, LinuxCommands.make_dir_service_config("lora-raw"))
+    logging.info(f"LOG: @func mkdir lora-raw {exe}")
+    exe = SSHConnection.run_command(ctx, LinuxCommands.chown_data_dir())
+    logging.info(f"LOG: @func chown_data_dir {exe}")
 
 
 @task
@@ -128,7 +121,7 @@ def install_rubix_service(ctx, host, github_token, **kwargs):
     rubix_password = kwargs.get('rubix_password')
     rubix_bios_port = kwargs.get('rubix_bios_port')
     rubix_service_port = kwargs.get('rubix_service_port')
-    print(22222, rubix_username, rubix_password, rubix_bios_port , rubix_service_port)
+    print(22222, rubix_username, rubix_password, rubix_bios_port, rubix_service_port)
     bios_token = RubixApi.bios_get_token(host)
     print(22222, bios_token)
     RubixApi.bios_add_git_token(host, bios_token, github_token)

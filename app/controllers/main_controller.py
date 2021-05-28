@@ -1,4 +1,3 @@
-
 class MainWindowController:
     def __init__(self, parent_window, app):
         self.parent = parent_window

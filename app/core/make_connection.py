@@ -1,5 +1,4 @@
 import logging
-
 from fabric import Connection
 
 
@@ -33,23 +32,19 @@ class SSHConnection:
 
     @staticmethod
     def run_command(ctx, command):
-        print("run_command")
         try:
             out = ctx.run(command)
-            print("run_command 2")
             return out.__dict__.get('stdout')
         except:
-            print("run_command ERROR")
             return f"ERROR: {command}"
 
     @staticmethod
     def run_sftp(ctx, file, directory):
-        out = ctx.put(file, directory)
         try:
-            # out = ctx.put(file, directory)
+            out = ctx.put(file, directory)
             return out.__dict__.get('stdout')
         except:
-            return f"ERROR: file transfer {out}"
+            return f"ERROR: file transfer: file {file} dir: {directory}"
 
     @staticmethod
     def run_command_sudo(ctx, command, **kwargs):
@@ -57,8 +52,6 @@ class SSHConnection:
         watchers = kwargs.get('watchers')
         try:
             out = ctx.run(command, pty=pty, watchers=watchers)
-            print("run_command 2")
             return out.__dict__.get('stdout')
         except:
-            print("run_command ERROR")
             return f"ERROR: {command}"
