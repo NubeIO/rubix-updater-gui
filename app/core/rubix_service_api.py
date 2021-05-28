@@ -5,8 +5,9 @@ from time import sleep
 class RubixApi:
 
     @staticmethod
-    def bios_get_token(host):
-        url = f"http://{host}:1615/api/users/login"
+    def bios_get_token(host, **kwargs):
+        port = kwargs.get('port') or 1615
+        url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
         sleep(1)
         while True:
@@ -21,8 +22,9 @@ class RubixApi:
                 return False
 
     @staticmethod
-    def bios_add_git_token(host, access_token, github_token):
-        url = f"http://{host}:1615/api/service/token"
+    def bios_add_git_token(host, access_token, github_token, **kwargs):
+        port = kwargs.get('port') or 1615
+        url = f"http://{host}:{port}/api/service/token"
         github_token = {"token": github_token}
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
@@ -33,7 +35,9 @@ class RubixApi:
             return False
 
     @staticmethod
-    def install_rubix_service(host, access_token):
+    def install_rubix_service(host, access_token, **kwargs):
+        port = kwargs.get('port') or 1615
+        {port}
         url = f"http://{host}:1615/api/service/upgrade"
         body = {"version": "latest"}
         result = requests.put(url,
@@ -45,8 +49,9 @@ class RubixApi:
             return False
 
     @staticmethod
-    def get_rubix_service_token(host):
-        url = f"http://{host}:1616/api/users/login"
+    def get_rubix_service_token(host, **kwargs):
+        port = kwargs.get('port') or 1616
+        url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
         sleep(2)
         while True:
@@ -61,7 +66,9 @@ class RubixApi:
                 return False
 
     @staticmethod
-    def rubix_add_git_token(host, access_token, github_token):
+    def rubix_add_git_token(host, access_token, github_token, **kwargs):
+        port = kwargs.get('port') or 1616
+        {port}
         url = f"http://{host}:1616/api/service/token"
         github_token = {"token": github_token}
         result = requests.put(url,
@@ -73,7 +80,9 @@ class RubixApi:
             return False
 
     @staticmethod
-    def rubix_add_config_file(host, access_token, body):
+    def rubix_add_config_file(host, access_token, body, **kwargs):
+        port = kwargs.get('port') or 1616
+        {port}
         url = f"http://{host}:1616/api/app/config/config"
         print("add config file", body)
         result = requests.put(url,
@@ -85,7 +94,9 @@ class RubixApi:
             return False
 
     @staticmethod
-    def rubix_update_plat(host, access_token, body):
+    def rubix_update_plat(host, access_token, body, **kwargs):
+        port = kwargs.get('port') or 1616
+        {port}
         url = f"http://{host}:1616/api/wires/plat"
         print("add plat", body)
         result = requests.put(url,
@@ -97,7 +108,9 @@ class RubixApi:
             return False
 
     @staticmethod
-    def rubix_add_droplets(host, access_token, body):
+    def rubix_add_droplets(host, access_token, body, **kwargs):
+        port = kwargs.get('port') or 1616
+        {port}
         url = f"http://{host}:1616/lora/api/lora/devices"
         print("add droplet", body)
         result = requests.post(url,
@@ -110,7 +123,9 @@ class RubixApi:
             return False
 
     @staticmethod
-    def install_rubix_app(host, token, app, version):
+    def install_rubix_app(host, token, app, version, **kwargs):
+        port = kwargs.get('port') or 1616
+        {port}
         payload = [{"service": app, "version": version}]
         access_token = token
         url = f"http://{host}:1616/api/app/download"
@@ -160,7 +175,9 @@ class RubixApi:
                 return True
 
     @staticmethod
-    def install_wires_plat(host, token):
+    def install_wires_plat(host, token, **kwargs):
+        port = kwargs.get('port') or 1616
+        {port}
         payload = [{"service": "RUBIX_PLAT", "version": "latest"}]
         access_token = token
         url = f"http://{host}:1616/api/app/download"
@@ -191,8 +208,6 @@ class RubixApi:
                     break
             print("Download completed...")
             print("Please insert your installation code here...")
-            # Without clearing this state it won't able to start next download
-            # Currently rubix-service has an issue so it works without clearing but later it won't work
             print("Clearing download state...")
             requests.delete(download_state_url,
                             headers={'Content-Type': 'application/json',

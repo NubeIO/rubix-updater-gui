@@ -1,0 +1,9 @@
+{
+  "connection": {
+    "host": "1192.168.15.10",
+    "port": 22,
+    "user": "pi",
+    "password": "N00B",
+    "git_token": "my token"
+  }
+}

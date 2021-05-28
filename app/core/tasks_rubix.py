@@ -8,7 +8,7 @@ from app.core.rubix_service_api import RubixApi
 
 
 @task
-def deploy_rubix_update(ctx, **kwargs):
+def deploy_rubix_update(ctx):
     with ctx as c:
         delete_data_dir(c)
         mk_dir_data(c)
@@ -20,7 +20,6 @@ def deploy_rubix_update(ctx, **kwargs):
 
 @task
 def deploy_rubix_service_update(ctx, **kwargs):
-    delete_all_dirs = kwargs.get('delete_all_dirs')
     host = kwargs.get('host')
     github_token = kwargs.get('github_token')
     rubix_username = kwargs.get('rubix_username')
@@ -117,13 +116,7 @@ def install_bios(ctx):
 
 @task
 def install_rubix_service(ctx, host, github_token, **kwargs):
-    rubix_username = kwargs.get('rubix_username')
-    rubix_password = kwargs.get('rubix_password')
-    rubix_bios_port = kwargs.get('rubix_bios_port')
-    rubix_service_port = kwargs.get('rubix_service_port')
-    print(22222, rubix_username, rubix_password, rubix_bios_port, rubix_service_port)
     bios_token = RubixApi.bios_get_token(host)
-    print(22222, bios_token)
     RubixApi.bios_add_git_token(host, bios_token, github_token)
     RubixApi.install_rubix_service(host, bios_token)
     rubix_token = RubixApi.get_rubix_service_token(host)
@@ -138,10 +131,7 @@ def install_wires_plat(ctx):
     token = LinuxCommands.clean_token(exe)
     logging.info(f"LOG: @func clean_token {token}")
     service = "RUBIX_PLAT"
-    # git_token = "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"
-    version = "v1.7.1"
-    # version = "latest"
-
+    version = "latest"
     logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM DOWNLOAD >>>>>>>>>>> ")
     exe = SSHConnection.run_command(ctx, LinuxCommands.download_rubix_service_app(token, service, version))
     logging.info(f"LOG: @func download_rubix_service_app {exe}")

@@ -158,14 +158,7 @@ class ScratchPadController:
             self.parent.statusBar.showMessage(msg)
             logging.info(msg)
             logging.info("------ Connect and start updates ------")
-            deploy_rubix_update(cx,
-                                host=ip,
-                                github_token=github_token,
-                                rubix_username=rubix_username,
-                                rubix_password=rubix_password,
-                                rubix_bios_port=rubix_bios_port,
-                                rubix_service_port=rubix_service_port
-                                )
+            deploy_rubix_update(cx)
             msg = f"install completed"
             logging.info(msg)
             return msg
