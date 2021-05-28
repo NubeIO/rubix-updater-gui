@@ -4,7 +4,7 @@ import sys
 
 from app.core.rubix_service_api import RubixApi
 
-IP = '192.168.15.189'
+IP = '123.210.200.78'
 RS_PORT = 1616
 SERVICE = "POINT_SERVER"
 VERSION = "latest"
@@ -57,9 +57,9 @@ CONFIG_FILE = {
                 "name": "rubix-points",
                 "host": "0.0.0.0",
                 "port": 1883,
-                "authentication": False,
-                "username": "username",
-                "password": "password",
+                "authentication": True,
+                "username": "admin",
+                "password": "N00BMQTT",
                 "keepalive": 60,
                 "qos": 1,
                 "attempt_reconnect_on_unavailable": True,

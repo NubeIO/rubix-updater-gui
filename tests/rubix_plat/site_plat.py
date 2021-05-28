@@ -5,7 +5,7 @@ import sys
 
 from app.core.rubix_service_api import RubixApi
 
-IP = '192.168.15.189'
+IP = '123.210.200.78'
 RS_PORT = 1616
 
 CWD = os.getcwd()
@@ -90,7 +90,7 @@ body = {
 }
 
 print(build_id)
-update = False
+update = True
 if update:
     host = IP
     payload = {"username": "admin", "password": "N00BWires"}

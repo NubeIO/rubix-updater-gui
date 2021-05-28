@@ -2,7 +2,7 @@ import sys
 
 from app.core.rubix_service_api import RubixApi
 
-IP = '192.168.15.189'
+IP = '123.210.200.78'
 RS_PORT = 1616
 SERVICE = "LORA_RAW"
 VERSION = "latest"
