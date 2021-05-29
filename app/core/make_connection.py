@@ -1,27 +1,40 @@
 import logging
 from fabric import Connection
 
+from config.config import Config
+
 
 class SSHConnection:
     def __init__(self,
-                 host='192.168.15.10',
-                 port=22,
-                 user='pi',
+                 host=None,
+                 port=None,
+                 user=None,
                  connect_timeout=10,
-                 password=None
+                 password=None,
+                 use_config=None
                  ):
         self.host = host
         self.port = port
         self.user = user
         self.connect_timeout = connect_timeout
         self.password = password
+        self.use_config = use_config
 
     def connect(self):
-        connection = Connection(host=self.host,
-                                port=self.port,
-                                user=self.user,
-                                connect_timeout=self.connect_timeout,
-                                connect_kwargs={'password': self.password})
+        if self.use_config:
+            c = Config()
+            c.load_config()
+            connection = Connection(host=c.get_host(),
+                                    port=c.get_port(),
+                                    user=c.get_user(),
+                                    connect_timeout=self.connect_timeout,
+                                    connect_kwargs={'password': c.get_password()})
+        else:
+            connection = Connection(host=self.host,
+                                    port=self.port,
+                                    user=self.user,
+                                    connect_timeout=self.connect_timeout,
+                                    connect_kwargs={'password': self.password})
         try:
             connection.run('pwd')
             logging.info(f"CONNECTED with host:{self.host} port:{self.port} user:{self.user}")

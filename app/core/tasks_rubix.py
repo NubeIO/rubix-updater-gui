@@ -13,7 +13,6 @@ def deploy_rubix_update(ctx):
         delete_data_dir(c)
         mk_dir_data(c)
         delete_rubix_dirs(c)
-        command_ls(c)
         install_bios(c)
         return "install completed"
 
@@ -51,6 +50,7 @@ def file_transfer_stm_build(ctx, file, directory):
     logging.info(f"LOG: @func transfer stm file {exe}")
     exe = SSHConnection.run_command(ctx, LinuxCommands.run_stm_file())
     logging.info(f"LOG: @func run_stm_file {exe}")
+    return exe
 
 
 @task
@@ -71,12 +71,14 @@ def reboot_host(ctx):
 def delete_rubix_dirs(ctx):
     exe = SSHConnection.run_command(ctx, LinuxCommands.delete_rubix_dirs())
     logging.info(f"LOG: @func delete_rubix_dirs {exe}")
+    return exe
 
 
 @task
 def delete_data_dir(ctx):
     exe = SSHConnection.run_command(ctx, LinuxCommands.delete_data_dir())
     logging.info(f"LOG: @func delete_data_dir {exe}")
+    return exe
 
 
 @task
@@ -99,6 +101,7 @@ def mk_dir_data(ctx):
     logging.info(f"LOG: @func mkdir lora-raw {exe}")
     exe = SSHConnection.run_command(ctx, LinuxCommands.chown_data_dir())
     logging.info(f"LOG: @func chown_data_dir {exe}")
+    return exe
 
 
 @task
@@ -112,6 +115,7 @@ def install_bios(ctx):
     logging.info(f"LOG: INSTALL BIOS -> run install")
     exe = SSHConnection.run_command(ctx, LinuxCommands.install_bios())
     logging.info(f"LOG: @func install_bios {exe}")
+    return exe
 
 
 @task
@@ -122,6 +126,7 @@ def install_rubix_service(ctx, host, github_token, **kwargs):
     rubix_token = RubixApi.get_rubix_service_token(host)
     RubixApi.rubix_add_git_token(host, rubix_token, github_token)
     RubixApi.install_wires_plat(host, rubix_token)
+
 
 
 @task

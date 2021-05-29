@@ -1,6 +1,5 @@
 import logging
 import os
-from time import sleep
 
 import githubdl
 from datetime import datetime
@@ -13,6 +12,7 @@ from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
     deploy_rubix_service_update, reboot_host
 from app.utils.utils import Utils
+from config.config import Config
 
 RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
 RUBIX_SERVICE_CONFIG = "config-files/rubix-apps"
@@ -34,14 +34,25 @@ class RubixUpdateLogger:
 
 class ScratchPadController:
     def __init__(self, parent, app):
-
         self.parent = parent
         RubixUpdateLogger(self.parent)
         self.app = app
+        # use config
+        self.parent.use_config_file.toggled.connect(self._use_config)
+        self.parent.use_config_file.setChecked(True)
+        self.parent.setting_remote_update_host.setEnabled(False)
+        self.parent.setting_remote_update_port.setEnabled(False)
+        self.parent.setting_remote_update_user.setEnabled(False)
+        self.parent.setting_remote_update_password.setEnabled(False)
+        self.parent.rubix_username.setEnabled(False)
+        self.parent.rubix_password.setEnabled(False)
+        self.parent.rubix_bios_port.setEnabled(False)
+        self.parent.rubix_service_port.setEnabled(False)
+        self.parent.github_token.setEnabled(False)
+
         # tab host connection
         self.parent.action_remote_update_connect.pressed.connect(self._check_rc_connection)
         self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
-
         # update rubix bios
         self.parent.action_remote_update.pressed.connect(self._update_rubix)
         self.parent.action_remote_update.setEnabled(False)
@@ -68,12 +79,14 @@ class ScratchPadController:
         password = self.parent.setting_remote_update_password.text()
         logging.info(f"try and connect with host:{host} port:{port} user:{user}")
         time = self._time_stamp()
+        use_config = self.parent.use_config_file.isChecked()
         cx = SSHConnection(
             host=host,
             port=port,
             user=user,
             connect_timeout=5,
-            password=password
+            password=password,
+            use_config=use_config
         ).connect()
         if not cx:
             msg = f"device on ip: {host} is DEAD {time}"
@@ -83,6 +96,35 @@ class ScratchPadController:
             msg = f"device on ip: {host} is connected {time}"
             self.parent.statusBar.showMessage(msg)
             return cx
+
+    def _use_config(self):
+        use_config = self.parent.use_config_file.isChecked()
+        # test
+        c = Config()
+        c.load_config()
+        b = c.get_bios_url()
+        logging.info(f"CONFIG-FILE: {b}")
+
+        if use_config:
+            self.parent.setting_remote_update_host.setEnabled(False)
+            self.parent.setting_remote_update_port.setEnabled(False)
+            self.parent.setting_remote_update_user.setEnabled(False)
+            self.parent.setting_remote_update_password.setEnabled(False)
+            self.parent.rubix_username.setEnabled(False)
+            self.parent.rubix_password.setEnabled(False)
+            self.parent.rubix_bios_port.setEnabled(False)
+            self.parent.rubix_service_port.setEnabled(False)
+            self.parent.github_token.setEnabled(False)
+        else:
+            self.parent.setting_remote_update_host.setEnabled(True)
+            self.parent.setting_remote_update_port.setEnabled(True)
+            self.parent.setting_remote_update_user.setEnabled(True)
+            self.parent.setting_remote_update_password.setEnabled(True)
+            self.parent.rubix_username.setEnabled(True)
+            self.parent.rubix_password.setEnabled(True)
+            self.parent.rubix_bios_port.setEnabled(True)
+            self.parent.rubix_service_port.setEnabled(True)
+            self.parent.github_token.setEnabled(True)
 
     def _check_rc_connection(self):
         cx = self._connection()
@@ -131,7 +173,6 @@ class ScratchPadController:
 
     def _lora_reflash(self):
         cx = self._connection()
-
         github_token = self.parent.github_token.text()
         githubdl.dl_dir(RUBIX_IMAGE_REPO, STM_FLASH_SCRIPT,
                         github_token=github_token)
@@ -147,11 +188,6 @@ class ScratchPadController:
     def _update_rubix(self):
         cx = self._connection()
         ip = self.parent.setting_remote_update_host.text()
-        rubix_username = self.parent.rubix_username.text()
-        rubix_password = self.parent.rubix_password.text()
-        rubix_bios_port = self.parent.rubix_bios_port.text()
-        rubix_service_port = self.parent.rubix_service_port.text()
-        github_token = self.parent.github_token.text()
         ping = Utils.ping(ip)
         if ping:
             msg = f"device on ip: {ip} is connected"
@@ -172,7 +208,6 @@ class ScratchPadController:
         cx = self._connection()
         ip = self.parent.setting_remote_update_host.text()
         ping = Utils.ping(ip)
-
         if ping:
             msg = f"device on ip: {ip} is connected"
             self.parent.statusBar.showMessage(msg)

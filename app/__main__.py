@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QApplication
 from app import __version__, __appname__, __desktopid__
 from app.themes.theme_provider import configure_theme
 from app.views.main_window import MainWindow
-from config.config import Config
 
 
 def main():
@@ -15,11 +14,6 @@ def main():
     window = MainWindow()
     configure_theme(app)
     window.show()
-
-    c = Config()
-    c.load_config()
-    print(c.get_host())
-
     sys.exit(app.exec_())
 
 
