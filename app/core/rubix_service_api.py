@@ -10,16 +10,14 @@ class RubixApi:
         url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
         sleep(1)
-        while True:
-            sleep(1)
-            try:
-                result = requests.post(url, json=payload)
-                print(result.status_code)
-                if result.status_code == 200:
-                    return result.json().get('access_token')
-            except:
-                print(f"ERROR: get bios token")
-                return False
+        try:
+            result = requests.post(url, json=payload)
+            print(result.status_code)
+            if result.status_code == 200:
+                return result.json().get('access_token')
+        except:
+            print(f"ERROR: get bios token")
+            return False
 
     @staticmethod
     def bios_add_git_token(host, access_token, github_token, **kwargs):
@@ -37,8 +35,8 @@ class RubixApi:
     @staticmethod
     def install_rubix_service(host, access_token, **kwargs):
         port = kwargs.get('port') or 1615
-        {port}
-        url = f"http://{host}:1615/api/service/upgrade"
+
+        url = f"http://{host}:{port}/api/service/upgrade"
         body = {"version": "latest"}
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
@@ -54,22 +52,19 @@ class RubixApi:
         url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
         sleep(2)
-        while True:
-            sleep(1)
-            try:
-                result = requests.post(url, json=payload)
-                if result.status_code == 200:
-                    return result.json().get('access_token')
-                #
-            except:
-                print(f"ERROR: 1616/api/system/ping")
-                return False
+        try:
+            result = requests.post(url, json=payload)
+            if result.status_code == 200:
+                return result.json().get('access_token')
+            #
+        except:
+            print(f"ERROR: 1616/api/system/ping")
+            return False
 
     @staticmethod
     def rubix_add_git_token(host, access_token, github_token, **kwargs):
         port = kwargs.get('port') or 1616
-        {port}
-        url = f"http://{host}:1616/api/service/token"
+        url = f"http://{host}:{port}/api/service/token"
         github_token = {"token": github_token}
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
@@ -82,8 +77,7 @@ class RubixApi:
     @staticmethod
     def rubix_add_config_file(host, access_token, body, **kwargs):
         port = kwargs.get('port') or 1616
-        {port}
-        url = f"http://{host}:1616/api/app/config/config"
+        url = f"http://{host}:{port}/api/app/config/config"
         print("add config file", body)
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
@@ -96,12 +90,11 @@ class RubixApi:
     @staticmethod
     def rubix_update_plat(host, access_token, body, **kwargs):
         port = kwargs.get('port') or 1616
-        {port}
-        url = f"http://{host}:1616/api/wires/plat"
+        url = f"http://{host}:{port}/api/wires/plat"
         print("add plat", body)
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
-                                       'Authorization': '{}'.format(access_token)}, json=body)
+                                       'Authorization': 'Bearer {}'.format(access_token)}, json=body)
         if result.status_code == 200:
             return result.json()
         else:
@@ -110,12 +103,11 @@ class RubixApi:
     @staticmethod
     def rubix_add_droplets(host, access_token, body, **kwargs):
         port = kwargs.get('port') or 1616
-        {port}
-        url = f"http://{host}:1616/lora/api/lora/devices"
+        url = f"http://{host}:{port}/lora/api/lora/devices"
         print("add droplet", body)
         result = requests.post(url,
                                headers={'Content-Type': 'application/json',
-                                        'Authorization': '{}'.format(access_token)}, json=body)
+                                        'Authorization': 'Bearer {}'.format(access_token)}, json=body)
         if result.status_code == 200:
             return result.json()
         else:
@@ -125,14 +117,13 @@ class RubixApi:
     @staticmethod
     def install_rubix_app(host, token, app, version, **kwargs):
         port = kwargs.get('port') or 1616
-        {port}
         payload = [{"service": app, "version": version}]
         access_token = token
-        url = f"http://{host}:1616/api/app/download"
-        download_state_url = f"http://{host}:1616/api/app/download_state"
-        install_url = f"http://{host}:1616/api/app/install"
+        url = f"http://{host}:{port}/api/app/download"
+        download_state_url = f"http://{host}:{port}/api/app/download_state"
+        install_url = f"http://{host}:{port}/api/app/install"
         result = requests.post(url,
-                               headers={'Content-Type': 'application/json', 'Authorization': '{}'.format(access_token)},
+                               headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(access_token)},
                                json=payload)
         if result.status_code != 200:
             print("Failed to download", result.json())
@@ -149,7 +140,7 @@ class RubixApi:
                 sleep(1)
                 download_state = requests.get(download_state_url,
                                               headers={'Content-Type': 'application/json',
-                                                       'Authorization': '{}'.format(access_token)},
+                                                       'Authorization': 'Bearer {}'.format(access_token)},
                                               json=payload)
                 print('download_state', download_state.json())
                 if download_state.json().get('state') == 'DOWNLOADED':
@@ -177,14 +168,13 @@ class RubixApi:
     @staticmethod
     def install_wires_plat(host, token, **kwargs):
         port = kwargs.get('port') or 1616
-        {port}
         payload = [{"service": "RUBIX_PLAT", "version": "latest"}]
         access_token = token
-        url = f"http://{host}:1616/api/app/download"
-        download_state_url = f"http://{host}:1616/api/app/download_state"
-        install_url = f"http://{host}:1616/api/app/install"
+        url = f"http://{host}:{port}/api/app/download"
+        download_state_url = f"http://{host}:{port}/api/app/download_state"
+        install_url = f"http://{host}:{port}/api/app/install"
         result = requests.post(url,
-                               headers={'Content-Type': 'application/json', 'Authorization': '{}'.format(access_token)},
+                               headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(access_token)},
                                json=payload)
         if result.status_code != 200:
             print("Failed to download", result.json())

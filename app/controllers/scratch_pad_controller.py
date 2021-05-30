@@ -12,7 +12,9 @@ from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
     deploy_rubix_service_update, reboot_host
 from app.utils.utils import Utils
-from config.config import Config
+from config.load_config import get_config_host
+
+_get_config_host = get_config_host()
 
 RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
 RUBIX_SERVICE_CONFIG = "config-files/rubix-apps"
@@ -49,6 +51,8 @@ class ScratchPadController:
         self.parent.rubix_bios_port.setEnabled(False)
         self.parent.rubix_service_port.setEnabled(False)
         self.parent.github_token.setEnabled(False)
+
+
 
         # tab host connection
         self.parent.action_remote_update_connect.pressed.connect(self._check_rc_connection)
@@ -100,11 +104,6 @@ class ScratchPadController:
     def _use_config(self):
         use_config = self.parent.use_config_file.isChecked()
         # test
-        c = Config()
-        c.load_config()
-        b = c.get_bios_url()
-        logging.info(f"CONFIG-FILE: {b}")
-
         if use_config:
             self.parent.setting_remote_update_host.setEnabled(False)
             self.parent.setting_remote_update_port.setEnabled(False)

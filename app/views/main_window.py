@@ -36,7 +36,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event: QCloseEvent):
         logging.info("Received close event")
         event.accept()
-        self.main_controller.shutdown()
+        # self.main_controller.shutdown()
         try:
             qApp.exit(0)
         except:

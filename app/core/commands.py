@@ -1,5 +1,10 @@
 import json
 
+from config.load_config import get_config_host
+
+_get_config_host = get_config_host()
+_host = _get_config_host.get("get_host")
+
 
 class LinuxCommands:
 
@@ -23,9 +28,9 @@ class LinuxCommands:
 
     @classmethod
     def download_bios(cls):
-        return f"wget https://github.com/NubeIO/rubix-bios/releases/download/v1.4.1/rubix-bios-1.4.1-005821de.armv7.zip"
+        return f"wget {_host}"
 
-    @classmethod
+    @classmethod    
     def unzip_bios(cls):
         return f"unzip rubix-bios-1.4.1-005821de.armv7.zip"
 
