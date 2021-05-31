@@ -6,3 +6,4 @@ dataset
 githubdl
 fabric
 pyinstaller
+requests

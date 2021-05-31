@@ -1,3 +1,4 @@
+import argparse
 import csv
 import os
 
@@ -5,8 +6,34 @@ import sys
 
 from app.core.rubix_service_api import RubixApi
 
-IP = '123.210.200.78'
-RS_PORT = 1616
+from config.load_config import get_config_host, get_config_rubix_service
+
+_host_settings = get_config_host()
+_rubix_settings = get_config_rubix_service()
+
+IP = None
+RS_PORT = None
+
+
+rubix_service_user = _rubix_settings.get('get_rubix_service_user')
+rubix_service_password = _rubix_settings.get('get_rubix_service_password')
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-ip', '--ip', type=str, help="override config ip address")
+parser.add_argument('-port', '--port', type=str, help="override config port number")
+args = parser.parse_args()
+
+if args.ip is None:
+    IP = _host_settings.get('get_host')
+else:
+    IP = args.ip
+
+if args.port is None:
+    RS_PORT = _rubix_settings.get('get_rubix_service_port')
+else:
+    RS_PORT = args.port
+
+
 
 CWD = os.getcwd()
 FILE_NAME = "site.csv"
@@ -111,22 +138,23 @@ host = IP
 payload = {"username": "admin", "password": "N00BWires"}
 access_token = RubixApi.get_rubix_service_token(host)
 print(access_token)
-
-for d in droplets_ids:
-    print(droplets_zones[count])
-    count += 1
-    devices_obj = {
-        "name": f'dr{count}',
-        "id": f'{d}',
-        "device_type": "DROPLET",
-        "device_model": "DROPLET_THL"
-    }
-    droplets = True
-    if droplets:
-        if access_token != False:
-            app = RubixApi.rubix_add_droplets(host, access_token, devices_obj)
-            print(" rubix_add_droplets", app)
-        else:
-            sys.exit("FAILED to get token")
+add_droplets = True
+if add_droplets:
+    for d in droplets_ids:
+        print(droplets_zones[count])
+        count += 1
+        devices_obj = {
+            "name": f'dr{count}',
+            "id": f'{d}',
+            "device_type": "DROPLET",
+            "device_model": "DROPLET_THL"
+        }
+        droplets = True
+        if droplets:
+            if access_token != False:
+                app = RubixApi.rubix_add_droplets(host, access_token, devices_obj)
+                print(" rubix_add_droplets", app)
+            else:
+                sys.exit("FAILED to get token")
 
 

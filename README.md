@@ -70,3 +70,12 @@ Please check the following script to change location of `Inkscape`.
 ```
 $ ./mk-icns.sh
 ```
+
+
+Run rubix scripts
+```
+export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 scripts/install_rubix_apps/lora/install.py
+# override IP address
+export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 scripts/install_rubix_apps/lora/install.py 192.168.15.10
+
+```

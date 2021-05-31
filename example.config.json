@@ -1,10 +1,10 @@
 {
   "connection": {
-    "host": "192.168.10.10",
-    "port": 22,
+    "host": "120.157.13.237",
+    "port": 2022,
     "user": "pi",
-    "password": "N00B",
-    "git_token": "my token",
+    "password": "N00BRCRC",
+    "git_token": "token",
     "rubix_bios_user": "admin",
     "rubix_bios_password": "N00BWires",
     "rubix_bios_port": 1615,
@@ -16,12 +16,44 @@
     "bios_url": "https://github.com/NubeIO/rubix-bios/releases/download/v1.4.1/rubix-bios-1.4.1-005821de.armv7.zip",
     "bios_dir": "rubix-bios-1.4.1-005821de.armv7.zip",
     "bios_version": "latest"
-    },
+  },
   "rubix_service": {
-      "rubix_service_version": "latest"
-    },
+    "rubix_service_version": "latest"
+  },
   "rubix_stm_32": {
-    "stm_version": "r-c-loraraw_subnet-1_v0.2.bin",
-    "stm_repo": "https://github.com/NubeIO/rubix-pi-image"
-    }
+    "stm_version": "r-c-loraraw_subnet-1_v0.2.bin"
+  },
+  "rubix_build_repo": {
+    "rubix_build_repo": "https://github.com/NubeIO/rubix-pi-image"
+  },
+  "wires_plat_settings": {
+    "isGlobal": true,
+    "globalIp": "0.0.0.0",
+    "deviceUser": "pi",
+    "libPath": "/data",
+    "biosServicePort": "1615",
+    "rubixServicePort": "1616",
+    "brokerIp": "0.0.0.0",
+    "brokerPort": "1883",
+    "services": true,
+    "serviceMapping": true,
+    "cloudNetworks": true,
+    "rubixApps": true,
+    "ipScanning": true,
+    "logging": true,
+    "modbus": true,
+    "fileManager": true,
+    "lora": true,
+    "io10Config": true,
+    "apiClient": true,
+    "appManager": true,
+    "mqtt": true,
+    "bacnetServer": true,
+    "lockSidebar": true,
+    "timezone": "Africa/Abidjan"
+  },
+  "wires_plat_user": {
+    "wires_plat_user": "admin",
+    "wires_plat_password": "N00BWires"
+  }
 }

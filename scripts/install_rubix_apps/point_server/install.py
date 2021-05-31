@@ -1,11 +1,37 @@
-
-
+import argparse
+import logging
 import sys
 
+logging.basicConfig(level=logging.INFO)
 from app.core.rubix_service_api import RubixApi
 
-IP = '123.210.200.78'
-RS_PORT = 1616
+from config.load_config import get_config_host, get_config_rubix_service
+
+_host_settings = get_config_host()
+_rubix_settings = get_config_rubix_service()
+
+
+IP = None
+RS_PORT = None
+
+
+rubix_service_user = _rubix_settings.get('get_rubix_service_user')
+rubix_service_password = _rubix_settings.get('get_rubix_service_password')
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-ip', '--ip', type=str, help="override config ip address")
+parser.add_argument('-port', '--port', type=str, help="override config port number")
+args = parser.parse_args()
+
+if args.ip is None:
+    IP = _host_settings.get('get_host')
+else:
+    IP = args.ip
+
+if args.port is None:
+    RS_PORT = _rubix_settings.get('get_rubix_service_port')
+else:
+    RS_PORT = args.port
 SERVICE = "POINT_SERVER"
 VERSION = "latest"
 
@@ -13,16 +39,16 @@ CONFIG_FILE = {
     'service': SERVICE,
     "data": {
         "drivers": {
-            "generic": False,
-            "modbus_rtu": True,
+            "generic": True,
+            "modbus_rtu": False,
             "modbus_tcp": False
         },
         "services": {
             "mqtt": True,
-            "histories": False,
+            "histories": True,
             "cleaner": False,
             "history_sync_influxdb": False,
-            "history_sync_postgres": False
+            "history_sync_postgres": True
         },
         "influx": {
             "host": "0.0.0.0",

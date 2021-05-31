@@ -21,23 +21,32 @@ class SSHConnection:
         self.use_config = use_config
 
     def connect(self):
+        from config.load_config import get_config_host
+        _host_settings = get_config_host()
+        host = _host_settings.get('get_host')
+        port = _host_settings.get('get_port')
+        user = _host_settings.get('get_user')
+        password = _host_settings.get('get_password')
+        print(2222, host, port)
+        print(2222, self.use_config)
         if self.use_config:
             c = Config()
             c.load_config()
-            connection = Connection(host=c.get_host(),
-                                    port=c.get_port(),
-                                    user=c.get_user(),
+            connection = Connection(host=host,
+                                    port=port,
+                                    user=user,
                                     connect_timeout=self.connect_timeout,
-                                    connect_kwargs={'password': c.get_password()})
+                                    connect_kwargs={'password': password})
+            logging.info(f"CONNECTED with host:{host} port:{port} user:{user}")
         else:
             connection = Connection(host=self.host,
                                     port=self.port,
                                     user=self.user,
                                     connect_timeout=self.connect_timeout,
                                     connect_kwargs={'password': self.password})
+            logging.info(f"CONNECTED with host:{self.host} port:{self.port} user:{self.user}")
         try:
             connection.run('pwd')
-            logging.info(f"CONNECTED with host:{self.host} port:{self.port} user:{self.user}")
             return connection
         except:
             logging.info(f"DEAD host:{self.host} port:{self.port} user:{self.user}")

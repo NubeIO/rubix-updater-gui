@@ -27,15 +27,19 @@ class Config:
         self.rubix_build_repo = None
         # wires_plat_settings
         self.wires_plat_settings = None
+        # wires_plat user
+        self.wires_plat_user = None
+        self.wires_plat_password = None
 
-    def load_config(self):
-        CWD = os.getcwd()
+    def load_config(self, **kwargs):
+        CWD = kwargs.get('file') or os.getcwd()
         key_connection = "connection"
         key_bios = "bios"
         key_rubix_service = "rubix_service"
         key_stm32 = "rubix_stm_32"
         key_rubix_build_repo = "rubix_build_repo"
         key_wires_plat_settings = "wires_plat_settings"
+        key_wires_plat_user = "wires_plat_user"
         file = f"{CWD}/config.json"
         host = 'host'
         port = 'port'
@@ -60,6 +64,9 @@ class Config:
         rubix_build_repo = "rubix_build_repo"
         # wires plat settings
         wires_plat_settings = "wires_plat_settings"
+
+        wires_plat_user = "wires_plat_user"
+        wires_plat_password = "wires_plat_password"
 
         with open(file) as json_file:
             data = json.load(json_file)
@@ -103,6 +110,11 @@ class Config:
                 if br == rubix_build_repo:
                     self.rubix_build_repo = data[key_rubix_build_repo].get(rubix_build_repo)
             # wires plat
+            for wp in data[key_wires_plat_user]:
+                if wp == wires_plat_user:
+                    self.wires_plat_user = data[key_wires_plat_user].get(wires_plat_user)
+                if wp == wires_plat_password:
+                    self.wires_plat_password = data[key_wires_plat_user].get(wires_plat_password)
             self.wires_plat_settings = data[key_wires_plat_settings]
 
     def get_host(self):
@@ -163,3 +175,12 @@ class Config:
     # wires plat settings
     def get_wires_plat_settings(self):
         return self.wires_plat_settings
+
+    # wires plat user
+    def get_wires_plat_user(self):
+        return self.wires_plat_user
+
+    def get_wires_plat_password(self):
+        return self.wires_plat_password
+
+

@@ -28,7 +28,7 @@ class LinuxCommands:
 
     @classmethod
     def download_bios(cls):
-        return f"wget {_host}"
+        return f"wget https://github.com/NubeIO/rubix-bios/releases/download/v1.4.1/rubix-bios-1.4.1-005821de.armv7.zip"
 
     @classmethod    
     def unzip_bios(cls):

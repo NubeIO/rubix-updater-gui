@@ -1,6 +1,7 @@
+import logging
 import requests
 from time import sleep
-
+logging.basicConfig(level=logging.INFO)
 
 class RubixApi:
 
@@ -9,10 +10,10 @@ class RubixApi:
         port = kwargs.get('port') or 1615
         url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
-        sleep(1)
+        logging.info(f"Add get bios token")
         try:
             result = requests.post(url, json=payload)
-            print(result.status_code)
+            logging.info(f"Add get bios status {result.status_code}")
             if result.status_code == 200:
                 return result.json().get('access_token')
         except:
@@ -26,7 +27,8 @@ class RubixApi:
         github_token = {"token": github_token}
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
-                                       'Authorization': '{}'.format(access_token)}, json=github_token)
+                                       'Authorization': 'Bearer {}'.format(access_token)}, json=github_token)
+        logging.info(f"bios_add_git_token status code {result.status_code}")
         if result.status_code == 200:
             return True
         else:
@@ -40,7 +42,8 @@ class RubixApi:
         body = {"version": "latest"}
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
-                                       'Authorization': '{}'.format(access_token)}, json=body)
+                                       'Authorization': 'Bearer {}'.format(access_token)}, json=body)
+        logging.info(f"install_rubix_service status code {result.status_code}")
         if result.status_code == 200:
             return True
         else:
@@ -51,14 +54,15 @@ class RubixApi:
         port = kwargs.get('port') or 1616
         url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
-        sleep(2)
+        logging.info(f"get_rubix_service_token status code {url}")
+        sleep(10)
         try:
             result = requests.post(url, json=payload)
+            logging.info(f"get_rubix_service_token status code {result.status_code}")
             if result.status_code == 200:
                 return result.json().get('access_token')
-            #
         except:
-            print(f"ERROR: 1616/api/system/ping")
+            logging.info(f"FAILED get_rubix_service_token")
             return False
 
     @staticmethod
@@ -68,7 +72,8 @@ class RubixApi:
         github_token = {"token": github_token}
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
-                                       'Authorization': '{}'.format(access_token)}, json=github_token)
+                                       'Authorization': 'Bearer {}'.format(access_token)}, json=github_token)
+        logging.info(f"rubix_add_git_token status code {result.status_code}")
         if result.status_code == 200:
             return True
         else:
@@ -78,10 +83,10 @@ class RubixApi:
     def rubix_add_config_file(host, access_token, body, **kwargs):
         port = kwargs.get('port') or 1616
         url = f"http://{host}:{port}/api/app/config/config"
-        print("add config file", body)
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
-                                       'Authorization': '{}'.format(access_token)}, json=body)
+                                       'Authorization': 'Bearer {}'.format(access_token)}, json=body)
+        logging.info(f"rubix_add_config_file status code {result.status_code}")
         if result.status_code == 200:
             return True
         else:
@@ -91,10 +96,10 @@ class RubixApi:
     def rubix_update_plat(host, access_token, body, **kwargs):
         port = kwargs.get('port') or 1616
         url = f"http://{host}:{port}/api/wires/plat"
-        print("add plat", body)
         result = requests.put(url,
                               headers={'Content-Type': 'application/json',
                                        'Authorization': 'Bearer {}'.format(access_token)}, json=body)
+        logging.info(f"rubix_update_plat status code {result.status_code}")
         if result.status_code == 200:
             return result.json()
         else:
@@ -104,14 +109,13 @@ class RubixApi:
     def rubix_add_droplets(host, access_token, body, **kwargs):
         port = kwargs.get('port') or 1616
         url = f"http://{host}:{port}/lora/api/lora/devices"
-        print("add droplet", body)
         result = requests.post(url,
                                headers={'Content-Type': 'application/json',
                                         'Authorization': 'Bearer {}'.format(access_token)}, json=body)
+        logging.info(f"rubix_add_droplets status code {result.status_code}")
         if result.status_code == 200:
             return result.json()
         else:
-            print(result.json())
             return False
 
     @staticmethod
@@ -125,44 +129,43 @@ class RubixApi:
         result = requests.post(url,
                                headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(access_token)},
                                json=payload)
+        logging.info(f"install_rubix_app status code {result.status_code}")
         if result.status_code != 200:
-            print("Failed to download", result.json())
-            print("Clearing download state...")
+            logging.info(f"Failed to download", result.json())
+            logging.info(f"Clearing download state...")
 
             requests.delete(download_state_url,
                             headers={'Content-Type': 'application/json',
                                      'Authorization': '{}'.format(access_token)},
                             json=payload)
-            print("Download state is cleared...")
+            logging.info(f"Download state is cleared....")
         else:
-            print("Download process has been started, and waiting for it's completion...")
+            logging.info(f"Download process has been started, and waiting for it's completion...")
             while True:
                 sleep(1)
                 download_state = requests.get(download_state_url,
                                               headers={'Content-Type': 'application/json',
                                                        'Authorization': 'Bearer {}'.format(access_token)},
                                               json=payload)
-                print('download_state', download_state.json())
+
+                logging.info(f"download_state', {download_state.json()}")
                 if download_state.json().get('state') == 'DOWNLOADED':
                     break
-            print("Download completed...")
-            print("Please insert your installation code here...")
-            # Without clearing this state it won't able to start next download
-            # Currently rubix-service has an issue so it works without clearing but later it won't work
-            print("Clearing download state...")
+            logging.info(f"Download completed...")
+            logging.info(f"Clearing download state...")
             requests.delete(download_state_url,
                             headers={'Content-Type': 'application/json',
-                                     'Authorization': '{}'.format(access_token)},
+                                     'Authorization': 'Bearer {}'.format(access_token)},
                             json=payload)
-            print("Download state is cleared...")
+            logging.info(f"Download state is cleared.....")
             result = requests.post(install_url,
                                    headers={'Content-Type': 'application/json',
-                                            'Authorization': '{}'.format(access_token)},
+                                            'Authorization': 'Bearer {}'.format(access_token)},
                                    json=payload)
             if result.status_code != 200:
-                print("Failed to install", result.json())
+                logging.debug(f"Failed to install', {result.json()}")
             else:
-                print("Install completed...")
+                logging.info(f"Install completed...")
                 return True
 
     @staticmethod

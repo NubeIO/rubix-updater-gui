@@ -12,9 +12,12 @@ from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
     deploy_rubix_service_update, reboot_host
 from app.utils.utils import Utils
-from config.load_config import get_config_host
+from config.load_config import get_config_host, get_config_rubix_service, get_config_bios
 
 _get_config_host = get_config_host()
+_rubix_settings = get_config_rubix_service()
+_host_settings = get_config_host()
+_bios_settings = get_config_bios()
 
 RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
 RUBIX_SERVICE_CONFIG = "config-files/rubix-apps"
@@ -52,8 +55,6 @@ class ScratchPadController:
         self.parent.rubix_service_port.setEnabled(False)
         self.parent.github_token.setEnabled(False)
 
-
-
         # tab host connection
         self.parent.action_remote_update_connect.pressed.connect(self._check_rc_connection)
         self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
@@ -81,7 +82,6 @@ class ScratchPadController:
         port = self.parent.setting_remote_update_port.text()
         user = self.parent.setting_remote_update_user.text()
         password = self.parent.setting_remote_update_password.text()
-        logging.info(f"try and connect with host:{host} port:{port} user:{user}")
         time = self._time_stamp()
         use_config = self.parent.use_config_file.isChecked()
         cx = SSHConnection(
@@ -93,12 +93,8 @@ class ScratchPadController:
             use_config=use_config
         ).connect()
         if not cx:
-            msg = f"device on ip: {host} is DEAD {time}"
-            self.parent.statusBar.showMessage(msg)
             return False
         else:
-            msg = f"device on ip: {host} is connected {time}"
-            self.parent.statusBar.showMessage(msg)
             return cx
 
     def _use_config(self):
@@ -186,7 +182,11 @@ class ScratchPadController:
 
     def _update_rubix(self):
         cx = self._connection()
-        ip = self.parent.setting_remote_update_host.text()
+        use_config = self.parent.use_config_file.isChecked()
+        if use_config:
+            ip = _host_settings.get('get_host')
+        else:
+            ip = self.parent.setting_remote_update_host.text()
         ping = Utils.ping(ip)
         if ping:
             msg = f"device on ip: {ip} is connected"
@@ -224,14 +224,26 @@ class ScratchPadController:
 
     def _update_rubix_service(self):
         cx = self._connection()
-        ip = self.parent.setting_remote_update_host.text()
-        rubix_username = self.parent.rubix_username.text()
-        rubix_password = self.parent.rubix_password.text()
-        rubix_bios_port = self.parent.rubix_bios_port.text()
-        rubix_service_port = self.parent.rubix_service_port.text()
-        ping = Utils.ping(ip)
+        use_config = self.parent.use_config_file.isChecked()
+        if use_config:
+            ip = _host_settings.get('get_host')
+            port = _host_settings.get('get_port')
+            user = _host_settings.get('get_user')
+            password = _host_settings.get('get_password')
+            rubix_username = _bios_settings.get('get_rubix_bios_user')
+            rubix_password = _bios_settings.get('get_rubix_bios_password')
+            rubix_bios_port = _bios_settings.get('get_rubix_bios_port')
+            rubix_service_port = _rubix_settings.get('get_rubix_service_port')
+            github_token = _host_settings.get('get_git_token')
 
-        github_token = self.parent.github_token.text()
+        else:
+            ip = self.parent.setting_remote_update_host.text()
+            rubix_username = self.parent.rubix_username.text()
+            rubix_password = self.parent.rubix_password.text()
+            rubix_bios_port = self.parent.rubix_bios_port.text()
+            rubix_service_port = self.parent.rubix_service_port.text()
+            github_token = _host_settings.get('get_git_token')
+        ping = Utils.ping(ip)
         githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
                         github_token=github_token)
         file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/app.json"
