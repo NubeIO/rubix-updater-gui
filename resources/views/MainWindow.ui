@@ -9,12 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>891</width>
-    <height>752</height>
+    <width>950</width>
+    <height>950</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -53,16 +53,16 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTabWidget" name="lora_flasher">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
         <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>900</width>
-        <height>900</height>
        </size>
       </property>
       <property name="currentIndex">
@@ -110,7 +110,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="4">
+            <item row="16" column="3">
              <widget class="QComboBox" name="rubix_app_selection">
               <item>
                <property name="text">
@@ -129,7 +129,7 @@
               </item>
              </widget>
             </item>
-            <item row="16" column="6">
+            <item row="16" column="5">
              <widget class="QComboBox" name="rubix_app_action">
               <item>
                <property name="text">
@@ -180,19 +180,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QPushButton" name="action_remote_ping_host">
-              <property name="toolTip">
-               <string extracomment="Ping ip address (dosnt ping the ssh port only the ip)"/>
-              </property>
-              <property name="toolTipDuration">
-               <number>5</number>
-              </property>
-              <property name="text">
-               <string>Ping IP Address</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="2">
              <widget class="QRadioButton" name="use_config_file">
               <property name="text">
@@ -207,7 +194,7 @@
               </property>
              </widget>
             </item>
-            <item row="13" column="4">
+            <item row="13" column="3">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -220,8 +207,11 @@
               </property>
              </spacer>
             </item>
-            <item row="15" column="4">
+            <item row="15" column="3">
              <widget class="QPushButton" name="rubix_reboot">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Reboot Rubix</string>
               </property>
@@ -294,8 +284,11 @@
               </property>
              </widget>
             </item>
-            <item row="14" column="4">
+            <item row="14" column="3">
              <widget class="QPushButton" name="action_lora_reflash">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>flash lora</string>
               </property>
@@ -352,6 +345,16 @@
               </property>
              </widget>
             </item>
+            <item row="16" column="4">
+             <widget class="QCheckBox" name="rubix_app_use_config">
+              <property name="text">
+               <string>add config file</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_3">
               <property name="text">
@@ -359,7 +362,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="7">
+            <item row="16" column="6">
              <widget class="QPushButton" name="rubix_app_action_run">
               <property name="text">
                <string>RUN TASK</string>
@@ -370,13 +373,6 @@
              <widget class="QLabel" name="label">
               <property name="text">
                <string>Host: </string>
-              </property>
-             </widget>
-            </item>
-            <item row="16" column="5">
-             <widget class="QCheckBox" name="rubix_app_use_config">
-              <property name="text">
-               <string>add config</string>
               </property>
              </widget>
             </item>

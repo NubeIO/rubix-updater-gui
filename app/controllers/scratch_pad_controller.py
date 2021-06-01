@@ -56,7 +56,7 @@ class ScratchPadController:
         self.parent.github_token.setEnabled(False)
         # tab host connection
         self.parent.action_remote_update_connect.pressed.connect(self._check_rc_connection)
-        self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
+        # self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
         # update rubix bios
         self.parent.action_remote_update.pressed.connect(self._update_rubix)
         self.parent.action_remote_update.setEnabled(False)
