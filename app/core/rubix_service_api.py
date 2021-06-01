@@ -133,12 +133,12 @@ class RubixApi:
         result = requests.post(url,
                                headers={'Content-Type': 'application/json',
                                         'Authorization': 'Bearer {}'.format(access_token)}, json=payload)
-        logging.info(f"start_stop_app: {url} service: {service} action {action}  body: {payload} status code: {result.status_code} status_code:{result.status_code} res:{result.text}")
+        logging.info(
+            f"start_stop_app: {url} service: {service} action {action}  body: {payload} status code: {result.status_code} status_code:{result.status_code} res:{result.text}")
         if result.status_code == 200:
             return True
         else:
             return False
-
 
     @staticmethod
     def install_rubix_app(host, token, app, version, **kwargs):
@@ -190,4 +190,48 @@ class RubixApi:
             else:
                 logging.info(f"Install completed...service {app}")
                 return True
+
+    @staticmethod
+    def add_point_server_network(host, access_token, **kwargs):
+        port = kwargs.get('port') or 1616
+        name = kwargs.get('name') or "net-1"
+        enable = kwargs.get('enable') or True
+        history_enable = kwargs.get('history_enable') or True
+        url = f"http://{host}:{port}/api/generic/network"
+        net = {
+            "name": name,
+            "enable": enable,
+            "history_enable": history_enable
+        }
+        result = requests.post(url,
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {}'.format(access_token)}, json=net)
+        logging.info(f"add_point_server_network status code {result.status_code}")
+        if result.status_code == 200:
+            return result.json()
+        else:
+            return False
+
+    @staticmethod
+    def add_point_server_device(host, access_token, **kwargs):
+        port = kwargs.get('port') or 1616
+        name = kwargs.get('name') or "dev-1"
+        network_uuid = kwargs.get('network_uuid') or "dev-1"
+        enable = kwargs.get('enable') or True
+        history_enable = kwargs.get('history_enable') or True
+        url = f"http://{host}:{port}/api/generic/devices"
+        dev = {
+            "name": name,
+            "enable": enable,
+            "network_uuid": network_uuid,
+            "history_enable": history_enable
+        }
+        result = requests.post(url,
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {}'.format(access_token)}, json=dev)
+        logging.info(f"add_point_server_device status code {result.status_code}")
+        if result.status_code == 200:
+            return result.json()
+        else:
+            return False
 

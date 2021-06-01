@@ -74,492 +74,6 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTabWidget" name="token">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="widget">
-           <attribute name="title">
-            <string>Host Connection</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>username:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="2">
-             <widget class="QSpinBox" name="rubix_service_port">
-              <property name="minimum">
-               <number>1616</number>
-              </property>
-              <property name="maximum">
-               <number>60000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>rubix username</string>
-              </property>
-             </widget>
-            </item>
-            <item row="17" column="3">
-             <widget class="QComboBox" name="rubix_app_selection">
-              <item>
-               <property name="text">
-                <string>RUBIX_PLAT</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>LORA_RAW</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>POINT_SERVER</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="17" column="5">
-             <widget class="QComboBox" name="rubix_app_action">
-              <item>
-               <property name="text">
-                <string>RESTART</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>RUBIX_PLAT_ADD_CREDENTIALS</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>INSTALL</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>REMOVE</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>STOP</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>START</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>STATUS</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QSpinBox" name="setting_remote_update_port">
-              <property name="minimum">
-               <number>22</number>
-              </property>
-              <property name="maximum">
-               <number>60000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>rubix bios port</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QRadioButton" name="use_config_file">
-              <property name="text">
-               <string>use configuration file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="2">
-             <widget class="QPushButton" name="action_remote_rubix_service">
-              <property name="text">
-               <string>update rubix service</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="3">
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="15" column="3">
-             <widget class="QPushButton" name="rubix_reboot">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Reboot Rubix</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>password:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>rubix service port</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="setting_remote_update_password">
-              <property name="text">
-               <string>N00BRCRC</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::PasswordEchoOnEdit</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="2">
-             <widget class="QLineEdit" name="github_token">
-              <property name="text">
-               <string>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</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::PasswordEchoOnEdit</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="rubix_password">
-              <property name="text">
-               <string>N00BRCRC</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::PasswordEchoOnEdit</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="2">
-             <widget class="QPushButton" name="action_remote_update">
-              <property name="text">
-               <string>update bios</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Token (git)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="3">
-             <widget class="QPushButton" name="action_lora_reflash">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>flash lora</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="setting_remote_update_host">
-              <property name="text">
-               <string>192.168.15.10</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <widget class="QSpinBox" name="rubix_bios_port">
-              <property name="minimum">
-               <number>1615</number>
-              </property>
-              <property name="maximum">
-               <number>60000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="2">
-             <widget class="QPushButton" name="action_remote_update_connect">
-              <property name="text">
-               <string>check connection</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>rubix password</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="setting_remote_update_user">
-              <property name="text">
-               <string>pi</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::Normal</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="rubix_username">
-              <property name="text">
-               <string>admin</string>
-              </property>
-             </widget>
-            </item>
-            <item row="17" column="4">
-             <widget class="QCheckBox" name="rubix_app_use_config">
-              <property name="text">
-               <string>add config file</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Port:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="17" column="6">
-             <widget class="QPushButton" name="rubix_app_action_run">
-              <property name="text">
-               <string>RUN TASK</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Host: </string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QTextBrowser" name="rubix_plat_hyperlink">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>15</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>400</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="autoFillBackground">
-               <bool>false</bool>
-              </property>
-              <property name="html">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Fira Sans Semi-Light'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://192.168.15.10:1414/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;open in browser&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="openExternalLinks">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tab">
-           <attribute name="title">
-            <string>Edge-28</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <item row="7" column="1">
-             <widget class="QLabel" name="label_16">
-              <property name="text">
-               <string>net mask</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QLabel" name="label_15">
-              <property name="text">
-               <string>new ip</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QLineEdit" name="bbb_user">
-              <property name="text">
-               <string>debian</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="label_13">
-              <property name="text">
-               <string>port</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="3">
-             <widget class="QPushButton" name="run_update_bbb_ip">
-              <property name="text">
-               <string>Update</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="3">
-             <widget class="QLineEdit" name="bbb_new_ip">
-              <property name="text">
-               <string>192.168.15.249</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="3">
-             <widget class="QLineEdit" name="bbb_new_router">
-              <property name="text">
-               <string>192.168.15.253</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>host</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QLineEdit" name="bbb_host">
-              <property name="text">
-               <string>192.168.15.249</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
-             <widget class="QRadioButton" name="bbb_dhcp_static_option">
-              <property name="text">
-               <string>Set up IP as DHCP (auto) or static</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QLineEdit" name="bbb_password">
-              <property name="text">
-               <string>N00B2828</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::PasswordEchoOnEdit</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>user</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QLineEdit" name="bbb_port">
-              <property name="text">
-               <string>22</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QLabel" name="label_14">
-              <property name="text">
-               <string>DHCP/Static</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="3">
-             <widget class="QLineEdit" name="bbb_new_mask">
-              <property name="text">
-               <string>255.255.255.0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="1">
-             <widget class="QLabel" name="label_17">
-              <property name="text">
-               <string>gateway/router address</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>password</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QPushButton" name="bbb_host_check_connection">
-              <property name="text">
-               <string>check connection</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-        <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
            <string>Rubix Settings</string>
@@ -571,9 +85,603 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QGroupBox" name="groupBox">
              <property name="title">
-              <string>Console</string>
+              <string/>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QTabWidget" name="token">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="currentIndex">
+                 <number>1</number>
+                </property>
+                <widget class="QWidget" name="widget">
+                 <attribute name="title">
+                  <string>Host Connection</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout">
+                  <item row="6" column="0">
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>rubix password</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="2">
+                   <widget class="QSpinBox" name="rubix_bios_port">
+                    <property name="minimum">
+                     <number>1615</number>
+                    </property>
+                    <property name="maximum">
+                     <number>60000</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="2">
+                   <widget class="QLineEdit" name="rubix_username">
+                    <property name="text">
+                     <string>admin</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="11" column="2">
+                   <widget class="QPushButton" name="action_remote_update_connect">
+                    <property name="text">
+                     <string>CONNECT</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="2">
+                   <widget class="QLineEdit" name="rubix_password">
+                    <property name="text">
+                     <string>N00BRCRC</string>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::PasswordEchoOnEdit</enum>
+                    </property>
+                    <property name="clearButtonEnabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="2">
+                   <widget class="QSpinBox" name="rubix_service_port">
+                    <property name="minimum">
+                     <number>1616</number>
+                    </property>
+                    <property name="maximum">
+                     <number>60000</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>Port:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QLabel" name="label_9">
+                    <property name="text">
+                     <string>rubix bios port</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="9" column="2">
+                   <widget class="QLineEdit" name="github_token">
+                    <property name="text">
+                     <string>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</string>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::PasswordEchoOnEdit</enum>
+                    </property>
+                    <property name="clearButtonEnabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="2">
+                   <widget class="QLineEdit" name="setting_remote_update_password">
+                    <property name="text">
+                     <string>N00BRCRC</string>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::PasswordEchoOnEdit</enum>
+                    </property>
+                    <property name="clearButtonEnabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QRadioButton" name="use_config_file">
+                    <property name="text">
+                     <string>use configuration file</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>password:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="13" column="3">
+                   <spacer name="horizontalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="9" column="0">
+                   <widget class="QLabel" name="label_6">
+                    <property name="text">
+                     <string>Token (git)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="14" column="2">
+                   <widget class="QPushButton" name="rubix_reboot">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Reboot Rubix</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>Host: </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>username:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QLineEdit" name="setting_remote_update_user">
+                    <property name="text">
+                     <string>pi</string>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::Normal</enum>
+                    </property>
+                    <property name="clearButtonEnabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QSpinBox" name="setting_remote_update_port">
+                    <property name="minimum">
+                     <number>22</number>
+                    </property>
+                    <property name="maximum">
+                     <number>60000</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QLineEdit" name="setting_remote_update_host">
+                    <property name="text">
+                     <string>192.168.15.10</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="0">
+                   <widget class="QLabel" name="label_10">
+                    <property name="text">
+                     <string>rubix service port</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>rubix username</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="tab_4">
+                 <attribute name="title">
+                  <string>Manage Rubix Apps</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="action_remote_update">
+                    <property name="text">
+                     <string>update bios</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="5">
+                   <widget class="QTextBrowser" name="rubix_plat_hyperlink">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>15</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>400</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                    <property name="html">
+                     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Fira Sans Semi-Light'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://192.168.15.10:1414/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;open in browser&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="4">
+                   <widget class="QPushButton" name="rubix_app_action_run">
+                    <property name="text">
+                     <string>RUN TASK</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QComboBox" name="rubix_app_selection">
+                    <item>
+                     <property name="text">
+                      <string>RUBIX_PLAT</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>LORA_RAW</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>POINT_SERVER</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QCheckBox" name="rubix_app_use_config">
+                    <property name="text">
+                     <string>add config file</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QPushButton" name="action_remote_rubix_service">
+                    <property name="text">
+                     <string>update rubix service</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="3">
+                   <widget class="QComboBox" name="rubix_app_action">
+                    <item>
+                     <property name="text">
+                      <string>RESTART</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>RUBIX_PLAT_ADD_CREDENTIALS</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>INSTALL</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>REMOVE</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>STOP</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>START</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>STATUS</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_18">
+                    <property name="text">
+                     <string>TextLabel</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_19">
+                    <property name="text">
+                     <string>TextLabel</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="tab_2">
+                 <attribute name="title">
+                  <string>Modpoll</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="1" column="5">
+                   <widget class="QSpinBox" name="modbus_poll_delay"/>
+                  </item>
+                  <item row="1" column="6">
+                   <widget class="QPushButton" name="pushButton_3">
+                    <property name="text">
+                     <string>PushButton</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QComboBox" name="comboBox_2">
+                    <item>
+                     <property name="text">
+                      <string>READ_INPUT</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>READ_COIL</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QComboBox" name="comboBox_3">
+                    <item>
+                     <property name="text">
+                      <string>RAW</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>FLOAT</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="comboBox">
+                    <item>
+                     <property name="text">
+                      <string>RS485-1</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>RS485-2</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="1" column="4">
+                   <widget class="QSpinBox" name="spinBox"/>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="action_remote_update_connect_modbus">
+                    <property name="text">
+                     <string>Connect</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="tab_3">
+                 <attribute name="title">
+                  <string>LoRa</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout_5">
+                  <item row="0" column="0">
+                   <widget class="QPushButton" name="pushButton_4">
+                    <property name="text">
+                     <string>Connect</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="action_lora_reflash">
+                    <property name="text">
+                     <string>Flash STM</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QPushButton" name="pushButton">
+                    <property name="text">
+                     <string>Stream LoRa Messages</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="tab">
+                 <attribute name="title">
+                  <string>Edge-28</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout_2">
+                  <item row="7" column="1">
+                   <widget class="QLabel" name="label_16">
+                    <property name="text">
+                     <string>net mask</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="1">
+                   <widget class="QLabel" name="label_15">
+                    <property name="text">
+                     <string>new ip</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="3">
+                   <widget class="QLineEdit" name="bbb_user">
+                    <property name="text">
+                     <string>debian</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="label_13">
+                    <property name="text">
+                     <string>port</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="9" column="3">
+                   <widget class="QPushButton" name="run_update_bbb_ip">
+                    <property name="text">
+                     <string>Update</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="3">
+                   <widget class="QLineEdit" name="bbb_new_ip">
+                    <property name="text">
+                     <string>192.168.15.249</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="3">
+                   <widget class="QLineEdit" name="bbb_new_router">
+                    <property name="text">
+                     <string>192.168.15.253</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_12">
+                    <property name="text">
+                     <string>host</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="3">
+                   <widget class="QLineEdit" name="bbb_host">
+                    <property name="text">
+                     <string>192.168.15.249</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="3">
+                   <widget class="QRadioButton" name="bbb_dhcp_static_option">
+                    <property name="text">
+                     <string>Set up IP as DHCP (auto) or static</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="3">
+                   <widget class="QLineEdit" name="bbb_password">
+                    <property name="text">
+                     <string>N00B2828</string>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::PasswordEchoOnEdit</enum>
+                    </property>
+                    <property name="clearButtonEnabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="label_11">
+                    <property name="text">
+                     <string>user</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QLineEdit" name="bbb_port">
+                    <property name="text">
+                     <string>22</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLabel" name="label_14">
+                    <property name="text">
+                     <string>DHCP/Static</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="3">
+                   <widget class="QLineEdit" name="bbb_new_mask">
+                    <property name="text">
+                     <string>255.255.255.0</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="1">
+                   <widget class="QLabel" name="label_17">
+                    <property name="text">
+                     <string>gateway/router address</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLabel" name="label_8">
+                    <property name="text">
+                     <string>password</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="3">
+                   <widget class="QPushButton" name="bbb_host_check_connection">
+                    <property name="text">
+                     <string>check connection</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
               <item>
                <widget class="QPlainTextEdit" name="feedback_logs_console">
                 <property name="verticalScrollBarPolicy">

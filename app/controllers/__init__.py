@@ -1,2 +1,2 @@
 from .main_controller import MainWindowController
-from .scratch_pad_controller import ScratchPadController
+from .main_window import ScratchPadController
