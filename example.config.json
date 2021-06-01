@@ -1,10 +1,10 @@
 {
   "connection": {
-    "host": "120.157.13.237",
-    "port": 2022,
+    "host": "192.168.15.10",
+    "port": 22,
     "user": "pi",
     "password": "N00BRCRC",
-    "git_token": "token",
+    "git_token": "ghp_DZMV0dScoHc6GbGEE3aeEk9",
     "rubix_bios_user": "admin",
     "rubix_bios_password": "N00BWires",
     "rubix_bios_port": 1615,
@@ -41,19 +41,121 @@
     "rubixApps": true,
     "ipScanning": true,
     "logging": true,
-    "modbus": true,
+    "modbus": false,
     "fileManager": true,
     "lora": true,
-    "io10Config": true,
-    "apiClient": true,
-    "appManager": true,
+    "io10Config": false,
+    "apiClient": false,
+    "appManager": false,
     "mqtt": true,
     "bacnetServer": true,
     "lockSidebar": true,
-    "timezone": "Africa/Abidjan"
+    "timezone": "Australia/Sydney"
   },
   "wires_plat_user": {
     "wires_plat_user": "admin",
     "wires_plat_password": "N00BWires"
+  },
+  "lora_raw_config": {
+    "service": "LORA_RAW",
+    "data": {
+      "mqtt": {
+        "enabled": true,
+        "name": "lora-raw-mqtt",
+        "host": "0.0.0.0",
+        "port": 1883,
+        "authentication": true,
+        "username": "admin",
+        "password": "N00BMQTT",
+        "keepalive": 60,
+        "qos": 1,
+        "attempt_reconnect_on_unavailable": true,
+        "attempt_reconnect_secs": 5,
+        "timeout": 10,
+        "retain_clear_interval": 10,
+        "publish_value": true,
+        "topic": "rubix/lora_raw/value",
+        "publish_raw": true,
+        "raw_topic": "rubix/lora_raw/raw",
+        "publish_debug": false,
+        "debug_topic": "rubix/lora_raw/debug"
+      },
+      "serial": {
+        "enabled": true,
+        "port": "/dev/ttyAMA0",
+        "baud_rate": 38400,
+        "stop_bits": 1,
+        "parity": "N",
+        "byte_size": 8,
+        "timeout": 5
+      }
+    }
+  },
+  "point_server_config": {
+    "service": "POINT_SERVER",
+    "data": {
+      "drivers": {
+        "generic": true,
+        "modbus_rtu": true,
+        "modbus_tcp": false
+      },
+      "services": {
+        "mqtt": true,
+        "histories": false,
+        "cleaner": false,
+        "history_sync_influxdb": false,
+        "history_sync_postgres": false
+      },
+      "influx": {
+        "host": "0.0.0.0",
+        "port": 8086,
+        "database": "db",
+        "username": "username",
+        "password": "password",
+        "ssl": false,
+        "verify_ssl": false,
+        "timeout": 5,
+        "retries": 3,
+        "timer": 5,
+        "path": "",
+        "measurement": "points",
+        "attempt_reconnect_secs": 5
+      },
+      "postgres": {
+        "host": "0.0.0.0",
+        "port": 5432,
+        "dbname": "db",
+        "user": "user",
+        "password": "password",
+        "ssl_mode": "allow",
+        "connect_timeout": 5,
+        "timer": 5,
+        "table_prefix": "tbl",
+        "attempt_reconnect_secs": 5
+      },
+      "mqtt": [
+        {
+          "enabled": true,
+          "name": "rubix-points",
+          "host": "0.0.0.0",
+          "port": 1883,
+          "authentication": false,
+          "username": "username",
+          "password": "password",
+          "keepalive": 60,
+          "qos": 1,
+          "attempt_reconnect_on_unavailable": true,
+          "attempt_reconnect_secs": 5,
+          "timeout": 10,
+          "retain_clear_interval": 10,
+          "publish_value": true,
+          "topic": "rubix/points/value",
+          "listen": true,
+          "listen_topic": "rubix/points/listen",
+          "publish_debug": true,
+          "debug_topic": "rubix/points/debug"
+        }
+      ]
+    }
   }
 }
