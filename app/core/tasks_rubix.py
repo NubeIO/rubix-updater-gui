@@ -209,11 +209,10 @@ def install_rubix_app(host, version, app, add_config, action, **kwargs):
             elif action == "RESTART":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
                 _app_status(host, action, app, response)
+            elif action == "STATUS":
+                response = RubixApi.start_stop_app(host, access_token, action, app)
+                _app_status(host, action, app, response)
             elif action == "INSTALL":
-                print(22222)
-                print(add_config)
-                print(action)
-                print(host, access_token, app, version)
                 if add_config:
                     config_file = _select_config(app)
                     config = RubixApi.rubix_add_config_file(host, access_token, config_file)

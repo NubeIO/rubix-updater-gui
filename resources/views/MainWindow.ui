@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
-    <height>950</height>
+    <width>1000</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,7 +110,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="3">
+            <item row="17" column="3">
              <widget class="QComboBox" name="rubix_app_selection">
               <item>
                <property name="text">
@@ -129,7 +129,7 @@
               </item>
              </widget>
             </item>
-            <item row="16" column="5">
+            <item row="17" column="5">
              <widget class="QComboBox" name="rubix_app_action">
               <item>
                <property name="text">
@@ -159,6 +159,11 @@
               <item>
                <property name="text">
                 <string>START</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>STATUS</string>
                </property>
               </item>
              </widget>
@@ -345,7 +350,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="4">
+            <item row="17" column="4">
              <widget class="QCheckBox" name="rubix_app_use_config">
               <property name="text">
                <string>add config file</string>
@@ -362,7 +367,7 @@
               </property>
              </widget>
             </item>
-            <item row="16" column="6">
+            <item row="17" column="6">
              <widget class="QPushButton" name="rubix_app_action_run">
               <property name="text">
                <string>RUN TASK</string>
@@ -373,6 +378,41 @@
              <widget class="QLabel" name="label">
               <property name="text">
                <string>Host: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QTextBrowser" name="rubix_plat_hyperlink">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>15</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>400</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="html">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Fira Sans Semi-Light'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://192.168.15.10:1414/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;open in browser&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

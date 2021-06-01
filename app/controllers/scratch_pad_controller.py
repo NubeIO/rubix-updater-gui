@@ -74,6 +74,9 @@ class ScratchPadController:
         self.parent.rubix_reboot.pressed.connect(self._reboot_rubix)
         # install/restart rubix app
         self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
+        # hyperlink
+
+
 
 
 
@@ -188,8 +191,12 @@ class ScratchPadController:
         version = "latest"
         if use_config:
             ip = _host_settings.get('get_host')
+            link = f"""<a href="http://{ip}:1414">open {ip}:1414</a>"""
+            self.parent.rubix_plat_hyperlink.setText(link)
         else:
             ip = self.parent.setting_remote_update_host.text()
+            link = f"""<a href="http://{ip}:1414">open {ip}:1414</a>"""
+            self.parent.rubix_plat_hyperlink.setText(link)
         ping = Utils.ping(ip)
         if ping:
             msg = f"RUN rubix apps task: {action} app: {app} on ip: {ip}"
