@@ -1,10 +1,33 @@
-import json
 import logging
-import time
 from fabric import task
 from app.core.commands import LinuxCommands
 from app.core.make_connection import SSHConnection
 from app.core.rubix_service_api import RubixApi
+from app.core.wires_plat_api import WiresPlatApi
+from config.load_config import get_config_host, get_config_rubix_service, get_config_wires_plat_settings, \
+    get_config_bios, get_config_wires_plat_user, get_point_server_config, get_lora_raw_config
+
+logging.basicConfig(level=logging.INFO)
+
+_get_config_wires_plat_settings = get_config_wires_plat_settings()
+_bios_settings = get_config_bios()
+_config_wires_plat_user = get_config_wires_plat_user()
+
+IP = None
+RS_PORT = None
+wires_plat_user = _config_wires_plat_user.get('get_wires_plat_user')
+wires_plat_password = _config_wires_plat_user.get('get_wires_plat_password')
+_host_settings = get_config_host()
+_rubix_settings = get_config_rubix_service()
+_lora_config = get_lora_raw_config()
+_point_server = get_point_server_config()
+
+rubix_bios_user = _bios_settings.get('get_rubix_bios_user')
+rubix_bios_password = _bios_settings.get('get_rubix_bios_password')
+rubix_service_user = _rubix_settings.get('get_rubix_service_user')
+rubix_service_password = _rubix_settings.get('get_rubix_service_password')
+lora_config = _lora_config.get('get_lora_raw_config')
+point_server_config = _point_server.get('get_point_server_config')
 
 
 @task
@@ -125,44 +148,80 @@ def install_rubix_service(ctx, host, github_token, **kwargs):
     RubixApi.install_rubix_service(host, bios_token)
     rubix_token = RubixApi.get_rubix_service_token(host)
     RubixApi.rubix_add_git_token(host, rubix_token, github_token)
-    RubixApi.install_wires_plat(host, rubix_token)
-
-
-
-@task
-def install_wires_plat(ctx):
-    logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM UI >>>>>>>>>>> ")
-    exe = SSHConnection.run_command(ctx, LinuxCommands.get_rubix_service_token())
-    token = LinuxCommands.clean_token(exe)
-    logging.info(f"LOG: @func clean_token {token}")
-    service = "RUBIX_PLAT"
+    app = "RUBIX_PLAT"
     version = "latest"
-    logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM DOWNLOAD >>>>>>>>>>> ")
-    exe = SSHConnection.run_command(ctx, LinuxCommands.download_rubix_service_app(token, service, version))
-    logging.info(f"LOG: @func download_rubix_service_app {exe}")
-    time.sleep(5)
-    logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM CHECK DOWNLOAD STATUS >>>>>>>>>>> ")
-    max_checks = 20
-    time.sleep(2)
-    i = 1
-    while i < max_checks:
-        aa = SSHConnection.run_command(ctx, LinuxCommands.get_state_download_rubix_service_app(token))
-        time.sleep(3)
-        logging.info(f"LOG: >>>>>>>>>>> CHECK DOWNLOAD STATUS  >>>>>>>>>>> ")
-        tt = json.loads(aa)
-        tt = tt.get('services')
-        if isinstance(tt, list):
-            logging.info(f"LOG: >>>>>>>>>>> DOWNLOADED WIRES-PLAT-COMPLETED >>>>>>>>>>> ")
-            ttt = tt[0].get('download')
-            if ttt:
-                SSHConnection.run_command(ctx, LinuxCommands.delete_state_download_rubix_service_app(token))
-                logging.info(f"LOG: >>>>>>>>>>> DOWNLOADED WIRES-PLAT-COMPLETED DELETED DOWNLOAD>>>>>>>>>>> ")
-                break
-        i += 1
+    RubixApi.install_rubix_app(host, rubix_token, app, version)
 
-    logging.info(f"LOG: >>>>>>>>>>> INSTALL RUBIX PLATFORM INSTALL >>>>>>>>>>> ")
-    exe = SSHConnection.run_command(ctx, LinuxCommands.install_rubix_service_app(token, service, version))
-    logging.info(f"LOG: @func install_rubix_service_app {exe}")
-    time.sleep(8)
-    exe = SSHConnection.run_command(ctx, LinuxCommands.service_command("restart", "nubeio-wires-plat"))
-    logging.info(f"LOG: @func service_command {exe}")
+
+def _add_rubix_users_and_settings(url):
+    token = WiresPlatApi.get_token(url, name=wires_plat_user, password=wires_plat_password)
+    _body = _get_config_wires_plat_settings.get('get_wires_plat_settings')
+    put_settings = WiresPlatApi.put_settings(url, token, _body)
+    if put_settings:
+        print(f"PASS: Add settings")
+    else:
+        print(f"FAIL: Add settings")
+
+    service = "rubixBios"  # rubixBios rubixService
+    _body = {"username": rubix_bios_user, "password": rubix_bios_password}
+    put_user_bios = WiresPlatApi.put_bios_user(url, token, _body, service=service)
+    if put_user_bios:
+        print(f"PASS: Add bios user Ok")
+    else:
+        print(f"FAIL: Add bios user Fail")
+
+    _body = {"username": rubix_bios_user, "password": rubix_bios_password}
+    service = "rubixService"  # rubixBios rubixService
+    put_user_rubix = WiresPlatApi.put_bios_user(url, token, _body, service=service)
+    if put_user_rubix:
+        print(f"PASS: Add rubix service user Ok")
+    else:
+        print(f"FAIL: Add rubix service user Fail")
+
+
+def _app_status(host, action, app, response):
+    if response:
+        logging.info(f"PASS: start | stop | restart app: {app} action: {action} host: {host}")
+    else:
+        logging.info(f"FAIL: start | stop | restart app: {app} action: {action} host: {host}")
+
+
+def _select_config(app):
+    if app == "LORA_RAW":
+        return lora_config
+
+
+def install_rubix_app(host, version, app, add_config, action, **kwargs):
+    username = rubix_service_user
+    password = rubix_service_password
+    if action == "RUBIX_PLAT_ADD_CREDENTIALS":
+        url = f"{host}"
+        _add_rubix_users_and_settings(url)
+    else:
+        access_token = RubixApi.get_rubix_service_token(host, username=username, password=password)
+        if access_token != False:
+            if action == "START":
+                response = RubixApi.start_stop_app(host, access_token, action, app)
+                _app_status(host, action, app, response)
+            elif action == "STOP":
+                response = RubixApi.start_stop_app(host, access_token, action, app)
+                _app_status(host, action, app, response)
+            elif action == "RESTART":
+                response = RubixApi.start_stop_app(host, access_token, action, app)
+                _app_status(host, action, app, response)
+            elif action == "INSTALL":
+                print(22222)
+                print(add_config)
+                print(action)
+                print(host, access_token, app, version)
+                if add_config:
+                    config_file = _select_config(app)
+                    config = RubixApi.rubix_add_config_file(host, access_token, config_file)
+                    if config:
+                        logging.info(f"PASS: Add config file service: {app}")
+                        logging.info(f"try and instll app: {app}")
+                        RubixApi.install_rubix_app(host, access_token, app, version)
+                    else:
+                        logging.info(f"FAIL: Add config file service: {app}")
+                else:
+                    RubixApi.install_rubix_app(host, access_token, app, version)

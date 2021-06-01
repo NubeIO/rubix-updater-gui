@@ -36,8 +36,8 @@ else:
 
 url = IP
 print(f"url {url}")
-token = WiresPlatApi.get_token(url, name=wires_plat_user, password=wires_plat_password)
 
+token = WiresPlatApi.get_token(url, name=wires_plat_user, password=wires_plat_password)
 _body = _get_config_wires_plat_settings.get('get_wires_plat_settings')
 put_settings = WiresPlatApi.put_settings(url, token, _body)
 if put_settings:

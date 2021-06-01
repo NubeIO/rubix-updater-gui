@@ -86,25 +86,81 @@
             <string>Host Connection</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="14" column="4">
-             <widget class="QPushButton" name="action_lora_reflash">
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>flash lora</string>
+               <string>username:</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="2">
-             <widget class="QPushButton" name="action_remote_update">
-              <property name="text">
-               <string>update bios</string>
+            <item row="8" column="2">
+             <widget class="QSpinBox" name="rubix_service_port">
+              <property name="minimum">
+               <number>1616</number>
+              </property>
+              <property name="maximum">
+               <number>60000</number>
               </property>
              </widget>
             </item>
-            <item row="11" column="2">
-             <widget class="QPushButton" name="action_remote_update_connect">
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>check connection</string>
+               <string>rubix username</string>
               </property>
+             </widget>
+            </item>
+            <item row="16" column="4">
+             <widget class="QComboBox" name="rubix_app_selection">
+              <item>
+               <property name="text">
+                <string>RUBIX_PLAT</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LORA_RAW</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>POINT_SERVER</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="16" column="6">
+             <widget class="QComboBox" name="rubix_app_action">
+              <item>
+               <property name="text">
+                <string>RESTART</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RUBIX_PLAT_ADD_CREDENTIALS</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>INSTALL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>REMOVE</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>STOP</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>START</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="2" column="2">
@@ -117,23 +173,10 @@
               </property>
              </widget>
             </item>
-            <item row="9" column="2">
-             <widget class="QLineEdit" name="github_token">
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_9">
               <property name="text">
-               <string>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</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::PasswordEchoOnEdit</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="15" column="4">
-             <widget class="QPushButton" name="rubix_reboot">
-              <property name="text">
-               <string>Reboot Rubix</string>
+               <string>rubix bios port</string>
               </property>
              </widget>
             </item>
@@ -150,13 +193,17 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="2">
-             <widget class="QSpinBox" name="rubix_service_port">
-              <property name="minimum">
-               <number>1616</number>
+            <item row="0" column="2">
+             <widget class="QRadioButton" name="use_config_file">
+              <property name="text">
+               <string>use configuration file</string>
               </property>
-              <property name="maximum">
-               <number>60000</number>
+             </widget>
+            </item>
+            <item row="14" column="2">
+             <widget class="QPushButton" name="action_remote_rubix_service">
+              <property name="text">
+               <string>update rubix service</string>
               </property>
              </widget>
             </item>
@@ -173,51 +220,10 @@
               </property>
              </spacer>
             </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="rubix_username">
+            <item row="15" column="4">
+             <widget class="QPushButton" name="rubix_reboot">
               <property name="text">
-               <string>admin</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Port:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Token (git)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Host: </string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="rubix_password">
-              <property name="text">
-               <string>N00BRCRC</string>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::PasswordEchoOnEdit</enum>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>rubix username</string>
+               <string>Reboot Rubix</string>
               </property>
              </widget>
             </item>
@@ -228,27 +234,10 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="2">
-             <widget class="QSpinBox" name="rubix_bios_port">
-              <property name="minimum">
-               <number>1615</number>
-              </property>
-              <property name="maximum">
-               <number>60000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="2">
-             <widget class="QPushButton" name="action_remote_rubix_service">
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_10">
               <property name="text">
-               <string>update rubix service</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>username:</string>
+               <string>rubix service port</string>
               </property>
              </widget>
             </item>
@@ -265,24 +254,81 @@
               </property>
              </widget>
             </item>
+            <item row="9" column="2">
+             <widget class="QLineEdit" name="github_token">
+              <property name="text">
+               <string>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</string>
+              </property>
+              <property name="echoMode">
+               <enum>QLineEdit::PasswordEchoOnEdit</enum>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="rubix_password">
+              <property name="text">
+               <string>N00BRCRC</string>
+              </property>
+              <property name="echoMode">
+               <enum>QLineEdit::PasswordEchoOnEdit</enum>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="2">
+             <widget class="QPushButton" name="action_remote_update">
+              <property name="text">
+               <string>update bios</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Token (git)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="4">
+             <widget class="QPushButton" name="action_lora_reflash">
+              <property name="text">
+               <string>flash lora</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="setting_remote_update_host">
+              <property name="text">
+               <string>192.168.15.10</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <widget class="QSpinBox" name="rubix_bios_port">
+              <property name="minimum">
+               <number>1615</number>
+              </property>
+              <property name="maximum">
+               <number>60000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="2">
+             <widget class="QPushButton" name="action_remote_update_connect">
+              <property name="text">
+               <string>check connection</string>
+              </property>
+             </widget>
+            </item>
             <item row="6" column="0">
              <widget class="QLabel" name="label_7">
               <property name="text">
                <string>rubix password</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>rubix service port</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>rubix bios port</string>
               </property>
              </widget>
             </item>
@@ -299,17 +345,38 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="setting_remote_update_host">
+            <item row="5" column="2">
+             <widget class="QLineEdit" name="rubix_username">
               <property name="text">
-               <string>192.168.15.10</string>
+               <string>admin</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QRadioButton" name="use_config_file">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>use config file</string>
+               <string>Port:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="7">
+             <widget class="QPushButton" name="rubix_app_action_run">
+              <property name="text">
+               <string>RUN TASK</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Host: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="5">
+             <widget class="QCheckBox" name="rubix_app_use_config">
+              <property name="text">
+               <string>add config</string>
               </property>
              </widget>
             </item>

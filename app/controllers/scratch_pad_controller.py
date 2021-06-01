@@ -10,7 +10,7 @@ from app.core.commands import LinuxCommands
 from app.core.logger import LoggerSetup
 from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
-    deploy_rubix_service_update, reboot_host
+    deploy_rubix_service_update, reboot_host, install_rubix_app
 from app.utils.utils import Utils
 from config.load_config import get_config_host, get_config_rubix_service, get_config_bios
 
@@ -54,21 +54,17 @@ class ScratchPadController:
         self.parent.rubix_bios_port.setEnabled(False)
         self.parent.rubix_service_port.setEnabled(False)
         self.parent.github_token.setEnabled(False)
-
         # tab host connection
         self.parent.action_remote_update_connect.pressed.connect(self._check_rc_connection)
         self.parent.action_remote_ping_host.pressed.connect(self._ping_host)
         # update rubix bios
         self.parent.action_remote_update.pressed.connect(self._update_rubix)
         self.parent.action_remote_update.setEnabled(False)
-
         # update rubix service
         self.parent.action_remote_rubix_service.pressed.connect(self._update_rubix_service)
         self.parent.action_remote_rubix_service.setEnabled(False)
-
         # flash lora
         self.parent.action_lora_reflash.pressed.connect(self._lora_reflash)
-
         # check bbb connection
         self.parent.bbb_host_check_connection.pressed.connect(self.check_bbb_connection)
         # update bbb ip
@@ -76,6 +72,10 @@ class ScratchPadController:
         self.parent.run_update_bbb_ip.pressed.connect(self.run_update_bbb_ip)
         # rubix_reboot
         self.parent.rubix_reboot.pressed.connect(self._reboot_rubix)
+        # install/restart rubix app
+        self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
+
+
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
@@ -179,6 +179,32 @@ class ScratchPadController:
         file_transfer_stm(cx, file_stm_script, HOME_DIR)
         self.parent.statusBar.showMessage(f"LOG: START STM INSTALL")
         file_transfer_stm_build(cx, file_stm_bin, HOME_DIR)
+
+    def _manage_rubix_app(self):
+        use_config = self.parent.use_config_file.isChecked()
+        add_config_file = self.parent.rubix_app_use_config.isChecked()
+        app = self.parent.rubix_app_selection.currentText()
+        action = self.parent.rubix_app_action.currentText()
+        version = "latest"
+        if use_config:
+            ip = _host_settings.get('get_host')
+        else:
+            ip = self.parent.setting_remote_update_host.text()
+        ping = Utils.ping(ip)
+        if ping:
+            msg = f"RUN rubix apps task: {action} app: {app} on ip: {ip}"
+            self.parent.statusBar.showMessage(msg)
+            logging.info(msg)
+            logging.info("------ Connect and start updates ------")
+            install_rubix_app(ip, version, app, add_config_file, action)
+            msg = f"install completed"
+            logging.info(msg)
+            return msg
+        else:
+            msg = f"device on ip: {ip} is dead"
+            self.parent.statusBar.showMessage(msg)
+            logging.info(msg)
+            return msg
 
     def _update_rubix(self):
         cx = self._connection()

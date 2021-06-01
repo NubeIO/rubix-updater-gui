@@ -57,3 +57,15 @@ def get_config_wires_plat_user():
         c.get_wires_plat_user.__name__: c.get_wires_plat_user(),
         c.get_wires_plat_password.__name__: c.get_wires_plat_password()
     }
+
+
+def get_lora_raw_config():
+    return {
+        c.get_lora_raw_config.__name__: c.get_lora_raw_config()
+    }
+
+
+def get_point_server_config():
+    return {
+        c.get_point_server_config.__name__: c.get_point_server_config()
+    }

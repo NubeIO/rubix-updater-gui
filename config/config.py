@@ -30,6 +30,9 @@ class Config:
         # wires_plat user
         self.wires_plat_user = None
         self.wires_plat_password = None
+        # lora config
+        self.lora_raw_config = None
+        self.point_server_config = None
 
     def load_config(self, **kwargs):
         CWD = kwargs.get('file') or os.getcwd()
@@ -40,6 +43,8 @@ class Config:
         key_rubix_build_repo = "rubix_build_repo"
         key_wires_plat_settings = "wires_plat_settings"
         key_wires_plat_user = "wires_plat_user"
+        key_lora_raw_config = "lora_raw_config"
+        key_point_server_config = "point_server_config"
         file = f"{CWD}/config.json"
         host = 'host'
         port = 'port'
@@ -63,10 +68,9 @@ class Config:
         # builds repo
         rubix_build_repo = "rubix_build_repo"
         # wires plat settings
-        wires_plat_settings = "wires_plat_settings"
-
         wires_plat_user = "wires_plat_user"
         wires_plat_password = "wires_plat_password"
+        # lora raw config
 
         with open(file) as json_file:
             data = json.load(json_file)
@@ -116,6 +120,11 @@ class Config:
                 if wp == wires_plat_password:
                     self.wires_plat_password = data[key_wires_plat_user].get(wires_plat_password)
             self.wires_plat_settings = data[key_wires_plat_settings]
+            # lora-raw config
+            self.lora_raw_config = data[key_lora_raw_config]
+            # point-server config
+            self.point_server_config = data[key_point_server_config]
+
 
     def get_host(self):
         return self.host
@@ -182,5 +191,13 @@ class Config:
 
     def get_wires_plat_password(self):
         return self.wires_plat_password
+
+    def get_lora_raw_config(self):
+        return self.lora_raw_config
+
+    def get_point_server_config(self):
+        return self.point_server_config
+
+
 
 

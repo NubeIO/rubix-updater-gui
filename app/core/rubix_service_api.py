@@ -1,7 +1,9 @@
 import logging
 import requests
 from time import sleep
+
 logging.basicConfig(level=logging.INFO)
+
 
 class RubixApi:
 
@@ -52,10 +54,12 @@ class RubixApi:
     @staticmethod
     def get_rubix_service_token(host, **kwargs):
         port = kwargs.get('port') or 1616
+        username = kwargs.get('username') or 'admin'
+        password = kwargs.get('password') or 'N00BWires'
         url = f"http://{host}:{port}/api/users/login"
-        payload = {"username": "admin", "password": "N00BWires"}
+        payload = {"username": username, "password": password}
         logging.info(f"get_rubix_service_token status code {url}")
-        sleep(10)
+        sleep(5)
         try:
             result = requests.post(url, json=payload)
             logging.info(f"get_rubix_service_token status code {result.status_code}")
@@ -119,6 +123,24 @@ class RubixApi:
             return False
 
     @staticmethod
+    def start_stop_app(host, access_token, action, service, **kwargs):
+        port = kwargs.get('port') or 1616
+        url = f"http://{host}:{port}/api/app/control"
+        action = action.upper()
+        service = service.upper()
+        payload = [{"action": action, "service": service}]
+        print(access_token)
+        result = requests.post(url,
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {}'.format(access_token)}, json=payload)
+        logging.info(f"start_stop_app: {url} service: {service} action {action}  body: {payload} status code: {result.status_code} status_code:{result.status_code} res:{result.text}")
+        if result.status_code == 200:
+            return True
+        else:
+            return False
+
+
+    @staticmethod
     def install_rubix_app(host, token, app, version, **kwargs):
         port = kwargs.get('port') or 1616
         payload = [{"service": app, "version": version}]
@@ -127,7 +149,8 @@ class RubixApi:
         download_state_url = f"http://{host}:{port}/api/app/download_state"
         install_url = f"http://{host}:{port}/api/app/install"
         result = requests.post(url,
-                               headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(access_token)},
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {}'.format(access_token)},
                                json=payload)
         logging.info(f"install_rubix_app status code {result.status_code}")
         if result.status_code != 200:
@@ -165,54 +188,6 @@ class RubixApi:
             if result.status_code != 200:
                 logging.debug(f"Failed to install', {result.json()}")
             else:
-                logging.info(f"Install completed...")
+                logging.info(f"Install completed...service {app}")
                 return True
 
-    @staticmethod
-    def install_wires_plat(host, token, **kwargs):
-        port = kwargs.get('port') or 1616
-        payload = [{"service": "RUBIX_PLAT", "version": "latest"}]
-        access_token = token
-        url = f"http://{host}:{port}/api/app/download"
-        download_state_url = f"http://{host}:{port}/api/app/download_state"
-        install_url = f"http://{host}:{port}/api/app/install"
-        result = requests.post(url,
-                               headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(access_token)},
-                               json=payload)
-        if result.status_code != 200:
-            print("Failed to download", result.json())
-            print("Clearing download state...")
-
-            requests.delete(download_state_url,
-                            headers={'Content-Type': 'application/json',
-                                     'Authorization': '{}'.format(access_token)},
-                            json=payload)
-            print("Download state is cleared...")
-        else:
-            print("Download process has been started, and waiting for it's completion...")
-            while True:
-                sleep(1)
-                download_state = requests.get(download_state_url,
-                                              headers={'Content-Type': 'application/json',
-                                                       'Authorization': '{}'.format(access_token)},
-                                              json=payload)
-                print('download_state', download_state.json())
-                if download_state.json().get('state') == 'DOWNLOADED':
-                    break
-            print("Download completed...")
-            print("Please insert your installation code here...")
-            print("Clearing download state...")
-            requests.delete(download_state_url,
-                            headers={'Content-Type': 'application/json',
-                                     'Authorization': '{}'.format(access_token)},
-                            json=payload)
-            print("Download state is cleared...")
-            result = requests.post(install_url,
-                                   headers={'Content-Type': 'application/json',
-                                            'Authorization': '{}'.format(access_token)},
-                                   json=payload)
-            if result.status_code != 200:
-                print("Failed to install", result.json())
-            else:
-                print("Install completed...")
-                return True
