@@ -10,7 +10,7 @@ from app.core.commands import LinuxCommands
 from app.core.logger import LoggerSetup
 from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
-    deploy_rubix_service_update, reboot_host, install_rubix_app
+    deploy_rubix_service_update, reboot_host, install_rubix_app, task_command_blank
 from app.utils.utils import Utils
 from config.load_config import get_config_host, get_config_rubix_service, get_config_bios
 
@@ -223,6 +223,34 @@ class ScratchPadController:
             logging.info(msg)
             logging.info("------ Connect and start updates ------")
             deploy_rubix_update(cx)
+            msg = f"install completed"
+            logging.info(msg)
+            return msg
+        else:
+            msg = f"device on ip: {ip} is dead"
+            self.parent.statusBar.showMessage(msg)
+            logging.info(msg)
+            return msg
+
+    def _modpoll_lora(self):
+        cx = self._connection()
+        mod_run_for = self.parent.mod_run_for.text()
+        mod_serial_port = self.parent.mod_serial_port.currentText()
+        mod_baud_rate = self.parent.mod_baud_rate.currentText()
+        mod_device_address = self.parent.mod_device_address.text()
+        mod_point_address = self.parent.mod_point_address.text()
+        mod_length = self.parent.mod_length.text()
+        mod_point_type = self.parent.mod_point_type.currentText()
+        mod_data_type = self.parent.mod_data_type.currentText()
+        mod_delay = self.parent.mod_delay.text()
+
+        ping = True
+        if ping:
+            command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
+                                                           f"-a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
+                                                           f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
+            logging.info("------ Connect and start updates ------")
+            task_command_blank(cx, command)
             msg = f"install completed"
             logging.info(msg)
             return msg

@@ -18,6 +18,15 @@ count = 1
 point_type = 3
 data_type = "float"
 delay = 2
+
+# -t 0          Discrete output (coil) data type
+# -t 1          Discrete input data type
+# -t 3          16-bit input register data type
+# -t 4          16-bit output (holding) register data type (default)
+a = f"timeout {run_for} modpoll -m rtu -p none -b {baud_rate}" \
+                                                           f"-a {device_address} -t {point_type}:{data_type} " \
+                                                           f"-r {point_address} -c{count} -l {delay} /dev/{serial_port}"
+
 SSHConnection.run_command(ctx, LinuxCommands.command_blank(f"timeout {run_for} modpoll -m rtu -p none -b {baud_rate} "
                                                            f"-a {device_address} -t {point_type}:{data_type} "
                                                            f"-r {point_address} -c{count} -l {delay} /dev/{serial_port}"))
