@@ -27,8 +27,6 @@ class SSHConnection:
         port = _host_settings.get('get_port')
         user = _host_settings.get('get_user')
         password = _host_settings.get('get_password')
-        print(2222, host, port)
-        print(2222, self.use_config)
         if self.use_config:
             c = Config()
             c.load_config()

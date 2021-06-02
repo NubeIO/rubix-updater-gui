@@ -76,10 +76,6 @@ class ScratchPadController:
         self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
         # hyperlink
 
-
-
-
-
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
         port = self.parent.setting_remote_update_port.text()

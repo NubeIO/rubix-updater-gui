@@ -94,7 +94,7 @@
                  <bool>true</bool>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="widget">
                  <attribute name="title">
@@ -304,13 +304,6 @@
                   <string>Manage Rubix Apps</string>
                  </attribute>
                  <layout class="QGridLayout" name="gridLayout_4">
-                  <item row="0" column="1">
-                   <widget class="QPushButton" name="action_remote_update">
-                    <property name="text">
-                     <string>update bios</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="2" column="5">
                    <widget class="QTextBrowser" name="rubix_plat_hyperlink">
                     <property name="sizePolicy">
@@ -382,13 +375,6 @@ p, li { white-space: pre-wrap; }
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QPushButton" name="action_remote_rubix_service">
-                    <property name="text">
-                     <string>update rubix service</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="2" column="3">
                    <widget class="QComboBox" name="rubix_app_action">
                     <item>
@@ -431,14 +417,28 @@ p, li { white-space: pre-wrap; }
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_18">
                     <property name="text">
-                     <string>TextLabel</string>
+                     <string>Run update on bios</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_19">
                     <property name="text">
-                     <string>TextLabel</string>
+                     <string>Run update on rubix-service</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1" colspan="2">
+                   <widget class="QPushButton" name="action_remote_rubix_service">
+                    <property name="text">
+                     <string>update rubix service</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" colspan="2">
+                   <widget class="QPushButton" name="action_remote_update">
+                    <property name="text">
+                     <string>update bios</string>
                     </property>
                    </widget>
                   </item>
