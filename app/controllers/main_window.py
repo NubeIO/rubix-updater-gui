@@ -10,14 +10,15 @@ from app.core.commands import LinuxCommands
 from app.core.logger import LoggerSetup
 from app.core.make_connection import SSHConnection
 from app.core.tasks_rubix import file_transfer_stm, file_transfer_stm_build, deploy_rubix_update, command_ls, \
-    deploy_rubix_service_update, reboot_host, install_rubix_app, task_command_blank
+    deploy_rubix_service_update, reboot_host, install_rubix_app, task_command_blank, bbb_env_transfer
 from app.utils.utils import Utils
-from config.load_config import get_config_host, get_config_rubix_service, get_config_bios
+from config.load_config import get_config_host, get_config_rubix_service, get_config_bios, get_bbb_host_config
 
 _get_config_host = get_config_host()
 _rubix_settings = get_config_rubix_service()
 _host_settings = get_config_host()
 _bios_settings = get_config_bios()
+_bbb_settings = get_bbb_host_config()
 
 RUBIX_IMAGE_REPO = "https://github.com/NubeIO/rubix-pi-image"
 RUBIX_SERVICE_CONFIG = "config-files/rubix-apps"
@@ -28,6 +29,7 @@ STM_FLASH_BUILD = "builds"
 POINT_SERVER_PATH = "./config-files/point-server/point-server/config.json"
 BACNET_SERVER_PATH = "./config-files/bacnet-server/bacnet-server"
 HOME_DIR = '/home/pi'
+WIRES_DATA_DIR = '/data/rubix-wires/config'
 CWD = os.getcwd()
 
 
@@ -66,15 +68,18 @@ class ScratchPadController:
         # flash lora
         self.parent.action_lora_reflash.pressed.connect(self._lora_reflash)
         # check bbb connection
-        self.parent.bbb_host_check_connection.pressed.connect(self.check_bbb_connection)
+        # self.parent.bbb_host_check_connection.pressed.connect(self.check_bbb_connection)
         # update bbb ip
         self.parent.run_update_bbb_ip.setEnabled(False)
         self.parent.run_update_bbb_ip.pressed.connect(self.run_update_bbb_ip)
+        # env file bbb
+        self.parent.bbb_transfer_env.pressed.connect(self.bbb_send_env)
         # rubix_reboot
         self.parent.rubix_reboot.pressed.connect(self._reboot_rubix)
         # install/restart rubix app
         self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
-        # hyperlink
+        # modpoll
+        self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
@@ -130,10 +135,18 @@ class ScratchPadController:
             self.parent.action_remote_rubix_service.setEnabled(True)
 
     def _connection_bbb(self):
-        host = self.parent.bbb_host.text()
-        port = self.parent.bbb_port.text()
-        user = self.parent.bbb_user.text()
-        password = self.parent.bbb_password.text()
+        use_config = self.parent.bbb_use_config_file.isChecked()
+        if use_config:
+            host = _bbb_settings.get('get_bbb_host')
+            port = _bbb_settings.get('get_bbb_port')
+            user = _bbb_settings.get('get_bbb_user')
+            password = _bbb_settings.get('get_bbb_password')
+        else:
+            # ip = self.parent.setting_remote_update_host.text()
+            host = self.parent.bbb_host.text()
+            port = self.parent.bbb_port.text()
+            user = self.parent.bbb_username.text()
+            password = self.parent.bbb_password.text()
         time = self._time_stamp()
         logging.info(f"try and connect with host:{host} port:{port} user:{user}")
         cx = SSHConnection(
@@ -161,7 +174,7 @@ class ScratchPadController:
             self.parent.statusBar.showMessage(msg)
             return False
         else:
-            msg = f"device on ip: {ip} is cnnected {time}"
+            msg = f"device on ip: {ip} is connected {time}"
             self.parent.statusBar.showMessage(msg)
             return cx
 
@@ -243,12 +256,11 @@ class ScratchPadController:
         mod_point_type = self.parent.mod_point_type.currentText()
         mod_data_type = self.parent.mod_data_type.currentText()
         mod_delay = self.parent.mod_delay.text()
-
         ping = True
         if ping:
             command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
-                                                           f"-a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
-                                                           f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
+                      f"-a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
+                      f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
             logging.info("------ Connect and start updates ------")
             task_command_blank(cx, command)
             msg = f"install completed"
@@ -353,6 +365,22 @@ class ScratchPadController:
         cx.run(new_ip, pty=True, watchers=[sudo_pass])
         new_ip = "sudo pwd"
         cx.run(new_ip, pty=True, watchers=[sudo_pass])
+
+    def bbb_send_env(self):
+        cx = self._connection_bbb()
+        action = self.parent.bbb_env_option.currentText()
+        file = f"{CWD}/.env"
+        directory = WIRES_DATA_DIR
+
+
+        if action == "TRANSFER":
+            bbb_env_transfer(cx, file, directory)
+        elif action == "DELETE":
+            sudo_pass = Responder(
+                pattern=r'\[sudo\] password for debian:',
+                response='N00B2828\n',
+            )
+            cx.run('sudo rm /data/rubix-wires/config/.env', pty=True, watchers=[sudo_pass])
 
     def _clear_console(self):
         print("ADD LATER")

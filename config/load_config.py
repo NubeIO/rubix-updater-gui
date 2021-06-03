@@ -1,7 +1,6 @@
 from config.config import Config
 
 file = None
-# file = '/home/aidan/code/py-nube/rubix-updater-gui'
 
 c = Config()
 c.load_config(file=file)
@@ -68,4 +67,13 @@ def get_lora_raw_config():
 def get_point_server_config():
     return {
         c.get_point_server_config.__name__: c.get_point_server_config()
+    }
+
+
+def get_bbb_host_config():
+    return {
+        c.get_bbb_host.__name__: c.get_bbb_host(),
+        c.get_bbb_port.__name__: c.get_bbb_port(),
+        c.get_bbb_user.__name__: c.get_bbb_user(),
+        c.get_bbb_password.__name__: c.get_bbb_password()
     }

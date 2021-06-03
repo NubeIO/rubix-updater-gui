@@ -33,6 +33,10 @@ class Config:
         # lora config
         self.lora_raw_config = None
         self.point_server_config = None
+        self.bbb_host = None
+        self.bbb_port = None
+        self.bbb_user = None
+        self.bbb_password = None
 
     def load_config(self, **kwargs):
         CWD = kwargs.get('file') or os.getcwd()
@@ -45,6 +49,7 @@ class Config:
         key_wires_plat_user = "wires_plat_user"
         key_lora_raw_config = "lora_raw_config"
         key_point_server_config = "point_server_config"
+        key_bbb = "connection_bbb"
         file = f"{CWD}/config.json"
         host = 'host'
         port = 'port'
@@ -71,6 +76,11 @@ class Config:
         wires_plat_user = "wires_plat_user"
         wires_plat_password = "wires_plat_password"
         # lora raw config
+        # bbb
+        bbb_host = 'bbb_host'
+        bbb_port = 'bbb_port'
+        bbb_user = 'bbb_user'
+        bbb_password = 'bbb_password'
 
         with open(file) as json_file:
             data = json.load(json_file)
@@ -119,12 +129,22 @@ class Config:
                     self.wires_plat_user = data[key_wires_plat_user].get(wires_plat_user)
                 if wp == wires_plat_password:
                     self.wires_plat_password = data[key_wires_plat_user].get(wires_plat_password)
+                # BBB
+            for bbb in data[key_bbb]:
+                if bbb == bbb_host:
+                    self.bbb_host = data[key_bbb].get(bbb_host)
+                if bbb == bbb_port:
+                    self.bbb_port = data[key_bbb].get(bbb_port)
+                if bbb == bbb_user:
+                    self.bbb_user = data[key_bbb].get(bbb_user)
+                if bbb == bbb_password:
+                    self.bbb_password = data[key_bbb].get(bbb_password)
+
             self.wires_plat_settings = data[key_wires_plat_settings]
             # lora-raw config
             self.lora_raw_config = data[key_lora_raw_config]
             # point-server config
             self.point_server_config = data[key_point_server_config]
-
 
     def get_host(self):
         return self.host
@@ -198,6 +218,16 @@ class Config:
     def get_point_server_config(self):
         return self.point_server_config
 
+    # BBB EDGE-28
+    def get_bbb_host(self):
+        return self.bbb_host
 
+    def get_bbb_port(self):
+        return self.bbb_port
 
+    def get_bbb_user(self):
+        return self.bbb_user
+
+    def get_bbb_password(self):
+        return self.bbb_password
 

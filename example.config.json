@@ -4,13 +4,19 @@
     "port": 22,
     "user": "pi",
     "password": "N00BRCRC",
-    "git_token": "ghp_DZMV0dScoHc6GbGEE3aeEk9",
+    "git_token": "ghp_DZMV0dScoHc6GbGEEDBC8AGDRuD33a3aesadasdasdEk9",
     "rubix_bios_user": "admin",
     "rubix_bios_password": "N00BWires",
     "rubix_bios_port": 1615,
     "rubix_service_user": "admin",
     "rubix_service_password": "N00BWires",
     "rubix_service_port": 1616
+  },
+  "connection_bbb": {
+    "bbb_host": "192.168.15.10",
+    "bbb_port": 22,
+    "bbb_user": "debian",
+    "bbb_password": "N00B2828"
   },
   "bios": {
     "bios_url": "https://github.com/NubeIO/rubix-bios/releases/download/v1.4.1/rubix-bios-1.4.1-005821de.armv7.zip",

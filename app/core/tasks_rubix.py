@@ -75,11 +75,20 @@ def file_transfer_stm_build(ctx, file, directory):
     logging.info(f"LOG: @func run_stm_file {exe}")
     return exe
 
+
+@task
+def bbb_env_transfer(ctx, file, directory):
+    exe = SSHConnection.run_sftp(ctx, file, directory)
+    logging.info(f"LOG: @func bbb_env_transfer {exe}")
+    return exe
+
+
 @task
 def task_command_blank(ctx, command):
     exe = SSHConnection.run_command(ctx, LinuxCommands.command_blank(command))
     logging.info(f"LOG: @func command_blank {exe}")
     return exe
+
 
 @task
 def command_ls(ctx):
