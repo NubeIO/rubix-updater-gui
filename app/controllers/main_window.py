@@ -371,9 +371,19 @@ class ScratchPadController:
         action = self.parent.bbb_env_option.currentText()
         file = f"{CWD}/.env"
         directory = WIRES_DATA_DIR
-
-
-        if action == "TRANSFER":
+        if action == "RESTART_WIRES":
+            sudo_pass = Responder(
+                pattern=r'\[sudo\] password for debian:',
+                response='N00B2828\n',
+            )
+            cx.run('sudo systemctl restart nubeio-rubix-wires.service', pty=True, watchers=[sudo_pass])
+        elif action == "RESTART_HOST":
+            sudo_pass = Responder(
+                pattern=r'\[sudo\] password for debian:',
+                response='N00B2828\n',
+            )
+            cx.run('sudo reboot', pty=True, watchers=[sudo_pass])
+        elif action == "TRANSFER":
             bbb_env_transfer(cx, file, directory)
         elif action == "DELETE":
             sudo_pass = Responder(
