@@ -456,6 +456,7 @@ class Ui_MainWindow(object):
         self.bbb_env_option.addItem("")
         self.bbb_env_option.addItem("")
         self.bbb_env_option.addItem("")
+        self.bbb_env_option.addItem("")
         self.gridLayout_6.addWidget(self.bbb_env_option, 8, 0, 1, 1)
         self.token_2.addTab(self.widget_2, "")
         self.tab_9 = QtWidgets.QWidget()
@@ -503,7 +504,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusBar)
 
         self.retranslateUi(MainWindow)
-        self.lora_flasher.setCurrentIndex(1)
+        self.lora_flasher.setCurrentIndex(0)
         self.token.setCurrentIndex(0)
         self.token_2.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -541,8 +542,8 @@ class Ui_MainWindow(object):
         self.rubix_plat_hyperlink.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://192.168.15.10:1414/\"><span style=\" font-family:\'Fira Sans Semi-Light\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">open in browser</span></a></p></body></html>"))
+"</style></head><body style=\" font-family:\'Fira Sans Semi-Light\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://192.168.15.10:1414/\"><span style=\" text-decoration: underline; color:#0000ff;\">open in browser</span></a></p></body></html>"))
         self.action_remote_rubix_service.setText(_translate("MainWindow", "update rubix service"))
         self.rubix_app_action_run.setText(_translate("MainWindow", "RUN TASK"))
         self.rubix_app_use_config.setText(_translate("MainWindow", "add config file"))
@@ -555,24 +556,24 @@ class Ui_MainWindow(object):
         self.token.setTabText(self.token.indexOf(self.tab_4), _translate("MainWindow", "Manage Rubix Apps"))
         self.label_26.setText(_translate("MainWindow", "Register length"))
         self.label_23.setText(_translate("MainWindow", "Baud Rate"))
-        self.mod_serial_port.setItemText(0, _translate("MainWindow", "RS485-1"))
-        self.mod_serial_port.setItemText(1, _translate("MainWindow", "RS485-2"))
-        self.mod_data_type.setItemText(0, _translate("MainWindow", "raw"))
-        self.mod_data_type.setItemText(1, _translate("MainWindow", "hex"))
-        self.mod_data_type.setItemText(2, _translate("MainWindow", "int"))
-        self.mod_data_type.setItemText(3, _translate("MainWindow", "float"))
+        self.mod_serial_port.setItemText(0, _translate("MainWindow", "ttyRS485-1"))
+        self.mod_serial_port.setItemText(1, _translate("MainWindow", "ttyRS485-2"))
+        self.mod_data_type.setItemText(0, _translate("MainWindow", "float"))
+        self.mod_data_type.setItemText(1, _translate("MainWindow", "raw"))
+        self.mod_data_type.setItemText(2, _translate("MainWindow", "hex"))
+        self.mod_data_type.setItemText(3, _translate("MainWindow", "int"))
         self.mod_data_type.setItemText(4, _translate("MainWindow", "mod"))
         self.label_27.setText(_translate("MainWindow", "Point Type"))
         self.label_21.setText(_translate("MainWindow", "Point Addres"))
-        self.mod_point_type.setItemText(0, _translate("MainWindow", "READ-DO-COIL"))
-        self.mod_point_type.setItemText(1, _translate("MainWindow", "READ-DI-INPUT"))
-        self.mod_point_type.setItemText(2, _translate("MainWindow", "READ-AO-HOLDING"))
+        self.mod_point_type.setItemText(0, _translate("MainWindow", "READ-AO-HOLDING"))
+        self.mod_point_type.setItemText(1, _translate("MainWindow", "READ-DO-COIL"))
+        self.mod_point_type.setItemText(2, _translate("MainWindow", "READ-DI-INPUT"))
         self.mod_point_type.setItemText(3, _translate("MainWindow", "READ-AI-INPUT"))
         self.label_20.setText(_translate("MainWindow", "Data Type"))
         self.label_24.setText(_translate("MainWindow", "Select Serial Port"))
         self.label_28.setText(_translate("MainWindow", "Delay Between Polling"))
-        self.mod_baud_rate.setItemText(0, _translate("MainWindow", "38400"))
-        self.mod_baud_rate.setItemText(1, _translate("MainWindow", "9600"))
+        self.mod_baud_rate.setItemText(0, _translate("MainWindow", "9600"))
+        self.mod_baud_rate.setItemText(1, _translate("MainWindow", "38400"))
         self.label_22.setText(_translate("MainWindow", "Device Address"))
         self.label_29.setText(_translate("MainWindow", "Poll for x number of seconds"))
         self.mod_connect.setText(_translate("MainWindow", "Run"))
@@ -596,14 +597,14 @@ class Ui_MainWindow(object):
         self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">Help:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Set the network address: 192.168.15 (START 0) (FINISH 50) a scan range</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">from : 192.168.15.0</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">to : 192.168.15.20</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+"</style></head><body style=\" font-family:\'Fira Sans Semi-Light\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-size:16pt;\">Help:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:16pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">Set the network address: 192.168.15 (START 0) (FINISH 50) a scan range</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">from : 192.168.15.0</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">to : 192.168.15.20</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:11pt;\"><br /></p></body></html>"))
         self.token.setTabText(self.token.indexOf(self.tab_5), _translate("MainWindow", "Local Ping Scan"))
         self.lora_flasher.setTabText(self.lora_flasher.indexOf(self.tab_rubix_remote_update), _translate("MainWindow", "Remote Update Rubix"))
         self.bbb_transfer_env.setText(_translate("MainWindow", "Run Command"))
@@ -622,6 +623,7 @@ class Ui_MainWindow(object):
         self.bbb_env_option.setItemText(1, _translate("MainWindow", "DELETE"))
         self.bbb_env_option.setItemText(2, _translate("MainWindow", "RESTART_WIRES"))
         self.bbb_env_option.setItemText(3, _translate("MainWindow", "RESTART_HOST"))
+        self.bbb_env_option.setItemText(4, _translate("MainWindow", "INSTALL_WIRES"))
         self.token_2.setTabText(self.token_2.indexOf(self.widget_2), _translate("MainWindow", "Host Connection"))
         self.bbb_new_mask.setText(_translate("MainWindow", "255.255.255.0"))
         self.label_65.setText(_translate("MainWindow", "net mask"))
