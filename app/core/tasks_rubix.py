@@ -1,4 +1,6 @@
 import logging
+import time
+
 from fabric import task
 from app.core.commands import LinuxCommands
 from app.core.make_connection import SSHConnection
@@ -133,6 +135,8 @@ def mk_dir_data(ctx):
     # mkdir point-server
     exe = SSHConnection.run_command(ctx, LinuxCommands.make_dir_service_config("point-server"))
     logging.info(f"LOG: @func mkdir point-server {exe}")
+    exe = SSHConnection.run_command(ctx, LinuxCommands.chown_data_dir())
+    logging.info(f"LOG: @func chown_data_dir {exe}")
     # make lora-raw
     exe = SSHConnection.run_command(ctx, LinuxCommands.make_dir_service_config("lora-raw"))
     logging.info(f"LOG: @func mkdir lora-raw {exe}")
@@ -164,6 +168,7 @@ def install_rubix_service(ctx, host, github_token, **kwargs):
     RubixApi.rubix_add_git_token(host, rubix_token, github_token)
     app = "RUBIX_PLAT"
     version = "latest"
+    time.sleep(2)
     RubixApi.install_rubix_app(host, rubix_token, app, version)
 
 
@@ -195,14 +200,19 @@ def _add_rubix_users_and_settings(url):
 
 def _app_status(host, action, app, response):
     if response:
-        logging.info(f"PASS: start | stop | restart app: {app} action: {action} host: {host}")
+        logging.info(f"PASS: app: {app} action: {action} host: {host}")
+        return f"PASS: app: {app} action: {action} host: {host}"
+
     else:
-        logging.info(f"FAIL: start | stop | restart app: {app} action: {action} host: {host}")
+        logging.info(f"FAIL: app: {app} action: {action} host: {host}")
+        return f"FAIL: app: {app} action: {action} host: {host}"
 
 
 def _select_config(app):
     if app == "LORA_RAW":
         return lora_config
+    elif app == "POINT_SERVER":
+        return point_server_config
 
 
 def install_rubix_app(host, version, app, add_config, action, **kwargs):
@@ -217,24 +227,28 @@ def install_rubix_app(host, version, app, add_config, action, **kwargs):
             if action == "START":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
                 _app_status(host, action, app, response)
+                return _app_status
             elif action == "STOP":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
                 _app_status(host, action, app, response)
+                return _app_status
             elif action == "RESTART":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
                 _app_status(host, action, app, response)
+                return _app_status
             elif action == "STATUS":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
                 _app_status(host, action, app, response)
+                return _app_status
             elif action == "INSTALL":
                 if add_config:
                     config_file = _select_config(app)
                     config = RubixApi.rubix_add_config_file(host, access_token, config_file)
                     if config:
                         logging.info(f"PASS: Add config file service: {app}")
-                        logging.info(f"try and instll app: {app}")
                         RubixApi.install_rubix_app(host, access_token, app, version)
                     else:
                         logging.info(f"FAIL: Add config file service: {app}")
+                        RubixApi.install_rubix_app(host, access_token, app, version)
                 else:
                     RubixApi.install_rubix_app(host, access_token, app, version)

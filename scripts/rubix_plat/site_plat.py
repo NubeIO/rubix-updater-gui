@@ -14,7 +14,6 @@ _rubix_settings = get_config_rubix_service()
 IP = None
 RS_PORT = None
 
-
 rubix_service_user = _rubix_settings.get('get_rubix_service_user')
 rubix_service_password = _rubix_settings.get('get_rubix_service_password')
 
@@ -33,13 +32,10 @@ if args.port is None:
 else:
     RS_PORT = args.port
 
-
-
 CWD = os.getcwd()
 FILE_NAME = "site.csv"
 file = f"{CWD}/{FILE_NAME}"
 print(file)
-
 
 build_id = 0
 sim_number = 1
@@ -116,7 +112,7 @@ body = {
     "time_zone": time_zone
 }
 
-print(build_id)
+print("SITE:", " ", build_id)
 update = True
 if update:
     host = IP
@@ -153,8 +149,6 @@ if add_droplets:
         if droplets:
             if access_token != False:
                 app = RubixApi.rubix_add_droplets(host, access_token, devices_obj)
-                print(" rubix_add_droplets", app)
+                # print(" rubix_add_droplets", app)
             else:
                 sys.exit("FAILED to get token")
-
-

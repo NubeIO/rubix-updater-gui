@@ -68,7 +68,7 @@ class ScratchPadController:
         # flash lora
         self.parent.action_lora_reflash.pressed.connect(self._lora_reflash)
         # check bbb connection
-        # self.parent.bbb_host_check_connection.pressed.connect(self.check_bbb_connection)
+        self.parent.bbb_connect.pressed.connect(self.check_bbb_connection)
         # update bbb ip
         self.parent.run_update_bbb_ip.setEnabled(False)
         self.parent.run_update_bbb_ip.pressed.connect(self.run_update_bbb_ip)
@@ -79,7 +79,7 @@ class ScratchPadController:
         # install/restart rubix app
         self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
         # modpoll
-        self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
+        # self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
@@ -208,16 +208,13 @@ class ScratchPadController:
             self.parent.rubix_plat_hyperlink.setText(link)
         ping = Utils.ping(ip)
         if ping:
-            msg = f"RUN rubix apps task: {action} app: {app} on ip: {ip}"
-            self.parent.statusBar.showMessage(msg)
-            logging.info(msg)
-            logging.info("------ Connect and start updates ------")
             install_rubix_app(ip, version, app, add_config_file, action)
-            msg = f"install completed"
+            msg = f"RUN APP TASK PASS:  rubix apps task: {action} app: {app} on ip: {ip}"
+            self.parent.statusBar.showMessage(msg)
             logging.info(msg)
             return msg
         else:
-            msg = f"device on ip: {ip} is dead"
+            msg = f"RUN APP TASK FAIL: rubix apps task: {action} app: {app} on ip: {ip}"
             self.parent.statusBar.showMessage(msg)
             logging.info(msg)
             return msg

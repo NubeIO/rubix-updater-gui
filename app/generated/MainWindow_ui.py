@@ -503,7 +503,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusBar)
 
         self.retranslateUi(MainWindow)
-        self.lora_flasher.setCurrentIndex(1)
+        self.lora_flasher.setCurrentIndex(0)
         self.token.setCurrentIndex(0)
         self.token_2.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
