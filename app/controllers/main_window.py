@@ -80,11 +80,6 @@ class ScratchPadController:
         # install/restart rubix app
         self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
         # modpoll
-<<<<<<< HEAD
-        # self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
-=======
-        self.parent.mod_connect.pressed.connect(self._modpoll_lora)
->>>>>>> f0b3f36d7edefae827aa34267401149f5c782de6
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
