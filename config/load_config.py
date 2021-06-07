@@ -1,7 +1,7 @@
 from config.config import Config
 
-# file = None
-file = "/home/aidan/code/python/nube/rubix-updater-gui"
+file = None
+# file = "/home/aidan/code/python/nube/rubix-updater-gui"
 c = Config()
 c.load_config(file=file)
 
