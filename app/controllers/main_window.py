@@ -4,6 +4,7 @@ import os
 import githubdl
 from datetime import datetime
 
+from fabric import Connection
 from invoke import Responder
 
 from app.core.commands import LinuxCommands
@@ -79,7 +80,11 @@ class ScratchPadController:
         # install/restart rubix app
         self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
         # modpoll
+<<<<<<< HEAD
         # self.parent.rubix_app_action_run.pressed.connect(self._manage_rubix_app)
+=======
+        self.parent.mod_connect.pressed.connect(self._modpoll_lora)
+>>>>>>> f0b3f36d7edefae827aa34267401149f5c782de6
 
     def _connection(self):
         host = self.parent.setting_remote_update_host.text()
@@ -242,8 +247,31 @@ class ScratchPadController:
             logging.info(msg)
             return msg
 
+    def _modpoll_reg_type(self, reg_type):
+        if reg_type == "READ-DO-COIL":
+            return 0
+        elif reg_type == "READ-DI-INPUT":
+            return 1
+        elif reg_type == "READ-AO-HOLDING":
+            return 4
+        elif reg_type == "READ-AI-INPUT":
+            return 3
+
+    def _modpoll_data_type(self, reg_type):
+        if reg_type == "raw":
+            return "raw"
+        elif reg_type == "hex":
+            return "hex"
+        elif reg_type == "int":
+            return "int"
+        elif reg_type == "float":
+            return "float"
+        elif reg_type == "mod":
+            return "mod"
+
+
     def _modpoll_lora(self):
-        cx = self._connection()
+        # cx = self._connection()
         mod_run_for = self.parent.mod_run_for.text()
         mod_serial_port = self.parent.mod_serial_port.currentText()
         mod_baud_rate = self.parent.mod_baud_rate.currentText()
@@ -253,18 +281,35 @@ class ScratchPadController:
         mod_point_type = self.parent.mod_point_type.currentText()
         mod_data_type = self.parent.mod_data_type.currentText()
         mod_delay = self.parent.mod_delay.text()
+        mod_delay = int(mod_delay)*1000
         ping = True
+        mod_point_type = self._modpoll_reg_type(mod_point_type)
+        mod_data_type = self._modpoll_data_type(mod_data_type)
         if ping:
-            command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
-                      f"-a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
-                      f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
-            logging.info("------ Connect and start updates ------")
-            task_command_blank(cx, command)
+            command = "timeout 10 modpoll -m rtu -p none -b 9600 -a 1 -t 4:float -r 1  -l 2000 /dev/ttyRS485-1 "
+            # if mod_data_type == "raw":
+            #     command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
+            #               f"-a {mod_device_address} -t {mod_point_type} " \
+            #               f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
+            #
+            # else:
+            #     command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
+            #               f" -a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
+            #               f" -r {mod_point_address}  -l {mod_delay} /dev/{mod_serial_port} "
+            logging.info(f"------ MODPOLL ------")
+            logging.info(f"------ command: {command} ------")
+            host = '192.168.15.10'
+            port = 22
+            user = 'pi'
+            password = 'N00BRCRC'
+            # exe = task_command_blank(cx, command)
+            ctx = Connection(host=host, port=port, user=user, connect_timeout=3, connect_kwargs={'password': password})
+            exe = ctx.run("pwd")
             msg = f"install completed"
-            logging.info(msg)
+            logging.info(exe)
             return msg
         else:
-            msg = f"device on ip: {ip} is dead"
+            msg = f"device on ip: {mod_serial_port} is dead"
             self.parent.statusBar.showMessage(msg)
             logging.info(msg)
             return msg
@@ -388,6 +433,14 @@ class ScratchPadController:
                 response='N00B2828\n',
             )
             cx.run('sudo rm /data/rubix-wires/config/.env', pty=True, watchers=[sudo_pass])
+        elif action == "INSTALL_WIRES":
+            sudo_pass = Responder(
+                pattern=r'\[sudo\] password for debian:',
+                response='N00B2828\n',
+            )
+            cx.run(
+                'wget https://github.com/NubeIO/wires-builds/archive/refs/tags/v2.1.8.zip  && unzip v2.1.8.zip && mv wires-builds-2.1.8 wires-builds && cd wires-builds/rubix-wires/systemd && sudo bash script.bash install -s=nubeio-rubix-wires.service -u=debian --working-dir=/home/debian/wires-builds/rubix-wires -g=/data/rubix-wires -d=data -c=config -p=1313',
+                pty=True, watchers=[sudo_pass])
 
     def _clear_console(self):
         print("ADD LATER")

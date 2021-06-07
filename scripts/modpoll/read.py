@@ -2,8 +2,8 @@ from fabric import Connection
 from app.core.commands import LinuxCommands
 from app.core.make_connection import SSHConnection
 
-host = '120.157.111.164'
-port = 2022
+host = '192.168.15.10'
+port = 22
 user = 'pi'
 password = 'N00BRCRC'
 
