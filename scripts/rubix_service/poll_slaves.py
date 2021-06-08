@@ -1,6 +1,6 @@
 import requests
 
-host = '178.128.119.16'
+host = '178.128.119.166'
 port = '1616'
 payload = {"username": "admin", "password": "N00BWires"}
 get_token = requests.post(f"http://{host}:{port}/api/users/login", json=payload)
@@ -21,4 +21,8 @@ for global_uuid in json_result:
     result = requests.get(url,
                           headers={'Content-Type': 'application/json', 'Authorization': '{}'.format(access_token)},
                           json=payload)
-    print(global_uuid, json_result[global_uuid].get('device_name'), result.json())
+    device_name = json_result[global_uuid].get('device_name')
+    site_name = json_result[global_uuid].get('site_name')
+    public_ip = result.json().get('public_ip')
+    print("---------------------------------------------------------------------------")
+    print(f"public_ip: {public_ip}, device_name: {device_name}, site_name: {site_name}")

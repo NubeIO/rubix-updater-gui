@@ -352,7 +352,7 @@ class ScratchPadController:
         ping = Utils.ping(ip)
         githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
                         github_token=github_token)
-        file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/app.json"
+        file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/apps.json"
         exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
         logging.info(exe)
         if ping:
