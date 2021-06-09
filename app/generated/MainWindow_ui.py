@@ -152,6 +152,10 @@ class Ui_MainWindow(object):
         self.rubix_app_action.addItem("")
         self.rubix_app_action.addItem("")
         self.rubix_app_action.addItem("")
+        self.rubix_app_action.addItem("")
+        self.rubix_app_action.addItem("")
+        self.rubix_app_action.addItem("")
+        self.rubix_app_action.addItem("")
         self.gridLayout_4.addWidget(self.rubix_app_action, 4, 1, 1, 1)
         self.rubix_plat_hyperlink = QtWidgets.QTextBrowser(self.tab_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
@@ -539,11 +543,15 @@ class Ui_MainWindow(object):
         self.rubix_app_action.setItemText(4, _translate("MainWindow", "STOP"))
         self.rubix_app_action.setItemText(5, _translate("MainWindow", "START"))
         self.rubix_app_action.setItemText(6, _translate("MainWindow", "STATUS"))
+        self.rubix_app_action.setItemText(7, _translate("MainWindow", "MANUAL_DOWNLOAD_APP"))
+        self.rubix_app_action.setItemText(8, _translate("MainWindow", "MANUAL_CHECK_DOWNLOAD_APP_STATE"))
+        self.rubix_app_action.setItemText(9, _translate("MainWindow", "MANUAL_INSTALL_APP"))
+        self.rubix_app_action.setItemText(10, _translate("MainWindow", "MANUAL_DELETE_DOWNLOAD_APP_STATE"))
         self.rubix_plat_hyperlink.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Fira Sans Semi-Light\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://192.168.15.10:1414/\"><span style=\" text-decoration: underline; color:#0000ff;\">open in browser</span></a></p></body></html>"))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://192.168.15.10:1414/\"><span style=\" font-family:\'Fira Sans Semi-Light\'; font-size:10pt; text-decoration: underline; color:#0000ff;\">open in browser</span></a></p></body></html>"))
         self.action_remote_rubix_service.setText(_translate("MainWindow", "update rubix service"))
         self.rubix_app_action_run.setText(_translate("MainWindow", "RUN TASK"))
         self.rubix_app_use_config.setText(_translate("MainWindow", "add config file"))
@@ -597,14 +605,14 @@ class Ui_MainWindow(object):
         self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Fira Sans Semi-Light\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-size:16pt;\">Help:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:16pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">Set the network address: 192.168.15 (START 0) (FINISH 50) a scan range</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">from : 192.168.15.0</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\';\">to : 192.168.15.20</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-size:11pt;\"><br /></p></body></html>"))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">Help:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Set the network address: 192.168.15 (START 0) (FINISH 50) a scan range</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">from : 192.168.15.0</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">to : 192.168.15.20</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.token.setTabText(self.token.indexOf(self.tab_5), _translate("MainWindow", "Local Ping Scan"))
         self.lora_flasher.setTabText(self.lora_flasher.indexOf(self.tab_rubix_remote_update), _translate("MainWindow", "Remote Update Rubix"))
         self.bbb_transfer_env.setText(_translate("MainWindow", "Run Command"))

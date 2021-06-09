@@ -142,6 +142,70 @@ class RubixApi:
             return False
 
     @staticmethod
+    def download_rubix_app(host, token, app, version, **kwargs):
+        port = kwargs.get('port') or 1616
+        payload = [{"service": app, "version": version}]
+        access_token = token
+        download_url = f"http://{host}:{port}/api/app/download"
+        result = requests.post(download_url,
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {}'.format(access_token)},
+                               json=payload)
+        logging.info(f"DOWNLOAD APP: status code {result.status_code}")
+        if result.status_code != 200:
+            logging.info(f"DOWNLOAD APP: FAILED to download", result.json())
+            return False
+        else:
+            logging.info(f"DOWNLOAD APP: Download process has been started, and waiting for it's completion...")
+            return True
+
+    @staticmethod
+    def check_state_download_rubix_app(host, token, app, version, **kwargs):
+        port = kwargs.get('port') or 1616
+        payload = [{"service": app, "version": version}]
+        access_token = token
+        download_state_url = f"http://{host}:{port}/api/app/download_state"
+        download_state = requests.get(download_state_url,
+                                      headers={'Content-Type': 'application/json',
+                                               'Authorization': 'Bearer {}'.format(access_token)},
+                                      json=payload)
+        logging.info(f"CHECK DOWNLOAD STATE:', {download_state.json()}")
+        if download_state.json().get('state') == 'DOWNLOADED':
+            logging.info(f"CHECK DOWNLOAD STATE: Download completed...")
+            return True
+        else:
+            logging.info(f"CHECK DOWNLOAD STATE:', {download_state.json()}")
+
+    @staticmethod
+    def manual_install_rubix_app(host, token, app, version, **kwargs):
+        port = kwargs.get('port') or 1616
+        payload = [{"service": app, "version": version}]
+        access_token = token
+        install_url = f"http://{host}:{port}/api/app/install"
+        result = requests.post(install_url,
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {}'.format(access_token)},
+                               json=payload)
+        if result.status_code != 200:
+            logging.debug(f"INSTALL APP FAIL:Failed to install', {result.json()}")
+        else:
+            logging.info(f"INSTALL APP PASS: Install completed...service {app}")
+            return True
+
+    @staticmethod
+    def delete_state_download_rubix_app(host, token, app, version, **kwargs):
+        port = kwargs.get('port') or 1616
+        payload = [{"service": app, "version": version}]
+        access_token = token
+        download_state_url = f"http://{host}:{port}/api/app/download_state"
+        logging.info(f"DOWNLOAD STATE: Clearing download state...")
+        result = requests.delete(download_state_url,
+                                 headers={'Content-Type': 'application/json',
+                                          'Authorization': 'Bearer {}'.format(access_token)},
+                                 json=payload)
+        logging.info(f"DOWNLOAD STATE: Download state is cleared.....{result.status_code}")
+
+    @staticmethod
     def install_rubix_app(host, token, app, version, **kwargs):
         port = kwargs.get('port') or 1616
         payload = [{"service": app, "version": version}]
@@ -235,4 +299,3 @@ class RubixApi:
             return result.json()
         else:
             return False
-

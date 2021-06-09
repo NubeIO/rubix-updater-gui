@@ -240,15 +240,30 @@ def install_rubix_app(host, version, app, add_config, action, **kwargs):
                 response = RubixApi.start_stop_app(host, access_token, action, app)
                 _app_status(host, action, app, response)
                 return _app_status
+            elif action == "MANUAL_DOWNLOAD_APP":
+                run = RubixApi.download_rubix_app(host, access_token, app, version)
+                return run
+            elif action == "MANUAL_CHECK_DOWNLOAD_APP_STATE":
+                run = RubixApi.check_state_download_rubix_app(host, access_token, app, version)
+                return run
+            elif action == "MANUAL_INSTALL_APP":
+                run = RubixApi.manual_install_rubix_app(host, access_token, app, version)
+                return run
+            elif action == "MANUAL_DELETE_DOWNLOAD_APP_STATE":
+                run = RubixApi.delete_state_download_rubix_app(host, access_token, app, version)
+                return run
             elif action == "INSTALL":
                 if add_config:
                     config_file = _select_config(app)
                     config = RubixApi.rubix_add_config_file(host, access_token, config_file)
                     if config:
                         logging.info(f"PASS: Add config file service: {app}")
-                        RubixApi.install_rubix_app(host, access_token, app, version)
+                        install = RubixApi.install_rubix_app(host, access_token, app, version)
+                        return install
                     else:
                         logging.info(f"FAIL: Add config file service: {app}")
-                        RubixApi.install_rubix_app(host, access_token, app, version)
+                        install = RubixApi.install_rubix_app(host, access_token, app, version)
+                        return install
                 else:
-                    RubixApi.install_rubix_app(host, access_token, app, version)
+                    install = RubixApi.install_rubix_app(host, access_token, app, version)
+                    return install
