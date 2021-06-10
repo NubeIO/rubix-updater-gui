@@ -350,8 +350,10 @@ class ScratchPadController:
             rubix_service_port = self.parent.rubix_service_port.text()
             github_token = _host_settings.get('get_git_token')
         ping = Utils.ping(ip)
-        githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
-                        github_token=github_token)
+        #TODO dsiabled as token github wasnt working
+        # githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
+        #                 github_token=github_token)
+
         file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/apps.json"
         exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
         logging.info(exe)
