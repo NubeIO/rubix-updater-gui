@@ -1,10 +1,7 @@
 import logging
 import os
-
 import githubdl
 from datetime import datetime
-
-from fabric import Connection
 from invoke import Responder
 
 from app.core.commands import LinuxCommands
