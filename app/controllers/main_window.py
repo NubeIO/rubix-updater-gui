@@ -283,6 +283,7 @@ class ScratchPadController:
             logging.info(msg)
             return msg
 
+
     # def _update_rubix_service(self):
     #     cx = self._connection()
     #     use_config = self.parent.use_config_file.isChecked()
@@ -331,6 +332,58 @@ class ScratchPadController:
     #         self.parent.statusBar.showMessage(msg)
     #         logging.info(msg)
     #         return msg
+
+    def _update_rubix_service(self):
+        cx = self._connection()
+        use_config = self.parent.use_config_file.isChecked()
+        if use_config:
+            ip = _host_settings.get('get_host')
+            port = _host_settings.get('get_port')
+            user = _host_settings.get('get_user')
+            password = _host_settings.get('get_password')
+            rubix_username = _bios_settings.get('get_rubix_bios_user')
+            rubix_password = _bios_settings.get('get_rubix_bios_password')
+            rubix_bios_port = _bios_settings.get('get_rubix_bios_port')
+            rubix_service_port = _rubix_settings.get('get_rubix_service_port')
+            github_token = _host_settings.get('get_git_token')
+
+        else:
+            ip = self.parent.setting_remote_update_host.text()
+            rubix_username = self.parent.rubix_username.text()
+            rubix_password = self.parent.rubix_password.text()
+            rubix_bios_port = self.parent.rubix_bios_port.text()
+            rubix_service_port = self.parent.rubix_service_port.text()
+            github_token = _host_settings.get('get_git_token')
+        ping = Utils.ping(ip)
+        #TODO dsiabled as token github wasnt working
+        # githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
+        #                 github_token=github_token)
+
+        file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/apps.json"
+        exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
+        logging.info(exe)
+        if ping:
+            msg = f"device on ip: {ip} is connected"
+            self.parent.statusBar.showMessage(msg)
+            logging.info(msg)
+            logging.info("------ Connect and start updates ------")
+            deploy_rubix_service_update(cx,
+                                        host=ip,
+                                        github_token=github_token,
+                                        rubix_username=rubix_username,
+                                        rubix_password=rubix_password,
+                                        rubix_bios_port=rubix_bios_port,
+                                        rubix_service_port=rubix_service_port
+                                        )
+            msg = f"install completed"
+            logging.info(msg)
+            return msg
+        else:
+            msg = f"device on ip: {ip} is dead"
+            self.parent.statusBar.showMessage(msg)
+            logging.info(msg)
+            return msg
+
 
     def check_bbb_connection(self):
         cx = self._connection_bbb()
