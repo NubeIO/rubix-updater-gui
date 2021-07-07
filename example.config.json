@@ -4,7 +4,7 @@
     "port": 22,
     "user": "pi",
     "password": "N00BRCRC",
-    "git_token": "ghp_DZMV0dScoHc6GbGEEDBC8AGDRuD33a3aesadasdasdEk9",
+    "git_token": "ghp_LXf2rdP5Mz7d7SHPuEECMRt7Cv1qzS32",
     "rubix_bios_user": "admin",
     "rubix_bios_password": "N00BWires",
     "rubix_bios_port": 1615,
@@ -13,14 +13,14 @@
     "rubix_service_port": 1616
   },
   "connection_bbb": {
-    "bbb_host": "192.168.15.10",
-    "bbb_port": 22,
+    "bbb_host": "123.209.212.122",
+    "bbb_port": 2011,
     "bbb_user": "debian",
     "bbb_password": "N00B2828"
   },
   "bios": {
-    "bios_url": "https://github.com/NubeIO/rubix-bios/releases/download/v1.4.1/rubix-bios-1.4.1-005821de.armv7.zip",
-    "bios_dir": "rubix-bios-1.4.1-005821de.armv7.zip",
+    "bios_url": "https://github.com/NubeIO/rubix-bios/releases/download/v1.5.1/rubix-bios-1.5.1-fa2550f7.armv7.zip",
+    "bios_dir": "rubix-bios-1.5.1-fa2550f7.armv7.zip",
     "bios_version": "latest"
   },
   "rubix_service": {
@@ -100,68 +100,69 @@
   "point_server_config": {
     "service": "POINT_SERVER",
     "data": {
-      "drivers": {
-        "generic": true,
-        "modbus_rtu": true,
-        "modbus_tcp": false
-      },
-      "services": {
-        "mqtt": true,
-        "histories": false,
-        "cleaner": false,
-        "history_sync_influxdb": false,
-        "history_sync_postgres": false
-      },
-      "influx": {
-        "host": "0.0.0.0",
-        "port": 8086,
-        "database": "db",
-        "username": "username",
-        "password": "password",
-        "ssl": false,
-        "verify_ssl": false,
-        "timeout": 5,
-        "retries": 3,
-        "timer": 5,
-        "path": "",
-        "measurement": "points",
-        "attempt_reconnect_secs": 5
-      },
-      "postgres": {
-        "host": "0.0.0.0",
-        "port": 5432,
-        "dbname": "db",
-        "user": "user",
-        "password": "password",
-        "ssl_mode": "allow",
-        "connect_timeout": 5,
-        "timer": 5,
-        "table_prefix": "tbl",
-        "attempt_reconnect_secs": 5
-      },
-      "mqtt": [
-        {
-          "enabled": true,
-          "name": "rubix-points",
-          "host": "0.0.0.0",
-          "port": 1883,
-          "authentication": false,
-          "username": "username",
-          "password": "password",
-          "keepalive": 60,
-          "qos": 1,
-          "attempt_reconnect_on_unavailable": true,
-          "attempt_reconnect_secs": 5,
-          "timeout": 10,
-          "retain_clear_interval": 10,
-          "publish_value": true,
-          "topic": "rubix/points/value",
-          "listen": true,
-          "listen_topic": "rubix/points/listen",
-          "publish_debug": true,
-          "debug_topic": "rubix/points/debug"
-        }
-      ]
+  "drivers": {
+    "generic": true,
+    "modbus_rtu": false,
+    "modbus_tcp": false
+  },
+  "services": {
+    "mqtt": true,
+    "histories": true,
+    "cleaner": true,
+    "history_sync_influxdb": false,
+    "history_sync_postgres": true
+  },
+  "influx": {
+    "host": "0.0.0.0",
+    "port": 8086,
+    "database": "db",
+    "username": "username",
+    "password": "password",
+    "ssl": false,
+    "verify_ssl": false,
+    "timeout": 5,
+    "retries": 3,
+    "timer": 5,
+    "path": "",
+    "measurement": "points",
+    "attempt_reconnect_secs": 5
+  },
+  "postgres": {
+    "host": "aa.nube-iot.com",
+    "port": 5432,
+    "dbname": "***",
+    "user": "admin",
+    "password": "********",
+    "ssl_mode": "allow",
+    "connect_timeout": 5,
+    "timer": 1,
+    "table_prefix": "tbl",
+    "attempt_reconnect_secs": 5
+  },
+  "mqtt": [
+    {
+      "enabled": true,
+      "name": "rubix-points",
+      "host": "0.0.0.0",
+      "port": 1883,
+      "authentication": true,
+      "username": "admin",
+      "password": "N00BMQTT",
+      "keepalive": 60,
+      "qos": 1,
+      "attempt_reconnect_on_unavailable": true,
+      "attempt_reconnect_secs": 5,
+      "timeout": 10,
+      "retain_clear_interval": 10,
+      "publish_value": true,
+      "topic": "rubix/points/value",
+      "listen": true,
+      "listen_topic": "rubix/points/listen",
+      "publish_debug": true,
+      "debug_topic": "rubix/points/debug"
+    }
+  ]
+
     }
   }
 }
