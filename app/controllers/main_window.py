@@ -64,8 +64,8 @@ class ScratchPadController:
         self.parent.action_remote_update.pressed.connect(self._update_rubix)
         self.parent.action_remote_update.setEnabled(False)
         # update rubix service
-        self.parent.action_remote_rubix_service.pressed.connect(self._update_rubix_service)
-        self.parent.action_remote_rubix_service.setEnabled(False)
+        # self.parent.action_remote_rubix_service.pressed.connect(self._update_rubix_service)
+        # self.parent.action_remote_rubix_service.setEnabled(False)
         # flash lora
         self.parent.action_lora_reflash.pressed.connect(self._lora_reflash)
         # check bbb connection
@@ -132,7 +132,7 @@ class ScratchPadController:
             self.parent.action_remote_rubix_service.setEnabled(False)
         else:
             self.parent.action_remote_update.setEnabled(True)
-            self.parent.action_remote_rubix_service.setEnabled(True)
+            # self.parent.action_remote_rubix_service.setEnabled(True)
 
     def _connection_bbb(self):
         use_config = self.parent.bbb_use_config_file.isChecked()
@@ -210,12 +210,12 @@ class ScratchPadController:
         if ping:
             install_rubix_app(ip, version, app, add_config_file, action)
             msg = f"RUN APP TASK PASS:  rubix apps task: {action} app: {app} on ip: {ip}"
-            self.parent.statusBar.showMessage(msg)
-            logging.info(msg)
+            # self.parent.statusBar.showMessage(msg)
+            # logging.info(msg)
             return msg
         else:
             msg = f"RUN APP TASK FAIL: rubix apps task: {action} app: {app} on ip: {ip}"
-            self.parent.statusBar.showMessage(msg)
+            # self.parent.statusBar.showMessage(msg)
             logging.info(msg)
             return msg
 
@@ -242,72 +242,27 @@ class ScratchPadController:
             logging.info(msg)
             return msg
 
-    def _modpoll_reg_type(self, reg_type):
-        if reg_type == "READ-DO-COIL":
-            return 0
-        elif reg_type == "READ-DI-INPUT":
-            return 1
-        elif reg_type == "READ-AO-HOLDING":
-            return 4
-        elif reg_type == "READ-AI-INPUT":
-            return 3
-
-    def _modpoll_data_type(self, reg_type):
-        if reg_type == "raw":
-            return "raw"
-        elif reg_type == "hex":
-            return "hex"
-        elif reg_type == "int":
-            return "int"
-        elif reg_type == "float":
-            return "float"
-        elif reg_type == "mod":
-            return "mod"
-
-
-    def _modpoll_lora(self):
-        # cx = self._connection()
-        mod_run_for = self.parent.mod_run_for.text()
-        mod_serial_port = self.parent.mod_serial_port.currentText()
-        mod_baud_rate = self.parent.mod_baud_rate.currentText()
-        mod_device_address = self.parent.mod_device_address.text()
-        mod_point_address = self.parent.mod_point_address.text()
-        mod_length = self.parent.mod_length.text()
-        mod_point_type = self.parent.mod_point_type.currentText()
-        mod_data_type = self.parent.mod_data_type.currentText()
-        mod_delay = self.parent.mod_delay.text()
-        mod_delay = int(mod_delay)*1000
-        ping = True
-        mod_point_type = self._modpoll_reg_type(mod_point_type)
-        mod_data_type = self._modpoll_data_type(mod_data_type)
-        if ping:
-            command = "timeout 10 modpoll -m rtu -p none -b 9600 -a 1 -t 4:float -r 1  -l 2000 /dev/ttyRS485-1 "
-            # if mod_data_type == "raw":
-            #     command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
-            #               f"-a {mod_device_address} -t {mod_point_type} " \
-            #               f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
-            #
-            # else:
-            #     command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
-            #               f" -a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
-            #               f" -r {mod_point_address}  -l {mod_delay} /dev/{mod_serial_port} "
-            logging.info(f"------ MODPOLL ------")
-            logging.info(f"------ command: {command} ------")
-            host = '192.168.15.10'
-            port = 22
-            user = 'pi'
-            password = 'N00BRCRC'
-            # exe = task_command_blank(cx, command)
-            ctx = Connection(host=host, port=port, user=user, connect_timeout=3, connect_kwargs={'password': password})
-            exe = ctx.run("pwd")
-            msg = f"install completed"
-            logging.info(exe)
-            return msg
-        else:
-            msg = f"device on ip: {mod_serial_port} is dead"
-            self.parent.statusBar.showMessage(msg)
-            logging.info(msg)
-            return msg
+    # def _modpoll_reg_type(self, reg_type):
+    #     if reg_type == "READ-DO-COIL":
+    #         return 0
+    #     elif reg_type == "READ-DI-INPUT":
+    #         return 1
+    #     elif reg_type == "READ-AO-HOLDING":
+    #         return 4
+    #     elif reg_type == "READ-AI-INPUT":
+    #         return 3
+    #
+    # def _modpoll_data_type(self, reg_type):
+    #     if reg_type == "raw":
+    #         return "raw"
+    #     elif reg_type == "hex":
+    #         return "hex"
+    #     elif reg_type == "int":
+    #         return "int"
+    #     elif reg_type == "float":
+    #         return "float"
+    #     elif reg_type == "mod":
+    #         return "mod"
 
     def _reboot_rubix(self):
         cx = self._connection()
@@ -328,54 +283,54 @@ class ScratchPadController:
             logging.info(msg)
             return msg
 
-    def _update_rubix_service(self):
-        cx = self._connection()
-        use_config = self.parent.use_config_file.isChecked()
-        if use_config:
-            ip = _host_settings.get('get_host')
-            port = _host_settings.get('get_port')
-            user = _host_settings.get('get_user')
-            password = _host_settings.get('get_password')
-            rubix_username = _bios_settings.get('get_rubix_bios_user')
-            rubix_password = _bios_settings.get('get_rubix_bios_password')
-            rubix_bios_port = _bios_settings.get('get_rubix_bios_port')
-            rubix_service_port = _rubix_settings.get('get_rubix_service_port')
-            github_token = _host_settings.get('get_git_token')
-
-        else:
-            ip = self.parent.setting_remote_update_host.text()
-            rubix_username = self.parent.rubix_username.text()
-            rubix_password = self.parent.rubix_password.text()
-            rubix_bios_port = self.parent.rubix_bios_port.text()
-            rubix_service_port = self.parent.rubix_service_port.text()
-            github_token = _host_settings.get('get_git_token')
-        ping = Utils.ping(ip)
-        githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
-                        github_token=github_token)
-        file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/apps.json"
-        exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
-        logging.info(exe)
-        if ping:
-            msg = f"device on ip: {ip} is connected"
-            self.parent.statusBar.showMessage(msg)
-            logging.info(msg)
-            logging.info("------ Connect and start updates ------")
-            deploy_rubix_service_update(cx,
-                                        host=ip,
-                                        github_token=github_token,
-                                        rubix_username=rubix_username,
-                                        rubix_password=rubix_password,
-                                        rubix_bios_port=rubix_bios_port,
-                                        rubix_service_port=rubix_service_port
-                                        )
-            msg = f"install completed"
-            logging.info(msg)
-            return msg
-        else:
-            msg = f"device on ip: {ip} is dead"
-            self.parent.statusBar.showMessage(msg)
-            logging.info(msg)
-            return msg
+    # def _update_rubix_service(self):
+    #     cx = self._connection()
+    #     use_config = self.parent.use_config_file.isChecked()
+    #     if use_config:
+    #         ip = _host_settings.get('get_host')
+    #         port = _host_settings.get('get_port')
+    #         user = _host_settings.get('get_user')
+    #         password = _host_settings.get('get_password')
+    #         rubix_username = _bios_settings.get('get_rubix_bios_user')
+    #         rubix_password = _bios_settings.get('get_rubix_bios_password')
+    #         rubix_bios_port = _bios_settings.get('get_rubix_bios_port')
+    #         rubix_service_port = _rubix_settings.get('get_rubix_service_port')
+    #         github_token = _host_settings.get('get_git_token')
+    #
+    #     else:
+    #         ip = self.parent.setting_remote_update_host.text()
+    #         rubix_username = self.parent.rubix_username.text()
+    #         rubix_password = self.parent.rubix_password.text()
+    #         rubix_bios_port = self.parent.rubix_bios_port.text()
+    #         rubix_service_port = self.parent.rubix_service_port.text()
+    #         github_token = _host_settings.get('get_git_token')
+    #     ping = Utils.ping(ip)
+    #     # githubdl.dl_dir(RUBIX_IMAGE_REPO, RUBIX_SERVICE_CONFIG,
+    #     #                 github_token=github_token)
+    #     file = f"{CWD}/{RUBIX_SERVICE_CONFIG}/rubix-apps/apps.json"
+    #     exe = SSHConnection.run_sftp(cx, file, RUBIX_SERVICE_DIR)
+    #     logging.info(exe)
+    #     if ping:
+    #         msg = f"device on ip: {ip} is connected"
+    #         self.parent.statusBar.showMessage(msg)
+    #         logging.info(msg)
+    #         logging.info("------ Connect and start updates ------")
+    #         deploy_rubix_service_update(cx,
+    #                                     host=ip,
+    #                                     github_token=github_token,
+    #                                     rubix_username=rubix_username,
+    #                                     rubix_password=rubix_password,
+    #                                     rubix_bios_port=rubix_bios_port,
+    #                                     rubix_service_port=rubix_service_port
+    #                                     )
+    #         msg = f"install completed"
+    #         logging.info(msg)
+    #         return msg
+    #     else:
+    #         msg = f"device on ip: {ip} is dead"
+    #         self.parent.statusBar.showMessage(msg)
+    #         logging.info(msg)
+    #         return msg
 
     def check_bbb_connection(self):
         cx = self._connection_bbb()
@@ -469,3 +424,47 @@ class ScratchPadController:
             print(op)
         elif op == op_service_bios:
             print(op)
+
+    # def _modpoll_lora(self):
+    #     # cx = self._connection()
+    #     mod_run_for = self.parent.mod_run_for.text()
+    #     mod_serial_port = self.parent.mod_serial_port.currentText()
+    #     mod_baud_rate = self.parent.mod_baud_rate.currentText()
+    #     mod_device_address = self.parent.mod_device_address.text()
+    #     mod_point_address = self.parent.mod_point_address.text()
+    #     mod_length = self.parent.mod_length.text()
+    #     mod_point_type = self.parent.mod_point_type.currentText()
+    #     mod_data_type = self.parent.mod_data_type.currentText()
+    #     mod_delay = self.parent.mod_delay.text()
+    #     mod_delay = int(mod_delay)*1000
+    #     ping = True
+    #     mod_point_type = self._modpoll_reg_type(mod_point_type)
+    #     mod_data_type = self._modpoll_data_type(mod_data_type)
+    #     if ping:
+    #         command = "timeout 10 modpoll -m rtu -p none -b 9600 -a 1 -t 4:float -r 1  -l 2000 /dev/ttyRS485-1 "
+    #         # if mod_data_type == "raw":
+    #         #     command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
+    #         #               f"-a {mod_device_address} -t {mod_point_type} " \
+    #         #               f"-r {mod_point_address} -c{mod_length} -l {mod_delay} /dev/{mod_serial_port} "
+    #         #
+    #         # else:
+    #         #     command = f"timeout {mod_run_for} modpoll -m rtu -p none -b {mod_baud_rate}" \
+    #         #               f" -a {mod_device_address} -t {mod_point_type}:{mod_data_type}" \
+    #         #               f" -r {mod_point_address}  -l {mod_delay} /dev/{mod_serial_port} "
+    #         logging.info(f"------ MODPOLL ------")
+    #         logging.info(f"------ command: {command} ------")
+    #         host = '192.168.15.10'
+    #         port = 22
+    #         user = 'pi'
+    #         password = 'N00BRCRC'
+    #         # exe = task_command_blank(cx, command)
+    #         ctx = Connection(host=host, port=port, user=user, connect_timeout=3, connect_kwargs={'password': password})
+    #         exe = ctx.run("pwd")
+    #         msg = f"install completed"
+    #         logging.info(exe)
+    #         return msg
+    #     else:
+    #         msg = f"device on ip: {mod_serial_port} is dead"
+    #         self.parent.statusBar.showMessage(msg)
+    #         logging.info(msg)
+    #         return msg

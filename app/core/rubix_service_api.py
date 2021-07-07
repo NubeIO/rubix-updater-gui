@@ -8,18 +8,36 @@ logging.basicConfig(level=logging.INFO)
 class RubixApi:
 
     @staticmethod
+    def ping_app(host, token, app, **kwargs):
+        port = kwargs.get('port') or 1616
+        url = f"http://{host}:{port}/{app}/api/system/ping"
+        if app == "RUBIX_BIOS":
+            url = f"http://{host}:1615/api/system/ping"
+        elif app == "RUBIX_SERVICE":
+            url = f"http://{host}:{port}/api/system/ping"
+        req = requests.get(url,
+                           headers={'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer {}'.format(token)})
+        if req.json():
+            logging.info(f"PING SERVICE PASS:  {req.status_code}")
+            return True
+        else:
+            logging.info(f"PING SERVICE FAIL:', {req.status_code}")
+
+    @staticmethod
     def bios_get_token(host, **kwargs):
         port = kwargs.get('port') or 1615
         url = f"http://{host}:{port}/api/users/login"
         payload = {"username": "admin", "password": "N00BWires"}
-        logging.info(f"Add get bios token")
         try:
             result = requests.post(url, json=payload)
             logging.info(f"Add get bios status {result.status_code}")
             if result.status_code == 200:
-                return result.json().get('access_token')
+                token = result.json().get('access_token')
+                logging.info(f"PASS get bios token: {result.status_code}")
+                return token
         except:
-            print(f"ERROR: get bios token")
+            logging.info(f"ERROR get bios token")
             return False
 
     @staticmethod

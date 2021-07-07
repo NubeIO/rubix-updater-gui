@@ -28,15 +28,15 @@ class LinuxCommands:
 
     @classmethod
     def download_bios(cls):
-        return f"wget https://github.com/NubeIO/rubix-bios/releases/download/v1.4.1/rubix-bios-1.4.1-005821de.armv7.zip"
+        return f"wget https://github.com/NubeIO/rubix-bios/releases/download/v1.5.1/rubix-bios-1.5.1-fa2550f7.armv7.zip"
 
     @classmethod    
     def unzip_bios(cls):
-        return f"unzip rubix-bios-1.4.1-005821de.armv7.zip"
+        return f"unzip rubix-bios-1.5.1-fa2550f7.armv7.zip"
 
     @classmethod
     def install_bios(cls):
-        return f"sudo ./rubix-bios -p 1615 -g /data/rubix-bios -d data -c config -a apps --prod --install --auth"
+        return f"sudo ./rubix-bios -p 1615 -g /data/rubix-bios -d data -c config -a apps --prod --install --auth --device-type armv7 --token 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"
 
     @classmethod
     def get_bios_token(cls):

@@ -167,7 +167,7 @@ def install_rubix_service(ctx, host, github_token, **kwargs):
     rubix_token = RubixApi.get_rubix_service_token(host)
     RubixApi.rubix_add_git_token(host, rubix_token, github_token)
     app = "RUBIX_PLAT"
-    version = "latest"
+    version = "v1.7.6"
     time.sleep(2)
     RubixApi.install_rubix_app(host, rubix_token, app, version)
 
@@ -200,11 +200,11 @@ def _add_rubix_users_and_settings(url):
 
 def _app_status(host, action, app, response):
     if response:
-        logging.info(f"PASS: app: {app} action: {action} host: {host}")
+        # logging.info(f"PASS: app: {app} action: {action} host: {host}")
         return f"PASS: app: {app} action: {action} host: {host}"
 
     else:
-        logging.info(f"FAIL: app: {app} action: {action} host: {host}")
+        # logging.info(f"FAIL: app: {app} action: {action} host: {host}")
         return f"FAIL: app: {app} action: {action} host: {host}"
 
 
@@ -215,6 +215,17 @@ def _select_config(app):
         return point_server_config
 
 
+def _select_rubix_service_proxy(app):
+    if app == "LORA_RAW":
+        return "lora"
+    elif app == "POINT_SERVER":
+        return "ps"
+    elif app == "RUBIX_SERVICE":
+        return "RUBIX_SERVICE"
+    elif app == "RUBIX_BIOS":
+        return "RUBIX_BIOS"
+
+
 def install_rubix_app(host, version, app, add_config, action, **kwargs):
     username = rubix_service_user
     password = rubix_service_password
@@ -222,7 +233,10 @@ def install_rubix_app(host, version, app, add_config, action, **kwargs):
         url = f"{host}"
         _add_rubix_users_and_settings(url)
     else:
-        access_token = RubixApi.get_rubix_service_token(host, username=username, password=password)
+        if app == "RUBIX_BIOS":
+            access_token = RubixApi.bios_get_token(host, username=username, password=password)
+        else:
+            access_token = RubixApi.get_rubix_service_token(host, username=username, password=password)
         if access_token != False:
             if action == "START":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
@@ -238,6 +252,11 @@ def install_rubix_app(host, version, app, add_config, action, **kwargs):
                 return _app_status
             elif action == "STATUS":
                 response = RubixApi.start_stop_app(host, access_token, action, app)
+                _app_status(host, action, app, response)
+                return _app_status
+            elif action == "PING":
+                app = _select_rubix_service_proxy(app)
+                response = RubixApi.ping_app(host, access_token, app)
                 _app_status(host, action, app, response)
                 return _app_status
             elif action == "MANUAL_DOWNLOAD_APP":
