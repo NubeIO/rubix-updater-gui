@@ -35,10 +35,18 @@ point_server_config = _point_server.get('get_point_server_config')
 @task
 def deploy_rubix_update(ctx):
     with ctx as c:
-        delete_data_dir(c)
-        mk_dir_data(c)
-        delete_rubix_dirs(c)
+        delete_data_dir(c)  # delete /data
+        mk_dir_data(c)  # remake  /data
+        delete_rubix_dirs(c)  # delete existing build zip on /home/$USER
+        task_command_blank(c, "sudo rm -r /data/rubix-bios/apps/install")
+        task_command_blank(c, "sudo systemctl stop nubeio-rubix-bios.service")
+        task_command_blank(c, "sudo systemctl disable nubeio-rubix-bios.service")
+        task_command_blank(c, "sudo systemctl stop nubeio-rubix-service.service")
+        task_command_blank(c, "sudo systemctl disable nubeio-rubix-service.service")
+        task_command_blank(c, "sudo systemctl stop nubeio-wires-plat.service")
+        task_command_blank(c, "sudo systemctl disable nubeio-wires-plat.service")
         install_bios(c)
+
         return "install completed"
 
 
@@ -88,7 +96,7 @@ def bbb_env_transfer(ctx, file, directory):
 @task
 def task_command_blank(ctx, command):
     exe = SSHConnection.run_command(ctx, LinuxCommands.command_blank(command))
-    logging.info(f"LOG: @func command_blank {exe}")
+    logging.info(f"LOG: @func command_blank command:{command} return:{exe}")
     return exe
 
 

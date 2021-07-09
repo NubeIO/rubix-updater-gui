@@ -22,6 +22,8 @@ def get_config_bios():
         c.get_rubix_bios_user.__name__: c.get_rubix_bios_user(),
         c.get_rubix_bios_password.__name__: c.get_rubix_bios_password(),
         c.get_rubix_bios_port.__name__: c.get_rubix_bios_port(),
+        c.get_bios_url.__name__: c.get_bios_url(),
+        c.get_bios_dir.__name__: c.get_bios_dir(),
     }
 
 
