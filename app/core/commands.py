@@ -1,10 +1,14 @@
 import json
 
-from config.load_config import get_config_host
+from config.load_config import get_config_host, get_config_bios
 
 _get_config_host = get_config_host()
 _host = _get_config_host.get("get_host")
+_bios_settings = get_config_bios()
 
+get_git_token = _bios_settings.get("get_git_token")
+get_bios_url = _bios_settings.get("get_bios_url")
+get_bios_dir = _bios_settings.get("get_bios_dir")
 
 class LinuxCommands:
 
@@ -28,15 +32,15 @@ class LinuxCommands:
 
     @classmethod
     def download_bios(cls):
-        return f"wget https://github.com/NubeIO/rubix-bios/releases/download/v1.5.1/rubix-bios-1.5.1-fa2550f7.armv7.zip"
+        return f"wget {get_bios_url}"
 
     @classmethod    
     def unzip_bios(cls):
-        return f"unzip rubix-bios-1.5.1-fa2550f7.armv7.zip"
+        return f"unzip {get_bios_dir}"
 
     @classmethod
     def install_bios(cls):
-        return f"sudo ./rubix-bios -p 1615 -g /data/rubix-bios -d data -c config -a apps --prod --install --auth --device-type armv7 --token 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"
+        return f"sudo ./rubix-bios -p 1615 -g /data/rubix-bios -d data -c config -a apps --prod --install --auth --device-type armv7 --token {get_git_token}"
 
     @classmethod
     def get_bios_token(cls):
